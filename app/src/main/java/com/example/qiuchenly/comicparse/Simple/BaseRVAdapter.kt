@@ -32,8 +32,26 @@ abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
         else 0
     }
 
+    /**
+     * 快速排序算法
+     * @param MODE =1 正序 =2 倒序
+     */
+    fun sort(MODE: Int) {
+        if (map != null) {
+            val ret = ArrayList<T>()
+            for (m: T in map!!) {
+                ret.add(if (MODE == 1) 0 else ret.size, m)
+            }
+            map = ret
+            notifyDataSetChanged()
+        }
+
+        //排序算法2
+
+    }
+
     override fun onBindViewHolder(holder: BaseVH, position: Int) {
-        InitUI(holder.itemView, if (position==map?.size!!) null else map!![position], position)
+        InitUI(holder.itemView, if (position == map?.size!!) null else map!![position], position)
     }
 
     abstract fun InitUI(item: View, data: T?, position: Int)

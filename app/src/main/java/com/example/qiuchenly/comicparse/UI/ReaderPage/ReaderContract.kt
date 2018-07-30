@@ -5,7 +5,7 @@ import com.example.qiuchenly.comicparse.Simple.BasePresenter
 import com.example.qiuchenly.comicparse.Simple.BaseView
 
 interface ReaderContract {
-    interface View : BaseView<Presenter>,GetPageCB {
+    interface View : BaseView<Presenter>, GetPageCB {
 
     }
 

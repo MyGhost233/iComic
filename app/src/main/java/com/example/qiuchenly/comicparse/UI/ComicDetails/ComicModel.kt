@@ -2,15 +2,41 @@ package com.example.qiuchenly.comicparse.UI.ComicDetails
 
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.example.qiuchenly.comicparse.Simple.BaseModelImp
+import com.example.qiuchenly.comicparse.VolleyImp.BaseURL
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import java.text.DecimalFormat
 
 class ComicModel : BaseModelImp(), ComicDetailContract.Model {
     companion object {
         var cachePageList = ArrayList<ComicBookInfo>()
     }
 
-    fun InitPageInfo(page: String, cb: ComicDetailContract.GetPageInfo) {
+    override fun getBookScore(bookID: String, cb: ComicDetailContract.GetScore) {
+        val id = subStr(bookID, "comic/", ".html")
+        val url = BaseURL.GET_BOOK_SCORE + id
+        SendRequest(url, object : RequestCallback {
+            override fun onSuccess(RetStr: String?) {
+                val ret = RetStr!!.replace("var Scorepl=", "")
+                val peopleLimit = Integer.valueOf(subStr(ret, ":", ","))
+                val list = subStr(ret, "[", "]").split(",")
+                val s = ArrayList<Int>()
+                for (a: String in list) {
+                    s.add(Integer.valueOf(a))
+                }
+                val range = (s[0] + 2 * s[1] + 3 * s[2] + 4 * s[3] + 5 * s[4]) * 1.0
+                val b = range / peopleLimit * 2
+                val _avg = if (peopleLimit > 0) DecimalFormat("#.0").format(b) else 0.0
+                cb.getScoreSucc(_avg.toString())
+            }
+
+            override fun onFailed(ReasonStr: String?) {
+                cb.onFailed(ReasonStr!!)
+            }
+        })
+    }
+
+    override fun InitPageInfo(page: String, cb: ComicDetailContract.GetPageInfo) {
         SendRequest(page, object : RequestCallback {
             override fun onSuccess(RetStr: String?) {
                 val init = Jsoup.parse(RetStr)

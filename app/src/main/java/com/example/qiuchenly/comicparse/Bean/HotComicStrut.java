@@ -1,4 +1,5 @@
 package com.example.qiuchenly.comicparse.Bean;
+
 public class HotComicStrut {
     public String bookName;
     public String bookImgSrc;
@@ -8,6 +9,6 @@ public class HotComicStrut {
 
     @Override
     public String toString() {
-        return bookName+"|"+bookImgSrc+"|"+lastedPage_name+"|"+lastedPage_src+"|"+bookLink;
+        return bookName + "|" + bookImgSrc + "|" + lastedPage_name + "|" + lastedPage_src + "|" + bookLink;
     }
 }

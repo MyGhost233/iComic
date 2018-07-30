@@ -1,39 +1,40 @@
 package com.example.qiuchenly.comicparse.UI.Main;
 
 import com.example.qiuchenly.comicparse.Bean.HotComicStrut;
+import com.example.qiuchenly.comicparse.Simple.BasePresenterImp;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainPresenter implements MainContract.Presenter {
-
-    MainContract.View mView;
-    MainModel model = new MainModel();
+/**
+ * 主页P层实现类
+ * 作者 秋城落叶
+ * 2018年7月30号
+ */
+public class MainPresenter extends BasePresenterImp<MainContract.View, MainModel> implements MainContract.Presenter {
 
     public MainPresenter(MainContract.View mView) {
-        this.mView = mView;
-        mView.setPres(this);
+        super(mView);
     }
 
     @Override
     public void getHotComic() {
-        model.getHotsComic(new MainContract.GetHotComic() {
+        SuperModel.getHotsComic(new MainContract.GetHotComic() {
             @Override
             public void onSuccessGetHot(@NotNull ArrayList<HotComicStrut> arr) {
-                if (mView != null) mView.getHotComicList(arr);
+                if (isShow()) SuperView.getHotComicList(arr);
             }
 
             @Override
             public void onFailed(@NotNull String reasonStr) {
-                if (mView != null) mView.ShowErrorMsg(reasonStr);
+                if (isShow()) SuperView.ShowErrorMsg(reasonStr);
             }
         });
     }
 
     @Override
-    public void Destory() {
-        mView = null;
+    public MainModel createModel() {
+        return new MainModel();
     }
 }

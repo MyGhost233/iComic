@@ -1,10 +1,8 @@
 package com.example.qiuchenly.comicparse.UI.ReaderPage
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.example.qiuchenly.comicparse.Adapter.ComicImagePageAda
 import com.example.qiuchenly.comicparse.R
@@ -26,12 +24,9 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
             mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
             return
         }
-        val pointRange = mComicImagePageAda?.getData()?.size
         mComicImagePageAda?.addData(lst)
         currInfos.text = currInfo
         nextUrl = next
-        if (pointRange!! != 0)
-            rv_comicRead_list.smoothScrollToPosition(pointRange)
         mAppBarComicReader.setExpanded(true)
     }
 
@@ -45,6 +40,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         this.mPres = mPres
     }
 
+    private var currUrl = ""
     private var mComicImagePageAda: ComicImagePageAda? = null
     private var curr = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,34 +50,25 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         ReadPresenter(this)
         curr = intent.extras.getInt("curr")
 //        intent.extras.getString("title")
-        val url = intent.extras.getString("link")
+        var url = intent.extras.getString("link")
+        currUrl = url
         mComicImagePageAda = ComicImagePageAda()
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
         rv_comicRead_list.setOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, state: Int) {
-                if (state === RecyclerView.SCROLL_STATE_IDLE) {
-                    val layoutManager = recyclerView!!.layoutManager
-                    val lastVisiblePosition: Int
-                    lastVisiblePosition =
-                            when (layoutManager) {
-                                is GridLayoutManager -> (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
-                                is StaggeredGridLayoutManager -> {
-                                    val into = IntArray((layoutManager as StaggeredGridLayoutManager).spanCount)
-                                    (layoutManager as StaggeredGridLayoutManager).findLastVisibleItemPositions(into)
-                                    into.max()!!
-                                }
-                                else -> (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                            }
-                    if (layoutManager.childCount > 0             //当当前显示的item数量>0
-                            && lastVisiblePosition >= layoutManager.itemCount - 1           //当当前屏幕最后一个加载项位置>=所有item的数量
-                            && layoutManager.itemCount > layoutManager.childCount) { // 当当前总Item数大于可见Item数
-                        if (nextUrl != "" && !noMore) {
-                            mPres.getParsePicList(nextUrl, this@ReadPage)
+                val state1 = !recyclerView!!.canScrollVertically(1)
+                if (state1) {
+                    if (nextUrl != "" && !noMore) {
+                        if (currUrl == nextUrl) {
+                            println("the same as Url")
                         } else {
-                            onFailed("没有更多信息了")
-                            mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
+                            currUrl = nextUrl
+                            mPres.getParsePicList(nextUrl, this@ReadPage)
                         }
+                    } else {
+                        onFailed("没有更多信息了")
+                        mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
                     }
                 }
             }

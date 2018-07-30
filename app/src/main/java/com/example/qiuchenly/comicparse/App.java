@@ -23,7 +23,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ctx=this;
+        ctx = this;
         Queue = Volley.newRequestQueue(this);
         CookieMaster = new CookieHelper();
         sp = this.getSharedPreferences("qcly", MODE_PRIVATE);

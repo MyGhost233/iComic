@@ -30,7 +30,7 @@ public class AppManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-            ViewGroup decorViewGroup = (ViewGroup)activity.getWindow().getDecorView();
+            ViewGroup decorViewGroup = (ViewGroup) activity.getWindow().getDecorView();
             //获取自己布局的根视图
             View rootView = ((ViewGroup) (decorViewGroup.findViewById(android.R.id.content))).getChildAt(0);
             //预留状态栏位置
@@ -55,7 +55,6 @@ public class AppManager {
         }
         return result;
     }
-
 
 
     /**

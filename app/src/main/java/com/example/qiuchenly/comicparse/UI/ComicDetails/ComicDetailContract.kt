@@ -8,21 +8,28 @@ import com.example.qiuchenly.comicparse.Simple.BaseView
 interface ComicDetailContract {
     interface View : BaseView<Presenter> {
         fun GetInfoSucc(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
+        fun getScoreSucc(rate: String)
     }
 
     interface Presenter : BasePresenter {
-        fun InitPageInfo(page:String)
+        fun initPageInfo(page: String)
     }
 
     interface Model : BaseModel {
-
+        fun getBookScore(bookID: String, cb: ComicDetailContract.GetScore)
+        fun InitPageInfo(page: String, cb: ComicDetailContract.GetPageInfo)
     }
 
     interface BaseGetCallBack {
         fun onFailed(reasonStr: String)
     }
 
+    interface GetScore : BaseGetCallBack {
+        fun getScoreSucc(rate: String)
+
+    }
+
     interface GetPageInfo : BaseGetCallBack {
-         fun onSuccessGetInfo(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
-     }
+        fun onSuccessGetInfo(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
+    }
 }

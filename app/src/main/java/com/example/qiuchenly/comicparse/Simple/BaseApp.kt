@@ -17,14 +17,16 @@ abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P> {
 
     abstract fun getLayoutID(): Int
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mPres.Destory()
-        AppManager.getAppm().finishActivity(this)
+    override fun setPres(mPres: P) {
+        if (mPres == null)
+            this.mPres = mPres
     }
 
-    override fun initView() {
-
+    override fun onDestroy() {
+        super.onDestroy()
+        if (mPres != null)
+            mPres.Destory()
+        AppManager.getAppm().finishActivity(this)
     }
 
     override fun ShowErrorMsg(msg: String) {

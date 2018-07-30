@@ -23,6 +23,6 @@ interface MainContract {
     }
 
     interface GetHotComic : BaseGetCallBack {
-         fun onSuccessGetHot(arr: ArrayList<HotComicStrut>)
-     }
+        fun onSuccessGetHot(arr: ArrayList<HotComicStrut>)
+    }
 }

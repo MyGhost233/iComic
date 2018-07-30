@@ -10,17 +10,13 @@ class ReadModel : ReaderContract.Model, BaseModelImp() {
                 if (RetStr != null) {
                     val code = String(Base64.decode(subStr(RetStr, "var qTcms_S_m_murl_e=\"", "\""), 0))
                     val arr = code.split("\$qingtiandy\$")
-                    val next ="https://www.mh1234.com"+ subStr(RetStr, "qTcms_Pic_nextArr=\"", "\"")
-                    val currInfo = subStr(RetStr, "qTcms_S_m_name=\"", "\"") +"\n"+
+
+                    val next = "https://www.mh1234.com" + subStr(RetStr, "qTcms_Pic_nextArr=\"", "\"")
+                    val currInfo = subStr(RetStr, "qTcms_S_m_name=\"", "\"") + "\n" +
                             subStr(RetStr, "qTcms_S_m_playm=\"", "\"")
                     CB.onLoadSucc(ArrayList(arr), next, currInfo)
                 } else
                     CB.onFailed("数据有异常！")
-            }
-
-            fun subStr(all: String, left: String, right: String): String {
-                val sta = all.indexOf(left) + left.length
-                return all.substring(sta, all.indexOf(right, sta))
             }
             /*
 var qTcms_S_m_name="指染成婚";
