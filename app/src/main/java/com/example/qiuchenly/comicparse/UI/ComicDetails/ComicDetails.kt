@@ -39,12 +39,11 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         }
     }
 
-    var comicInfo = com.example.qiuchenly.comicparse.Bean.HotComicStrut()
+    private var comicInfo = com.example.qiuchenly.comicparse.Bean.HotComicStrut()
 
     override fun getLayoutID(): Int {
         return R.layout.activity_comicdetails
     }
-
 
     override fun setPres(mPres: ComicDetailContract.Presenter) {
         this.mPres = mPres
@@ -58,7 +57,6 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         ComicPresenter(this)
 
         val string = (intent.extras["data"] as String).split("|")
-        // return bookName+"|"+bookImgSrc+"|"+lastedPage_name+"|"+lastedPage_src+"|"+bookLink;
         comicInfo = com.example.qiuchenly.comicparse.Bean.HotComicStrut().apply {
             bookName = string[0]
             bookImgSrc = BaseURL.BASE_URL + string[1]

@@ -1,5 +1,6 @@
 package com.example.qiuchenly.comicparse.UI.SwicthMain
 
+import com.example.qiuchenly.comicparse.Simple.BaseModel
 import com.example.qiuchenly.comicparse.Simple.BasePresenter
 import com.example.qiuchenly.comicparse.Simple.BaseView
 
@@ -9,6 +10,10 @@ interface MainSwitchContract {
     }
 
     interface View:BaseView<Presenter>{
+
+    }
+
+    interface Model:BaseModel{
 
     }
 }

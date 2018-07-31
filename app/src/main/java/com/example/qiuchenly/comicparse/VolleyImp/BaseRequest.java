@@ -82,7 +82,6 @@ public abstract class BaseRequest {
                 head.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
                 head.put("Cookie", App.getCookieMaster().toString());
                 head.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36");
-                //head.put("Host", "opac.jsahvc.edu.cn");
                 return head;
             }
         };

@@ -11,17 +11,27 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/main_src"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/backs" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#68000000" />
-        <android.support.design.widget.CoordinatorLayout
+
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="82dp"
+            android:background="#36ffffff" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/ab_main_navigation_layout"
@@ -37,6 +47,7 @@
                     app:contentInsetStart="0dp">
 
                     <FrameLayout
+                        android:id="@+id/control_menu"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
@@ -62,6 +73,7 @@
                             android:layout_gravity="center">
 
                             <FrameLayout
+                                android:id="@+id/switch_my_list"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -77,6 +89,7 @@
                             </FrameLayout>
 
                             <FrameLayout
+                                android:id="@+id/switch_my_website_more"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
@@ -94,6 +107,7 @@
                             </FrameLayout>
 
                             <FrameLayout
+                                android:id="@+id/switch_my_website_addition"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
@@ -110,13 +124,14 @@
                                     android:src="@drawable/ic_menu_black_24dp" />
                             </FrameLayout>
                         </LinearLayout>
+
                         <FrameLayout
                             android:id="@+id/btn_menu_search"
                             android:layout_width="?attr/actionBarSize"
                             android:layout_height="match_parent"
+                            android:layout_gravity="end"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:layout_gravity="end"
                             android:focusable="auto">
 
                             <ImageView
@@ -135,11 +150,8 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_main_pages"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            </android.support.v4.view.ViewPager>
-        </android.support.design.widget.CoordinatorLayout>
+                android:layout_height="match_parent" />
+        </LinearLayout>
     </FrameLayout>
 
     <android.support.design.widget.NavigationView
@@ -153,10 +165,10 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/iv_backimg_nv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:id="@+id/iv_backimg_nv"
                 android:src="@drawable/vertical_back" />
 
         </FrameLayout>

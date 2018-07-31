@@ -10,7 +10,6 @@ import android.widget.Toast
 abstract class BaseFragment<P : BasePresenter> : Fragment(), BaseView<P> {
 
     protected var mPres: P? = null
-
     override fun setPres(mPres: P) {
         this.mPres = mPres
     }
