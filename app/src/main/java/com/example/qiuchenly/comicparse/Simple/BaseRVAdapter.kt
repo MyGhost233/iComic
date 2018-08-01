@@ -14,8 +14,9 @@ abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
     private var map: ArrayList<T>? = ArrayList()
 
     fun addData(map: ArrayList<T>) {
+        val startPoint = this.map?.size
         this.map?.addAll(map)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(startPoint!!, map.size)
     }
 
     fun setData(map: ArrayList<T>) {

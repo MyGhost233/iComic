@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="45dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:id="@+id/reader_floatbtn"
+        android:layout_height="45dp" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/mAppBarComicReader"
         android:layout_width="match_parent"

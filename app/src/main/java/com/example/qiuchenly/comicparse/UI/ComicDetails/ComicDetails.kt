@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.qiuchenly.comicparse.Adapter.ComicPageAda
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.example.qiuchenly.comicparse.R
@@ -70,6 +71,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
         Glide.with(this)
                 .load(comicInfo.bookImgSrc)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_book)
         mPres.initPageInfo(comicInfo.bookLink)
     }

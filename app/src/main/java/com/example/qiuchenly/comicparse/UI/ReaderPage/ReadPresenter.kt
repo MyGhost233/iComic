@@ -4,11 +4,11 @@ class ReadPresenter(var mView: ReaderContract.View?) : ReaderContract.Presenter 
     override fun getParsePicList(url: String, CB: ReaderContract.GetPageCB) {
         model.getParsePicList(url, object : ReaderContract.GetPageCB {
             override fun onFailed(reasonStr: String) {
-                mView?.onFailed(reasonStr)
+                if (mView != null) mView?.onFailed(reasonStr)
             }
 
             override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String) {
-                mView?.onLoadSucc(lst, next, currInfo)
+                if (mView != null) mView?.onLoadSucc(lst, next, currInfo)
             }
         })
     }

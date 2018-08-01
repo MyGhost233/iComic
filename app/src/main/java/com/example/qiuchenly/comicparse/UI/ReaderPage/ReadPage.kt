@@ -3,6 +3,7 @@ package com.example.qiuchenly.comicparse.UI.ReaderPage
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import com.example.qiuchenly.comicparse.Adapter.ComicImagePageAda
 import com.example.qiuchenly.comicparse.R
@@ -14,9 +15,12 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
 
     override fun onFailed(reasonStr: String) {
         ShowErrorMsg(reasonStr)
+        loading = false
     }
 
     var noMore = false
+
+    var lastPoint = 0
     override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String) {
         if (next.indexOf(".html") <= 0) {
             noMore = true
@@ -24,10 +28,36 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
             mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
             return
         }
-        mComicImagePageAda?.addData(lst)
+        lastPoint = mComicImagePageAda?.itemCount!!
+        mComicImagePageAda?.addData(lst)//removeAdultPicture(lst)
+
         currInfos.text = currInfo
         nextUrl = next
-        mAppBarComicReader.setExpanded(true)
+        loading = false
+
+        if (lastPoint < 0) {
+            mAppBarComicReader.setExpanded(true, true)
+            rv_comicRead_list.scrollToPosition(lastPoint)
+        }
+    }
+
+    /**
+     * 处理掉一些令人恶心的广告
+     * 无法处理 漫画自带 好恶心
+     */
+    private fun removeAdultPicture(lst: ArrayList<String>): ArrayList<String> {
+        for (str: String in lst) {
+            for (c in getClearPic())
+                if (str.indexOf(c) != -1) {
+                    lst.remove(str)
+                    break
+                }
+        }
+        return lst
+    }
+
+    fun getClearPic(): ArrayList<String> {
+        return arrayListOf("20161111115141126", "20161111115141690")
     }
 
     private var nextUrl = ""
@@ -40,6 +70,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         this.mPres = mPres
     }
 
+    private var loading = false
     private var currUrl = ""
     private var mComicImagePageAda: ComicImagePageAda? = null
     private var curr = -1
@@ -48,6 +79,11 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ReadPresenter(this)
+
+        reader_floatbtn.setOnClickListener {
+            rv_comicRead_list.smoothScrollToPosition(lastPoint)
+        }
+
         curr = intent.extras.getInt("curr")
 //        intent.extras.getString("title")
         var url = intent.extras.getString("link")
@@ -58,17 +94,19 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         rv_comicRead_list.setOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, state: Int) {
                 val state1 = !recyclerView!!.canScrollVertically(1)
+                if (loading) return//cancel request
+                if (state1) {
+                    loading = true
+                }
+                if (state1)
+                    Log.d("Qiuchen", "$nextUrl 滑动到最底部状态$state1 state = $state")
                 if (state1) {
                     if (nextUrl != "" && !noMore) {
-                        if (currUrl == nextUrl) {
-                            println("the same as Url")
-                        } else {
-                            currUrl = nextUrl
-                            mPres.getParsePicList(nextUrl, this@ReadPage)
-                        }
+                        mPres.getParsePicList(nextUrl, this@ReadPage)
                     } else {
                         onFailed("没有更多信息了")
-                        mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
+                        if (state == 0)
+                            mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
                     }
                 }
             }

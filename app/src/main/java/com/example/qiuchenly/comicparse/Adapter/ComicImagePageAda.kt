@@ -4,10 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.AppManager
 import com.example.qiuchenly.comicparse.Simple.BaseRVAdapter
 import kotlinx.android.synthetic.main.item_comicpage.view.*
+import java.lang.Exception
 
 
 class ComicImagePageAda : BaseRVAdapter<String>() {
@@ -19,6 +24,24 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
         if (data != null)
             Glide.with(AppManager.getAppm().currentActivity())
                     .load("http://mhpic.dongzaojiage.com" + data)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .listener(object : RequestListener<String, GlideDrawable> {
+                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+
+                        override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+                            if (resource == null) return false
+                            val params = item.iv_img_page.layoutParams
+                            val realWidth = item.iv_img_page.width - item.iv_img_page.paddingLeft - item.iv_img_page.paddingRight
+                            val scale = realWidth / (resource.intrinsicWidth * 1.0000)
+                            val realHeight = Math.round(resource.intrinsicHeight * scale).toInt()
+                            params.height = realHeight + item.iv_img_page.paddingTop + item.iv_img_page.paddingBottom
+                            item.iv_img_page.layoutParams = params
+                            return false
+                        }
+
+                    })
                     .into(item.iv_img_page)
     }
 
