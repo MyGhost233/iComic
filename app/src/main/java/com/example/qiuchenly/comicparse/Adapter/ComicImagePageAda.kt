@@ -12,6 +12,7 @@ import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.AppManager
 import com.example.qiuchenly.comicparse.Simple.BaseRVAdapter
 import kotlinx.android.synthetic.main.item_comicpage.view.*
+import kotlinx.android.synthetic.main.loadmore_view.view.*
 import java.lang.Exception
 
 
@@ -40,9 +41,20 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
                             item.iv_img_page.layoutParams = params
                             return false
                         }
-
                     })
                     .into(item.iv_img_page)
+
+        when (getItemViewType(position)) {
+            TYPE_LOAD_MORE -> {
+                with(item) {
+                    if (noMore) {
+                        noMore_tip.visibility = android.view.View.VISIBLE
+                        loadingView.visibility = android.view.View.GONE
+                    }
+                }
+            }
+
+        }
     }
 
     override fun getItemCount(): Int {
@@ -50,13 +62,19 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
-        return if (viewType === TYPE_LOAD_MORE) {
+        return if (viewType == TYPE_LOAD_MORE) {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.loadmore_view, parent, false)
             BaseVH(itemView)
         } else {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_comicpage, parent, false)
             BaseVH(itemView)
         }
+    }
+
+
+    private var noMore = false
+    fun setNoMore() {
+        noMore = true
     }
 
     val TYPE_NORMAL = 0

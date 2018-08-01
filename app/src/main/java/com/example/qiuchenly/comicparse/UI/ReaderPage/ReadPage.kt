@@ -3,7 +3,6 @@ package com.example.qiuchenly.comicparse.UI.ReaderPage
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import com.example.qiuchenly.comicparse.Adapter.ComicImagePageAda
 import com.example.qiuchenly.comicparse.R
@@ -25,7 +24,8 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         if (next.indexOf(".html") <= 0) {
             noMore = true
             onFailed("没有更多信息了")
-            mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
+            mComicImagePageAda?.setNoMore()
+            mComicImagePageAda?.notifyItemChanged(mComicImagePageAda?.getData()?.size!!)
             return
         }
         lastPoint = mComicImagePageAda?.itemCount!!
@@ -80,10 +80,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ReadPresenter(this)
 
-        reader_floatbtn.setOnClickListener {
-            rv_comicRead_list.smoothScrollToPosition(lastPoint)
-        }
-
         curr = intent.extras.getInt("curr")
 //        intent.extras.getString("title")
         var url = intent.extras.getString("link")
@@ -98,15 +94,16 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
                 if (state1) {
                     loading = true
                 }
-                if (state1)
-                    Log.d("Qiuchen", "$nextUrl 滑动到最底部状态$state1 state = $state")
+//                if (state1)
+//                    Log.d("Qiuchen", "$nextUrl 滑动到最底部状态$state1 state = $state")
                 if (state1) {
                     if (nextUrl != "" && !noMore) {
                         mPres.getParsePicList(nextUrl, this@ReadPage)
                     } else {
+                        noMore = true
                         onFailed("没有更多信息了")
-                        if (state == 0)
-                            mComicImagePageAda?.notifyItemRemoved(mComicImagePageAda?.getData()?.size!! - 1)
+                        mComicImagePageAda?.setNoMore()
+                        mComicImagePageAda?.notifyItemChanged(mComicImagePageAda?.getData()?.size!!)
                     }
                 }
             }
