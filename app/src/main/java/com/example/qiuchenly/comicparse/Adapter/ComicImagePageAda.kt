@@ -53,7 +53,6 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
                     }
                 }
             }
-
         }
     }
 
@@ -70,7 +69,6 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
             BaseVH(itemView)
         }
     }
-
 
     private var noMore = false
     fun setNoMore() {

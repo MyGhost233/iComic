@@ -81,11 +81,12 @@
                                 android:focusable="auto">
 
                                 <ImageView
+                                    android:id="@+id/switch_my_list_img"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_menu_black_24dp" />
+                                    android:src="@drawable/ic_menu_black_24dp_light_select" />
                             </FrameLayout>
 
                             <FrameLayout
@@ -99,6 +100,7 @@
                                 android:focusable="auto">
 
                                 <ImageView
+                                    android:id="@+id/switch_my_website_more_img"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
@@ -117,6 +119,7 @@
                                 android:focusable="auto">
 
                                 <ImageView
+                                    android:id="@+id/switch_my_website_addition_img"
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"

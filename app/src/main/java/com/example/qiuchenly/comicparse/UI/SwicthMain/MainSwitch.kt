@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -18,7 +19,49 @@ import kotlinx.android.synthetic.main.activity_switch_main.*
 import net.qiujuer.genius.blur.StackBlur
 import java.util.*
 
-class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.View {
+class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.View, ViewPager.OnPageChangeListener {
+    override fun onPageScrollStateChanged(state: Int) {
+
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+    }
+
+    var lastPosition = 0
+
+    override fun onPageSelected(position: Int) {
+        when (lastPosition) {
+            0 -> {
+                switch_my_list_img
+            }
+            1 -> {
+                switch_my_website_more_img
+            }
+            2 -> {
+                switch_my_website_addition_img
+            }
+            else -> {
+                switch_my_list_img
+            }
+        }.setImageResource(R.drawable.ic_menu_black_24dp)
+        when (position) {
+            0 -> {
+                switch_my_list_img
+            }
+            1 -> {
+                switch_my_website_more_img
+            }
+            2 -> {
+                switch_my_website_addition_img
+            }
+            else -> {
+                switch_my_list_img
+            }
+        }.setImageResource(R.drawable.ic_menu_black_24dp_light_select)
+        lastPosition = position
+    }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_switch_main
     }
@@ -76,6 +119,7 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
                 fragmentList)
         vp_main_pages.adapter = statement
         vp_main_pages.offscreenPageLimit = 3
+        vp_main_pages.setOnPageChangeListener(this)
 
         btn_menu_main.setOnClickListener {
             dl_navigation_main.openDrawer(Gravity.START)
