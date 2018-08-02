@@ -40,7 +40,7 @@ public abstract class BaseRequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                ret.onFailed(volleyError.getMessage());
+                ret.onFailed("非常抱歉，网络似乎有丶问题了");
             }
         }) {
             @Override

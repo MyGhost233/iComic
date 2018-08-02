@@ -1,7 +1,6 @@
 package com.example.qiuchenly.comicparse.UI.SwicthMain
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,8 +14,9 @@ import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.BaseApp
 import com.example.qiuchenly.comicparse.UI.Main.Main
 import com.example.qiuchenly.comicparse.UI.Main_MyIndex.MyDetailsFragment
+import com.example.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
+import com.example.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
 import kotlinx.android.synthetic.main.activity_switch_main.*
-import net.qiujuer.genius.blur.StackBlur
 import java.util.*
 
 class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.View, ViewPager.OnPageChangeListener {
@@ -67,7 +67,6 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
     }
 
     companion object BlurImageCache {
-        var navigationView: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         var contentView: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
         var imageGetters: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     }
@@ -76,26 +75,24 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         control_menu.visibility = View.INVISIBLE
+
         //start create appbar ui
         fl_main_root_view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 fl_main_root_view.buildDrawingCache()
-                val imageGetter = fl_main_root_view.drawingCache
-                imageGetters = imageGetter
+                var imageGetter = fl_main_root_view.drawingCache
+                imageGetters = blurs(imageGetter, 20)
 
-                var tmp = catchBitmap(ab_main_navigation_layout, imageGetters)
-                var retImg = blurs(tmp, 300)
+                var tmp = catchBitmap(ab_main_navigation_layout, imageGetter)
+                var retImg = blurs(tmp, 70)
                 ab_main_navigation_layout.background = BitmapDrawable(null, retImg)
-
-                control_menu.visibility = View.VISIBLE
-
-                navigationView = tmp
 
                 tmp = catchBitmap(vp_main_pages, imageGetters)
                 contentView = tmp
-                retImg = blurs(tmp, 30)
-                vp_main_pages.background = BitmapDrawable(null, retImg)
-                iv_backimg_nv.setImageBitmap(retImg)
+                vp_main_pages.background = BitmapDrawable(null, tmp)
+
+                control_menu.visibility = View.VISIBLE
+                iv_backimg_nv.setImageBitmap(imageGetters)
                 continueInit()
                 fl_main_root_view.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
@@ -148,16 +145,4 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
     }
 
     private var isOpenDrawable = false
-
-    fun blurs(bitmap: Bitmap, radius: Int): Bitmap {
-        return StackBlur.blurNatively(bitmap, radius, false)
-    }
-
-    fun catchBitmap(view: View, bitmap: Bitmap): Bitmap {
-        val bit1 = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bit1)
-        canvas.translate(-view.left.toFloat(), -view.top.toFloat())
-        canvas.drawBitmap(bitmap, 0.toFloat(), 0.toFloat(), null)
-        return bit1
-    }
 }

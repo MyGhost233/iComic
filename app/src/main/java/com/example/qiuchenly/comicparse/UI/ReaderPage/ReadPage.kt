@@ -90,7 +90,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         rv_comicRead_list.setOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, state: Int) {
                 val state1 = !recyclerView!!.canScrollVertically(1)
-                if (loading) return//cancel request
+                if (loading || noMore) return//cancel request
                 if (state1) {
                     loading = true
                 }

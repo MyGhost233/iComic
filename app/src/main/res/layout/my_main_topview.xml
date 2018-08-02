@@ -14,11 +14,11 @@
         android:scaleType="centerCrop"
         android:src="#00000000" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="29dp"
-        android:background="#36ffffff" />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="29dp"-->
+        <!--android:background="#36ffffff" />-->
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
