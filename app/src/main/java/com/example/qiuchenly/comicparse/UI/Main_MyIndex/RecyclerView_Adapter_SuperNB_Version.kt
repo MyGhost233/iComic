@@ -12,7 +12,7 @@ import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import com.example.qiuchenly.comicparse.Adapter.BaseVH
-import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
+import com.example.qiuchenly.comicparse.App
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.UI.RecentlyReading.RecentlyRead
 import com.example.qiuchenly.comicparse.UI.SwicthMain.MainSwitch
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.my_main_spec.view.*
 import kotlinx.android.synthetic.main.my_main_topview.view.*
 
 @Suppress("ClassName", "FunctionName")
-class RecyclerView_Adapter_SuperNB_Version : RecyclerView.Adapter<BaseVH>() {
+class RecyclerView_Adapter_SuperNB_Version(val mview: MyDetailsContract.View) : RecyclerView.Adapter<BaseVH>() {
 
     private var mList: List<String> = arrayListOf("", "", "", "", "", "", "")
 
@@ -57,8 +57,8 @@ class RecyclerView_Adapter_SuperNB_Version : RecyclerView.Adapter<BaseVH>() {
                             var ret = blurs(tmp, 70)
                             topview_back_for.setImageBitmap(ret)
 
-                             tmp = catchBitmap(topview_back, MainSwitch.contentView)
-                             ret = blurs(tmp, 100)
+                            tmp = catchBitmap(topview_back, MainSwitch.contentView)
+                            ret = blurs(tmp, 100)
                             topview_back.setImageBitmap(ret)
                             fl_main_root_view.viewTreeObserver.removeOnGlobalLayoutListener(this)
                         }
@@ -71,6 +71,7 @@ class RecyclerView_Adapter_SuperNB_Version : RecyclerView.Adapter<BaseVH>() {
                     normal_item.text = when (position) {
                         1 -> "本地漫画"
                         2 -> {
+                            recently_Size.text = "(${App.mDataBase.RECENTLY_GET_ALL().size})"
                             init_recently_read_item(this)
                             "最近浏览(本地)"
                         }
@@ -116,17 +117,12 @@ class RecyclerView_Adapter_SuperNB_Version : RecyclerView.Adapter<BaseVH>() {
                 anima.interpolator = AccelerateInterpolator()
                 rotateViews.startAnimation(anima)
             }
-            val arr = ArrayList<ComicBookInfo>()
-
-            arr.add(ComicBookInfo())
-            arr.add(ComicBookInfo())
-            arr.add(ComicBookInfo())
-            arr.add(ComicBookInfo())
+            var arr = mview.getAllLocalBook()
+            if (arr == null) arr = ArrayList()
             mMyDetailsLocalBookList.setData(arr)
-            my_main_spec_list.layoutManager = LinearLayoutManager(this.context)
+            my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
             my_main_spec_list.adapter = mMyDetailsLocalBookList
-
-            item_name.text = "我的漫画（本地有7本）"
+            item_name.text = "我的漫画（本地有${arr.size}本）"
         }
     }
 

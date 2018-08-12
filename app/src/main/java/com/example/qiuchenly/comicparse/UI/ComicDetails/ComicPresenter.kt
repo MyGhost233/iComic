@@ -1,8 +1,23 @@
 package com.example.qiuchenly.comicparse.UI.ComicDetails
+
+import com.example.qiuchenly.comicparse.App
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
+import com.example.qiuchenly.comicparse.Bean.HotComicStrut
 import com.example.qiuchenly.comicparse.Simple.BasePresenterImp
 
 class ComicPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDetailContract.View, ComicDetailContract.Model>(view), ComicDetailContract.Presenter {
+    override fun Save2DB(comicInfo: HotComicStrut, isLocal: Boolean) {
+        val book = ComicBookInfo.ComicBookInfo_Recently().apply {
+            this.BookName = comicInfo.bookName
+            this.BookName_Link = comicInfo.bookLink
+            this.BookName_Pic_Link = comicInfo.bookImgSrc
+            this.BookName_read_point = "暂无"
+            this.author = comicInfo.author
+        }
+        if (isLocal) App.mDataBase.LOCALBOOK_INSERT(book)
+        else App.mDataBase.RECENTLY_INSERT(book)
+    }
+
     override fun createModel(): ComicDetailContract.Model {
         return ComicModel()
     }

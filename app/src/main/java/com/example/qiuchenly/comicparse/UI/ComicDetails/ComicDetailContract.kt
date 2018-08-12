@@ -1,6 +1,7 @@
 package com.example.qiuchenly.comicparse.UI.ComicDetails
 
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
+import com.example.qiuchenly.comicparse.Bean.HotComicStrut
 import com.example.qiuchenly.comicparse.Simple.BaseModel
 import com.example.qiuchenly.comicparse.Simple.BasePresenter
 import com.example.qiuchenly.comicparse.Simple.BaseView
@@ -13,6 +14,7 @@ interface ComicDetailContract {
 
     interface Presenter : BasePresenter {
         fun initPageInfo(page: String)
+        fun Save2DB(comicInfo: HotComicStrut, isLocal: Boolean = false)
     }
 
     interface Model : BaseModel {

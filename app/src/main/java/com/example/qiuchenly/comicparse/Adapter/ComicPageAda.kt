@@ -11,7 +11,12 @@ import com.example.qiuchenly.comicparse.Simple.BaseRVAdapter
 import com.example.qiuchenly.comicparse.UI.ReaderPage.ReadPage
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 
-class ComicPageAda : BaseRVAdapter<ComicBookInfo>() {
+class ComicPageAda(private val mOnSaveCB: OnSaveCB) : BaseRVAdapter<ComicBookInfo>() {
+
+    interface OnSaveCB {
+        fun pleaseSave2DB()
+    }
+
     override fun getLayout(): Int {
         return R.layout.comic_page_item
     }
@@ -26,6 +31,7 @@ class ComicPageAda : BaseRVAdapter<ComicBookInfo>() {
                     putString("title", data.title)
                     putInt("curr", position)
                 })
+                mOnSaveCB.pleaseSave2DB()
                 startActivity(AppManager.getAppm().currentActivity(), bin, null)
             }
         }

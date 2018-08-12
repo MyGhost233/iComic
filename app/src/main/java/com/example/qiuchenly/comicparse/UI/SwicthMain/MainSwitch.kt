@@ -104,18 +104,22 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         this.mPres = mPres
     }
 
-    fun continueInit() {
-        val fragmentList = ArrayList<Fragment>().apply {
-            add(MyDetailsFragment())
-            add(Main())
-            add(Fragment())
-        }
+    fun updateInfo() {
+        (fragmentList[0] as MyDetailsFragment).notifyData()
+    }
 
+    val fragmentList = ArrayList<Fragment>().apply {
+        add(MyDetailsFragment())
+        add(Main())
+        add(Fragment())
+    }
+
+    fun continueInit() {
         val statement = BaseFragmentPagerStatement(
                 supportFragmentManager,
                 fragmentList)
         vp_main_pages.adapter = statement
-        vp_main_pages.offscreenPageLimit = 3
+        vp_main_pages.offscreenPageLimit = 4
         vp_main_pages.setOnPageChangeListener(this)
 
         btn_menu_main.setOnClickListener {

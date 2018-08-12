@@ -23,11 +23,11 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="33dp"
             android:gravity="center"
-            android:id="@+id/item_name"
             android:text="创建的歌单(7)"
             android:textColor="#dfffffff" />
 
@@ -50,6 +50,5 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_main_spec_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 </LinearLayout>

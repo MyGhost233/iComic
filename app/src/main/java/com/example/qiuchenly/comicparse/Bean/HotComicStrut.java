@@ -6,6 +6,7 @@ public class HotComicStrut {
     public String lastedPage_name;
     public String lastedPage_src;
     public String bookLink;
+    public String author;
 
     @Override
     public String toString() {

@@ -1,19 +1,18 @@
-package com.example.qiuchenly.comicparse.UI.Main_MyIndex
+package com.example.qiuchenly.comicparse.UI.RecentlyReading.RecnetByWeek
 
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.example.qiuchenly.comicparse.Simple.BaseModel
 import com.example.qiuchenly.comicparse.Simple.BasePresenter
 import com.example.qiuchenly.comicparse.Simple.BaseView
 
-interface MyDetailsContract {
+interface WeekContract {
 
     interface Presenter : BasePresenter {
-        fun getLocalBookByDB(): ArrayList<ComicBookInfo.ComicBookInfo_Recently>?
+        fun getAllRecently(): MutableList<ComicBookInfo.ComicBookInfo_Recently>
     }
 
-    interface View : BaseView<Presenter> {
-        fun getAllLocalBook(): ArrayList<ComicBookInfo.ComicBookInfo_Recently>?
-    }
+    interface View : BaseView<Presenter>
 
     interface Model : BaseModel
+
 }

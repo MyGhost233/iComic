@@ -5,12 +5,11 @@ import com.example.qiuchenly.comicparse.Simple.BasePresenter
 import com.example.qiuchenly.comicparse.Simple.BaseView
 
 interface ReaderContract {
-    interface View : BaseView<Presenter>, GetPageCB {
-
-    }
+    interface View : BaseView<Presenter>, GetPageCB
 
     interface Presenter : BasePresenter {
         fun getParsePicList(url: String, CB: GetPageCB)
+        fun updateReadPoint(point: String)
     }
 
     interface Model : BaseModel {

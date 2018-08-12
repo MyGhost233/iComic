@@ -8,7 +8,7 @@ import android.view.ViewTreeObserver
 import android.widget.Toast
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.BaseNavigatorCommon
-import com.example.qiuchenly.comicparse.UI.Main.Main
+import com.example.qiuchenly.comicparse.UI.RecentlyReading.RecnetByWeek.RecentlyByWeekFragment
 import com.example.qiuchenly.comicparse.UI.SwicthMain.MainSwitch
 import com.example.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_recently_read.*
@@ -38,8 +38,8 @@ class RecentlyRead : AppCompatActivity() {
         }
 
         val list = arrayListOf(
-                PagerAdapter.Struct("最近一周", Main()),
-                PagerAdapter.Struct("一周以前123123", Main())
+                PagerAdapter.Struct("最近一周", RecentlyByWeekFragment()),
+                PagerAdapter.Struct("一周以前", RecentlyByWeekFragment())
         )
         PgAdapter = PagerAdapter(supportFragmentManager, list)
         tl_recently_tab_setup_vp.adapter = PgAdapter
@@ -54,6 +54,7 @@ class RecentlyRead : AppCompatActivity() {
                 bit = CustomUtils.blurs(bit, 70)
                 al_recently_bar.background = BitmapDrawable(bit)
                 al_recently_bar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                tl_recently_tab_setup_vp.background = BitmapDrawable(MainSwitch.contentView)
             }
         })
 

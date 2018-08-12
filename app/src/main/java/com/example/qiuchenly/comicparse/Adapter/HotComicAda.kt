@@ -48,7 +48,7 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                     })
                     android.support.v4.content.ContextCompat.startActivity(this.context, i, android.app.ActivityOptions.makeSceneTransitionAnimation
                     (com.example.qiuchenly.comicparse.Simple.AppManager.getAppm().currentActivity(), this, "srdv")
-                            .toBundle());
+                            .toBundle())
                 }
                 setOnTouchListener { v, event ->
                     when(event!!.action){

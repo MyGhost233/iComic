@@ -8,12 +8,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.qiuchenly.comicparse.Adapter.ComicPageAda
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.example.qiuchenly.comicparse.R
+import com.example.qiuchenly.comicparse.Simple.AppManager
 import com.example.qiuchenly.comicparse.Simple.BaseApp
+import com.example.qiuchenly.comicparse.UI.SwicthMain.MainSwitch
 import com.example.qiuchenly.comicparse.VolleyImp.BaseURL
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 
 
-class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View {
+class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View, ComicPageAda.OnSaveCB {
+    override fun pleaseSave2DB() {
+        mPres.Save2DB(comicInfo)
+    }
+
     override fun getScoreSucc(rate: String) {
         tv_bookScore.text = "网友评分：" + rate
     }
@@ -24,6 +30,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
                              category: String,
                              introduction: String,
                              retPageList: ArrayList<ComicBookInfo>) {
+        comicInfo.author = author
         tv_bookName.text = comicInfo.bookName
         tv_bookAuthor.text = "原著作者：" + author
         tv_bookCategory.text = "剧情类别：" + category
@@ -57,15 +64,21 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ComicPresenter(this)
 
+        fa_add_local_list.setOnClickListener {
+            mPres.Save2DB(comicInfo, true)
+            (AppManager.getActivity(MainSwitch::class.java) as MainSwitch).updateInfo()
+            ShowErrorMsg("已加入本地图书列表！")
+        }
+
         val string = (intent.extras["data"] as String).split("|")
         comicInfo = com.example.qiuchenly.comicparse.Bean.HotComicStrut().apply {
             bookName = string[0]
-            bookImgSrc = BaseURL.BASE_URL + string[1]
+            bookImgSrc = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[1]
             lastedPage_name = string[2]
-            lastedPage_src = BaseURL.BASE_URL + string[3]
-            bookLink = BaseURL.BASE_URL + string[4]
+            lastedPage_src = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[3]
+            bookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
         }
-        comicPageAdas = ComicPageAda()
+        comicPageAdas = ComicPageAda(this)
         rv_comicPage.layoutManager = LinearLayoutManager(this)
         rv_comicPage.adapter = comicPageAdas
 
