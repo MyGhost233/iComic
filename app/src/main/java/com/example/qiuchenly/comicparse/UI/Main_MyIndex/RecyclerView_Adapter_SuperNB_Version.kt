@@ -104,24 +104,23 @@ class RecyclerView_Adapter_SuperNB_Version(val mview: MyDetailsContract.View) : 
             setOnClickListener {
                 var form = 0f
                 var to = 90f
-                if (my_main_spec_list.visibility == View.GONE) {
-                    my_main_spec_list.visibility = View.VISIBLE
-                } else {
-                    my_main_spec_list.visibility = View.GONE
-                    form = 90f
-                    to = 0f
-                }
-                val anima = RotateAnimation(form, to, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f)
-                anima.duration = 200
-                anima.fillAfter = true
-                anima.interpolator = AccelerateInterpolator()
-                rotateViews.startAnimation(anima)
+                if (my_main_spec_list.visibility == View.GONE) my_main_spec_list.visibility = View.VISIBLE else
+                    my_main_spec_list.visibility = View.GONE;form = 90f;to = 0f
+                rotateViews.startAnimation(RotateAnimation(form, to, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f).apply {
+                    duration = 200
+                    fillAfter = true
+                    interpolator = AccelerateInterpolator()
+                })
             }
+            rotateViews.startAnimation(RotateAnimation(0f, 90f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f).apply {
+                duration = 200;fillAfter = true;interpolator = AccelerateInterpolator()
+            })//设置旋转显示数据
             var arr = mview.getAllLocalBook()
             if (arr == null) arr = ArrayList()
             mMyDetailsLocalBookList.setData(arr)
             my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
             my_main_spec_list.adapter = mMyDetailsLocalBookList
+            my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
             item_name.text = "我的漫画（本地有${arr.size}本）"
         }
     }
