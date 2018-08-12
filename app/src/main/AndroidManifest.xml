@@ -14,13 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.ComicDetails.ComicDetails"
+            android:name="com.example.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.ReaderPage.ReadPage"
+            android:name="com.example.qiuchenly.comicparse.MVP.UI.Activitys.ReadPage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.SwicthMain.MainSwitch"
+            android:name="com.example.qiuchenly.comicparse.MVP.UI.Activitys.MainSwitch"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.RecentlyReading.RecentlyRead"
+            android:name="com.example.qiuchenly.comicparse.MVP.UI.RecentlyReading.RecentlyRead"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

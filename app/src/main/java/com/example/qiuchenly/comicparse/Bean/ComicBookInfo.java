@@ -4,7 +4,6 @@ public class ComicBookInfo {
     public String link;
     public String title;
 
-
     public static class ComicBookInfo_Recently {
         public String BookName;
         public String BookName_Link;

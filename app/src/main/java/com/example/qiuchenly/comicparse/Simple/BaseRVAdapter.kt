@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.qiuchenly.comicparse.Adapter.BaseVH
+import com.example.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
 
 abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
