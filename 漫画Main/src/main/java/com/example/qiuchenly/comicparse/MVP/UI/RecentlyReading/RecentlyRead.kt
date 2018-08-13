@@ -14,6 +14,7 @@ import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.BaseNavigatorCommon
 import com.example.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_recently_read.*
+import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 
 /**

@@ -32,7 +32,6 @@ class BaseNavigatorCommon(val list: ArrayList<RecentlyPagerAdapter.Struct>, val 
         return list.size
     }
 
-
     override fun getTitleView(context: Context, index: Int): IPagerTitleView {
         val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
         colorTransitionPagerTitleView.normalColor = Color.parseColor("#dfdede")//未被选择的颜色

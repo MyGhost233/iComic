@@ -9,13 +9,13 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import com.example.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
 import com.example.qiuchenly.comicparse.MVP.Contract.MainSwitchContract
+import com.example.qiuchenly.comicparse.MVP.Presenter.MainSwichPresenter
+import com.example.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
+import com.example.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
+import com.example.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.BaseApp
-import com.example.qiuchenly.comicparse.MVP.UI.Fragments.Main
-import com.example.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
-import com.example.qiuchenly.comicparse.MVP.Presenter.MainSwichPresenter
 import com.example.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
 import com.example.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
 import kotlinx.android.synthetic.main.activity_switch_main.*
@@ -112,7 +112,8 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
 
     val fragmentList = ArrayList<Fragment>().apply {
         add(MyDetailsFragment())
-        add(Main())
+        add(ComicBoardFragment())
+//        add(Main())
         add(Fragment())
     }
 
