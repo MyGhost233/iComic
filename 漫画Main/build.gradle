@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'//解决报错apply plugin: 'kotlin-kapt'
+
+apply plugin: 'realm-android'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -51,6 +55,11 @@ dependencies {
 
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
+    implementation 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
+
+    // kotlin使用realm的注解处理依赖库
+    kapt "io.realm:realm-annotations:0.87.1"
+    kapt "io.realm:realm-annotations-processor:0.87.1"
 
     implementation 'com.android.support:support-v13:27.1.1'
     implementation "org.jetbrains.anko:anko:$anko_version"
