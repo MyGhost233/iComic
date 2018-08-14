@@ -19,7 +19,7 @@ class ReadPresenter(mView: ReaderContract.View?) : BasePresenterImp<ReaderContra
     }
 
     override fun getParsePicList(url: String, CB: ReaderContract.GetPageCB) {
-        SuperModel.getParsePicList(url, object : ReaderContract.GetPageCB {
+        SuperModel!!.getParsePicList(url, object : ReaderContract.GetPageCB {
             override fun onFailed(reasonStr: String) {
                 if (isShow) SuperView?.onFailed(reasonStr)
             }

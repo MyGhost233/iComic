@@ -6,6 +6,7 @@ import android.view.View
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.BaseFragment
 import com.example.qiuchenly.comicparse.MVP.UI.Adapter.MyDetailsLocalBookListAdapter
+import com.example.qiuchenly.comicparse.MVP.UI.Adapter.MyRecentlyBookListAdapter
 import kotlinx.android.synthetic.main.recently_week.*
 
 class RecentlyByWeekFragment : BaseFragment<WeekContract.Presenter>(), WeekContract.View {
@@ -13,11 +14,11 @@ class RecentlyByWeekFragment : BaseFragment<WeekContract.Presenter>(), WeekContr
         return R.layout.recently_week
     }
 
-    var mMyDetailsLocalBookList: MyDetailsLocalBookListAdapter? = null
+    var mMyDetailsLocalBookList: MyRecentlyBookListAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_recently.layoutManager = LinearLayoutManager(this.context)
-        mMyDetailsLocalBookList = MyDetailsLocalBookListAdapter()
+        mMyDetailsLocalBookList = MyRecentlyBookListAdapter()
 
         RecentlyPresenter(this)
         val arr = ArrayList(mPres?.getAllRecently())

@@ -7,7 +7,7 @@ import com.example.qiuchenly.comicparse.Simple.BaseModelImp
 class Activity_ReaderModel : ReaderContract.Model, BaseModelImp() {
     override fun getParsePicList(url: String, CB: ReaderContract.GetPageCB) {
         SendRequest(url, object : RequestCallback {
-            override fun onSuccess(RetStr: String?) {
+            override fun onSuccess(RetStr: String) {
                 if (RetStr != null) {
                     val code = String(Base64.decode(subStr(RetStr, "var qTcms_S_m_murl_e=\"", "\""), 0))
                     val arr = code.split("\$qingtiandy\$")
@@ -25,7 +25,7 @@ var qTcms_S_m_playm="第145话 坐地起价与气极谋杀？！";
 var qTcms_Pic_nextArr="/comic/10452/372260.html";
              */
 
-            override fun onFailed(ReasonStr: String?) {
+            override fun onFailed(ReasonStr: String) {
                 if (ReasonStr != null) {
                     CB.onFailed(ReasonStr)
                 }

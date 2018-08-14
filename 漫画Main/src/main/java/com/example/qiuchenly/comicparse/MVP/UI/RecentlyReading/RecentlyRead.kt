@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 
 /**
- * 这个类 就这么跟你👍吧 最近阅读活动类 你了解⑧？
+ * 这个类 就这么跟你👄吧 最近阅读活动类 你了解⑧？
  * 作者：一个传说
  * 时间：⚽️⚽️你萌让我一个月拿驾驶证⑧
  */

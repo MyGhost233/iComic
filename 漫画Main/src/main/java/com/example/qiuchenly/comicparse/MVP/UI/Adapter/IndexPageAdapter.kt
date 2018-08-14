@@ -105,7 +105,9 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
                 var form = 0f
                 var to = 90f
                 if (my_main_spec_list.visibility == View.GONE) my_main_spec_list.visibility = View.VISIBLE
-                else { my_main_spec_list.visibility = View.GONE;form = 90f;to = 0f }
+                else {
+                    my_main_spec_list.visibility = View.GONE;form = 90f;to = 0f
+                }
                 rotateViews.startAnimation(RotateAnimation(form, to, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f).apply {
                     duration = 200
                     fillAfter = true
@@ -115,7 +117,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
             rotateViews.startAnimation(RotateAnimation(0f, 90f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f).apply {
                 duration = 200;fillAfter = true;interpolator = AccelerateInterpolator()
             })//设置旋转显示数据
-            var arr = mview.getAllLocalBook()
+            var arr = ArrayList(mview.getLocalListData())
             if (arr == null) arr = ArrayList()
             mMyDetailsLocalBookList.setData(arr)
             my_main_spec_list.layoutManager = LinearLayoutManager(view.context)

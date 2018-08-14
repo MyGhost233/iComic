@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import com.example.qiuchenly.comicparse.Bean.ComicBookInfo
+import com.example.qiuchenly.comicparse.MVP.UI.Activitys.ReadPage
 import com.example.qiuchenly.comicparse.R
 import com.example.qiuchenly.comicparse.Simple.AppManager
 import com.example.qiuchenly.comicparse.Simple.BaseRVAdapter
-import com.example.qiuchenly.comicparse.MVP.UI.Activitys.ReadPage
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 
 class ComicPageAda(private val mOnSaveCB: OnSaveCB) : BaseRVAdapter<ComicBookInfo>() {
@@ -25,14 +25,14 @@ class ComicPageAda(private val mOnSaveCB: OnSaveCB) : BaseRVAdapter<ComicBookInf
         if (data != null) {
             item.tv_comicPageName.text = data.title
             item.setOnClickListener {
-                val bin = Intent(AppManager.getAppm().currentActivity(), ReadPage::class.java)
+                val bin = Intent(AppManager.appm.currentActivity(), ReadPage::class.java)
                 bin.putExtras(Bundle().apply {
                     putString("link", "https://www.mh1234.com/" + data.link)
                     putString("title", data.title)
                     putInt("curr", position)
                 })
                 mOnSaveCB.pleaseSave2DB()
-                startActivity(AppManager.getAppm().currentActivity(), bin, null)
+                startActivity(AppManager.appm.currentActivity(), bin, null)
             }
         }
     }

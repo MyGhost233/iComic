@@ -9,7 +9,7 @@ class RecentlyPresenter(mView: WeekContract.View?) : BasePresenterImp<WeekContra
         return Model()
     }
 
-    override fun getAllRecently(): MutableList<ComicBookInfo.ComicBookInfo_Recently> {
-        return App.mDataBase.RECENTLY_GET_ALL()
+    override fun getAllRecently(): ArrayList<ComicBookInfo.ComicBookInfo_Recently> {
+        return ArrayList(App.mDataBase.RECENTLY_GET_ALL())
     }
 }

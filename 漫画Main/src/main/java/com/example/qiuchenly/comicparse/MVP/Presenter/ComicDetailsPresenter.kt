@@ -7,7 +7,7 @@ import com.example.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.example.qiuchenly.comicparse.MVP.Model.Activity_ComicModel
 import com.example.qiuchenly.comicparse.Simple.BasePresenterImp
 
-class ComicPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDetailContract.View, ComicDetailContract.Model>(view), ComicDetailContract.Presenter {
+class ComicDetailsPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDetailContract.View, ComicDetailContract.Model>(view), ComicDetailContract.Presenter {
     override fun Save2DB(comicInfo: HotComicStrut, isLocal: Boolean) {
         val book = ComicBookInfo.ComicBookInfo_Recently().apply {
             this.BookName = comicInfo.bookName
@@ -18,6 +18,8 @@ class ComicPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDet
         }
         if (isLocal) App.mDataBase.LOCALBOOK_INSERT(book)
         else App.mDataBase.RECENTLY_INSERT(book)
+
+
     }
 
     override fun createModel(): ComicDetailContract.Model {
@@ -25,7 +27,7 @@ class ComicPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDet
     }
 
     override fun initPageInfo(page: String) {
-        SuperModel.InitPageInfo(page, object : ComicDetailContract.GetPageInfo {
+        SuperModel!!.InitPageInfo(page, object : ComicDetailContract.GetPageInfo {
             override fun onFailed(reasonStr: String) {
                 if (isShow) SuperView!!.ShowErrorMsg(reasonStr)
             }
@@ -34,7 +36,7 @@ class ComicPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDet
                 if (isShow) SuperView!!.GetInfoSucc(author, updateTime, hits, category, introduction, retPageList)
             }
         })
-        SuperModel.getBookScore(page, object : ComicDetailContract.GetScore {
+        SuperModel!!.getBookScore(page, object : ComicDetailContract.GetScore {
             override fun onFailed(reasonStr: String) {
                 if (isShow) SuperView?.ShowErrorMsg(reasonStr)
             }

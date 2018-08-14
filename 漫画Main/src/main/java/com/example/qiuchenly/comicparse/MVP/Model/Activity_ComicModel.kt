@@ -17,8 +17,8 @@ class Activity_ComicModel : BaseModelImp(), ComicDetailContract.Model {
         val id = subStr(bookID, "comic/", ".html")
         val url = BaseURL.GET_BOOK_SCORE + id
         SendRequest(url, object : RequestCallback {
-            override fun onSuccess(RetStr: String?) {
-                val ret = RetStr!!.replace("var Scorepl=", "")
+            override fun onSuccess(RetStr: String) {
+                val ret = RetStr.replace("var Scorepl=", "")
                 val peopleLimit = Integer.valueOf(subStr(ret, ":", ","))
                 val list = subStr(ret, "[", "]").split(",")
                 val s = ArrayList<Int>()
@@ -31,15 +31,15 @@ class Activity_ComicModel : BaseModelImp(), ComicDetailContract.Model {
                 cb.getScoreSucc(_avg.toString())
             }
 
-            override fun onFailed(ReasonStr: String?) {
-                cb.onFailed(ReasonStr!!)
+            override fun onFailed(ReasonStr: String) {
+                cb.onFailed(ReasonStr)
             }
         })
     }
 
     override fun InitPageInfo(page: String, cb: ComicDetailContract.GetPageInfo) {
         SendRequest(page, object : RequestCallback {
-            override fun onSuccess(RetStr: String?) {
+            override fun onSuccess(RetStr: String) {
                 val init = Jsoup.parse(RetStr)
                 val infoClass = init.getElementsByClass("info")[0]
                 var tmp = infoClass.getElementsByTag("span")
@@ -74,7 +74,7 @@ class Activity_ComicModel : BaseModelImp(), ComicDetailContract.Model {
                 cb.onSuccessGetInfo(author, updateTime, hits, category, introduction, retPageList)
             }
 
-            override fun onFailed(ReasonStr: String?) {
+            override fun onFailed(ReasonStr: String) {
                 if (ReasonStr != null) {
                     cb.onFailed(ReasonStr)
                 }

@@ -37,7 +37,7 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                 kotlin.with(data) {
                     nb_bookName.text = this.bookName
                     nb_bookLasted.text = "更新到 " + this.lastedPage_name
-                    com.bumptech.glide.Glide.with(com.example.qiuchenly.comicparse.Simple.AppManager.getAppm().currentActivity())
+                    com.bumptech.glide.Glide.with(com.example.qiuchenly.comicparse.Simple.AppManager.appm.currentActivity())
                             .load("https://www.mh1234.com" + this.bookImgSrc)
                             .into(nb_bookImage)
 
@@ -48,7 +48,7 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                         putString("data", data.toString())
                     })
                     android.support.v4.content.ContextCompat.startActivity(this.context, i, android.app.ActivityOptions.makeSceneTransitionAnimation
-                    (com.example.qiuchenly.comicparse.Simple.AppManager.getAppm().currentActivity(), this, "srdv")
+                    (com.example.qiuchenly.comicparse.Simple.AppManager.appm.currentActivity(), this, "srdv")
                             .toBundle())
                 }
                 setOnTouchListener { v, event ->

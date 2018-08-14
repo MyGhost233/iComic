@@ -23,7 +23,7 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
 
     override fun InitUI(item: View, data: String?, position: Int) {
         if (data != null)
-            Glide.with(AppManager.getAppm().currentActivity())
+            Glide.with(AppManager.appm.currentActivity())
                     .load("http://mhpic.dongzaojiage.com" + data)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(object : RequestListener<String, GlideDrawable> {

@@ -3,15 +3,17 @@ package com.example.qiuchenly.comicparse.Simple
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import io.realm.Realm
 
 abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P> {
 
     protected lateinit var mPres: P
     protected val mCtx = this
+    protected val realm = Realm.getDefaultInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppManager.getAppm().addActivity(this)
+        AppManager.appm.addActivity(this)
         setContentView(getLayoutID())
     }
 
@@ -26,7 +28,8 @@ abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P> {
         super.onDestroy()
         if (mPres != null)
             mPres.Destory()
-        AppManager.getAppm().finishActivity(this)
+        realm.close()
+        AppManager.appm.finishActivity(this)
     }
 
     override fun ShowErrorMsg(msg: String) {
