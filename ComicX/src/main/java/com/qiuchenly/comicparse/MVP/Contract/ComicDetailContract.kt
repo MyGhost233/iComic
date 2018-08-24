@@ -10,6 +10,7 @@ interface ComicDetailContract {
     interface View : BaseView<Presenter> {
         fun GetInfoSucc(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
         fun getScoreSucc(rate: String)
+        fun scrollWithPosition(position: Int)
     }
 
     interface Presenter : BasePresenter {

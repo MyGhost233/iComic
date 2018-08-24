@@ -2,10 +2,11 @@ package com.qiuchenly.comicparse.MVP.UI.Activitys
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -21,7 +22,6 @@ import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Simple.WaveSideBarView
 import com.qiuchenly.comicparse.VolleyImp.BaseURL
-import org.jetbrains.anko.backgroundResource
 import org.jetbrains.anko.find
 
 class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View, ComicPageAda.OnSaveCB {
@@ -55,13 +55,23 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         comicPageAdas?.sort(1)
         val size = (1..retPageList.size).map { it.toString() }
         mWaveSideBar.letters = size
-        mWaveSideBar.setOnTouchLetterChangeListener(object : WaveSideBarView.OnTouchLetterChangeListener {
-            override fun onLetterChange(letter: String, newChoose: Int) {
-                rv_comicPage.scrollToPosition(newChoose)
-                val manager = rv_comicPage.layoutManager as LinearLayoutManager
-                manager.scrollToPositionWithOffset(newChoose, 0)
+        mWaveSideBar.setOnTouchLetterChangeListener { letter, newChoose -> scrollWithPosition(newChoose) }
+
+        val point = realm.where(ComicBookInfo_Recently::class.java)
+                .equalTo("BookName", comicInfo.BookName)
+                .findFirst()
+                ?.BookName_read_point
+        if (point != null)
+            retPageList.forEachIndexed { index, comicBookInfo ->
+                if (comicBookInfo.title == point)
+                    scrollWithPosition(retPageList.size - index - 1)
             }
-        })
+    }
+
+    override fun scrollWithPosition(position: Int) {
+        rv_comicPage.scrollToPosition(position)
+        val manager = rv_comicPage.layoutManager as LinearLayoutManager
+        manager.scrollToPositionWithOffset(position, 0)
     }
 
     private var comicInfo = HotComicStrut()
@@ -76,7 +86,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
     var comicPageAdas: ComicPageAda? = null
 
-    lateinit var fa_add_local_list: Button
+    lateinit var fa_add_local_list: FloatingActionButton
     lateinit var rv_comicPage: RecyclerView
     lateinit var tv_bookScore: TextView
     lateinit var tv_bookName: TextView
@@ -136,7 +146,12 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
             LastedPage_src = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[3]
             BookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
         }
-        comicPageAdas = ComicPageAda(this)
+        val point = realm.where(ComicBookInfo_Recently::class.java)
+                .equalTo("BookName", comicInfo.BookName)
+                .findFirst()
+                ?.BookName_read_point
+        comicPageAdas = ComicPageAda(this, point, this)
+
         rv_comicPage.layoutManager = LinearLayoutManager(this)
         rv_comicPage.adapter = comicPageAdas
 
@@ -148,11 +163,18 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         initFB()
     }
 
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+            fa_add_local_list.visibility = View.GONE
+        return super.onKeyUp(keyCode, event)
+    }
+
+
     fun initFB() {
         if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
-            fa_add_local_list.backgroundResource = R.drawable.ic_remove
+            fa_add_local_list.setImageResource(R.drawable.ic_remove_black_24dp)
         } else {
-            fa_add_local_list.backgroundResource = R.drawable.ic_add_fill
+            fa_add_local_list.setImageResource(R.drawable.ic_add_black_24dp)
         }
     }
 }

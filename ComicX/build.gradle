@@ -110,4 +110,5 @@ dependencies {
     implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
 
     implementation 'com.github.crosswall:Android-Coverflow:release-v1.0.5'
+
 }

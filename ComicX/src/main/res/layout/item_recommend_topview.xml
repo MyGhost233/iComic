@@ -8,9 +8,8 @@
         android:layout_height="180dp">
 
         <android.support.v4.view.ViewPager
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="150dp"
-            android:background="#123654"
             android:layout_gravity="center" />
 
     </me.crosswall.lib.coverflow.core.PagerContainer>

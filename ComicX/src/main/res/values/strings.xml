@@ -7,4 +7,5 @@
     <string name="days">Hits</string>
     <string name="mix">Mix</string>
     <string name="charts">Charts</string>
+    <string name="lasted_position">上次看到</string>
 </resources>
