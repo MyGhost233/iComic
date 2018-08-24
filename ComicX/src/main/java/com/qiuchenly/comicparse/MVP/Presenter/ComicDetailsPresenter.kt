@@ -10,9 +10,16 @@ import io.realm.Realm
 class ComicDetailsPresenter(view: ComicDetailContract.View) : BasePresenterImp<ComicDetailContract.View, ComicDetailContract.Model>(view), ComicDetailContract.Presenter {
     override fun Save2DB(comicInfo: ComicBookInfo_Recently) {
         val realm = Realm.getDefaultInstance()
-        realm.beginTransaction()
-        val obj = realm.createObject(ComicBookInfo_Recently::class.java, comicInfo.BookName)
-        realm.commitTransaction()
+        if (realm.where(ComicBookInfo_Recently::class.java).equalTo("BookName", comicInfo.BookName)
+                        .findFirst() == null) {
+            realm.beginTransaction()
+            realm.createObject(ComicBookInfo_Recently::class.java, comicInfo.BookName).apply {
+                this.BookImgSrc = comicInfo.BookImgSrc
+                this.BookLink = comicInfo.BookLink
+                this.Author = comicInfo.Author
+            }
+            realm.commitTransaction()
+        }
         realm.close()
     }
 

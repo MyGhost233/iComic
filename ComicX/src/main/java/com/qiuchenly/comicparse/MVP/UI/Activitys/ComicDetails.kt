@@ -28,6 +28,9 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
     override fun pleaseSave2DB() {
         mPres.Save2DB(ComicBookInfo_Recently().apply {
             this.BookName = comicInfo.BookName
+            this.BookImgSrc = comicInfo.BookImgSrc
+            this.BookLink = comicInfo.BookLink
+            this.Author = comicInfo.Author
         })
     }
 

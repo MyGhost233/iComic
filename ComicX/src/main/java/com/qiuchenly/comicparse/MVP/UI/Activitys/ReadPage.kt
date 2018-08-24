@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
 import com.qiuchenly.comicparse.MVP.Presenter.ReadPresenter
+import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
 import kotlinx.android.synthetic.main.activity_reader_page.*
@@ -42,25 +42,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
             mAppBarComicReader.setExpanded(true, true)
             rv_comicRead_list.scrollToPosition(lastPoint)
         }
-    }
-
-    /**
-     * 处理掉一些令人恶心的广告
-     * 无法处理 漫画自带 好恶心
-     */
-    private fun removeAdultPicture(lst: ArrayList<String>): ArrayList<String> {
-        for (str: String in lst) {
-            for (c in getClearPic())
-                if (str.indexOf(c) != -1) {
-                    lst.remove(str)
-                    break
-                }
-        }
-        return lst
-    }
-
-    fun getClearPic(): ArrayList<String> {
-        return arrayListOf("20161111115141126", "20161111115141690")
     }
 
     private var nextUrl = ""

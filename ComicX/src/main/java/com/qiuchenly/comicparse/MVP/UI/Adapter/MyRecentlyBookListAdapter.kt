@@ -4,11 +4,10 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
-import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Bean.HotComicStrut
+import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
 import io.realm.Realm
 import kotlinx.android.synthetic.main.comic_local_list.view.*
@@ -20,7 +19,7 @@ class MyRecentlyBookListAdapter : BaseRVAdapter<ComicBookInfo_Recently>() {
 
     override fun InitUI(item: View, data: ComicBookInfo_Recently?, position: Int) {
         val realm = Realm.getDefaultInstance()
-        val itemData = realm.where(HotComicStrut::class.java)
+        val itemData = realm.where(ComicBookInfo_Recently::class.java)
                 .equalTo("BookName", data?.BookName).findFirst()
         with(item) {
             Glide.with(item.context)
