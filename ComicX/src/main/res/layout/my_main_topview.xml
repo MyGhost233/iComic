@@ -118,19 +118,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
+                    android:layout_toStartOf="@+id/AD_heiweigou"
                     android:gravity="center"
                     android:text="@string/openVIP"
-                    android:layout_toStartOf="@+id/AD_heiweigou"
                     android:textColor="#ffffff"
                     android:textSize="10sp"
                     tools:ignore="SmallSp" />
 
                 <View
+                    android:id="@+id/AD_heiweigou"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:id="@+id/AD_heiweigou"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/ic_chevron_right_black_24dp" />
 
             </RelativeLayout>
