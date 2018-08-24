@@ -2,9 +2,7 @@ package com.example.qiuchenly.comicparse.Simple
 
 import com.example.qiuchenly.comicparse.Bean.HotComicStrut
 import com.example.qiuchenly.comicparse.VolleyImp.BaseRequest
-
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 
 open class BaseModelImp : BaseRequest(), BaseModel {
 
@@ -25,10 +23,10 @@ open class BaseModelImp : BaseRequest(), BaseModel {
         val book = HotComicStrut()
         var tmp = infoEle.getElementsByTag("img")[0]
         val tag: String
-        if (tmp.attr("_src").length > 0)
-            tag = "_src"
+        tag = if (tmp.attr("_src").isNotEmpty())
+            "_src"
         else
-            tag = "src"
+            "src"
         book.bookImgSrc = tmp.attr(tag)
         book.bookName = tmp.attr("alt")
         val tmps = infoEle.getElementsByTag("a")

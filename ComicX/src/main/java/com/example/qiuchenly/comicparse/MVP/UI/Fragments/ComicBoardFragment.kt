@@ -20,7 +20,7 @@ class ComicBoardFragment : BaseFragment<ComicBoardPresenter>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val list = arrayListOf(
-                RecentlyPagerAdapter.Struct("推荐", Main()),
+                RecentlyPagerAdapter.Struct("推荐", Net_RecommendFragment()),
                 RecentlyPagerAdapter.Struct("朋友", Main()),
                 RecentlyPagerAdapter.Struct("电台", Main())
         )
@@ -30,7 +30,5 @@ class ComicBoardFragment : BaseFragment<ComicBoardPresenter>() {
 
         //create tips bottom
         BaseNavigatorCommon.setUpWithPager(this.context!!, list, magic_indicator, magic_indicator_viewpager)
-
-
     }
 }

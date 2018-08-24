@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <FrameLayout
+                android:id="@+id/_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="#000000" />
+
+                <ImageView
+                    android:id="@+id/iv_privatefm_img"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_day_1" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/iv_privatefm_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/privatefm"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <FrameLayout
+                android:id="@+id/_img1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="#000000" />
+
+                <ImageView
+                    android:id="@+id/iv_day_img"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_day_1" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/iv_day_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/days"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <FrameLayout
+                android:id="@+id/_img2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="#000000" />
+
+                <ImageView
+                    android:id="@+id/iv_mix_img"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_day_1" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/iv_mix_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mix"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <FrameLayout
+                android:id="@+id/_img3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="#000000" />
+
+                <ImageView
+                    android:id="@+id/iv_charts_img"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_day_1" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/iv_charts_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/charts"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:background="#72979797"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp" />
+</LinearLayout>

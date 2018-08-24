@@ -3,4 +3,8 @@
     <string name="limit_benifit">限时特惠</string>
     <string name="ad_openVIP">开通终极帝王级服务VIP低至999亿美元/月</string>
     <string name="openVIP">黑喂狗</string>
+    <string name="privatefm">PrivateFM</string>
+    <string name="days">Hits</string>
+    <string name="mix">Mix</string>
+    <string name="charts">Charts</string>
 </resources>

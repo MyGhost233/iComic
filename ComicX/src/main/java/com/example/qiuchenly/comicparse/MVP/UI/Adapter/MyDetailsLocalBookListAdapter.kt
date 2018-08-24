@@ -25,11 +25,13 @@ class MyDetailsLocalBookListAdapter : BaseRVAdapter<HotComicStrut>() {
                     .into(bookNameImg)
             bookName.text = data?.bookName
             bookAuthor.text = data?.author
+
+            //todo 此处依然使用旧版数据库调用 择日修改
             curr_read.text = App.mDataBase.LOCALBOOK_GET_READ_POSITION(data?.bookName!!)
             setOnClickListener {
                 val i = android.content.Intent(this.context, ComicDetails::class.java)
                 i.putExtras(android.os.Bundle().apply {
-                    putString("data", data?.toString())
+                    putString("data", data.toString())
                 })
                 startActivity(AppManager.appm.currentActivity(), i, null)
             }

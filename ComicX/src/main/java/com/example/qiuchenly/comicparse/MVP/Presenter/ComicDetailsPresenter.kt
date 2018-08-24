@@ -18,8 +18,6 @@ class ComicDetailsPresenter(view: ComicDetailContract.View) : BasePresenterImp<C
         }
         if (isLocal) App.mDataBase.LOCALBOOK_INSERT(book)
         else App.mDataBase.RECENTLY_INSERT(book)
-
-
     }
 
     override fun createModel(): ComicDetailContract.Model {

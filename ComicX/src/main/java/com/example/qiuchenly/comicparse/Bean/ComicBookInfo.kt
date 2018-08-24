@@ -1,6 +1,10 @@
 package com.example.qiuchenly.comicparse.Bean
 
-class ComicBookInfo {
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
+
+class ComicBookInfo{
     var link: String? = null
     var title: String? = null
 
