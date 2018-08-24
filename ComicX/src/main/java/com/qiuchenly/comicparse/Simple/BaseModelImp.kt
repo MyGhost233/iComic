@@ -2,6 +2,7 @@ package com.qiuchenly.comicparse.Simple
 
 import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.VolleyImp.BaseRequest
+import com.qiuchenly.comicparse.VolleyImp.BaseURL
 import org.jsoup.nodes.Element
 
 open class BaseModelImp : BaseRequest(), BaseModel {
@@ -17,6 +18,53 @@ open class BaseModelImp : BaseRequest(), BaseModel {
     protected fun subStr(all: String, left: String, right: String): String {
         val sta = all.indexOf(left) + left.length
         return all.substring(sta, all.indexOf(right, sta))
+    }
+
+    /**
+     * 修复前缀网址高级方法
+     * @param infoEle 原网页对象
+     * @return 修复完成前缀的对象返回
+     */
+    protected fun getComicInfoEx(infoEle: Element): HotComicStrut {
+        return getComicInfo(infoEle).apply {
+            this.BookImgSrc = BaseURL.BASE_URL + this.BookImgSrc
+            this.BookLink = BaseURL.BASE_URL + this.BookLink
+            this.LastedPage_src = BaseURL.BASE_URL + this.LastedPage_src
+        }
+    }
+
+    protected fun getComicInfoEx(comic: HotComicStrut): HotComicStrut {
+        return comic.apply {
+            this.BookImgSrc = BaseURL.BASE_URL + this.BookImgSrc
+            this.BookLink = BaseURL.BASE_URL + this.BookLink
+            this.LastedPage_src = BaseURL.BASE_URL + this.LastedPage_src
+        }
+    }
+
+    protected fun parseByNewUpdate(element: Element): ArrayList<HotComicStrut> {
+        //        <li><span class="red"><font color="#ff0000">2018-08-24</font></span><a href="/comic/13016.html" target="_blank" title="与神兽同居的日子" class="video" i="/upload/2018-02-09/20182916575152.jpg">与神兽同居的日子</a>[<a class="red" href="/comic/13016/386246.html" target="_blank" title="第32话 火拼上">第32话 火拼上</a>]</li>
+        val lis = element.getElementsByTag("li")
+        val arr = ArrayList<HotComicStrut>()
+        for (li in lis) {
+            val obj = li.getElementsByTag("a")
+            arr.add(getComicInfoEx(HotComicStrut().apply {
+                this.BookImgSrc = obj[0].attr("i")
+                this.BookLink = obj[0].attr("href")
+                this.BookName = obj[0].attr("title")
+                this.LastedPage_name = obj[1].attr("title")
+                this.LastedPage_src = obj[1].attr("href")
+            }))
+        }
+        return arr
+    }
+
+    protected fun getComicInfoByAuto(element: Element): ArrayList<HotComicStrut> {
+        val list = element.getElementsByTag("li")
+        val mTopViewComicBook = ArrayList<HotComicStrut>()
+        for (a in list) {
+            mTopViewComicBook.add(getComicInfoEx(a))
+        }
+        return mTopViewComicBook
     }
 
     protected fun getComicInfo(infoEle: Element): HotComicStrut {

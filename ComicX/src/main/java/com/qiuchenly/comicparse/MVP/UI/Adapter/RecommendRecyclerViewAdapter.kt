@@ -1,20 +1,29 @@
 package com.qiuchenly.comicparse.MVP.UI.Adapter
 
-import android.graphics.Color
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
+import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Simple.AppManager
+import kotlinx.android.synthetic.main.item_recommend_normal.view.*
+import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
 import me.crosswall.lib.coverflow.CoverFlow
-import me.crosswall.lib.coverflow.core.PageItemClickListener
 import me.crosswall.lib.coverflow.core.PagerContainer
 import org.jetbrains.anko.find
+import kotlin.concurrent.thread
 
 class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : RecyclerView.Adapter<BaseVH>() {
 
@@ -39,7 +48,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
     }
 
     override fun onBindViewHolder(holder: BaseVH, position: Int) {
-        initUI(holder.itemView, position)
+        mInitUI(holder.itemView, position)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -50,44 +59,100 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
         }
     }
 
+    private var newUpdate: ArrayList<HotComicStrut>? = null
+    private var hand: Handler = Handler(Looper.getMainLooper())
 
-    fun initUI(view: View, position: Int) {
+    private var running = false
+    fun SetDataByIndexPage(mTopViewComicBook: ArrayList<HotComicStrut>?, newUpdate: ArrayList<HotComicStrut>?) {
+        this.newUpdate = newUpdate
+        TopViewBanner.setTopDate(mTopViewComicBook)
+        TopViewVP.adapter = TopViewBanner
+        TopViewVP.offscreenPageLimit = 3
+        TopViewVP.clipChildren = false
+        running = false
+        thread {
+            running = true
+            while (running) {
+                hand.post {
+                    if (TopViewVP != null) {
+                        if ((TopViewVP.currentItem + 1) > TopViewBanner.getSize())
+                            TopViewVP.currentItem = 0
+                        else
+                            TopViewVP.currentItem++
+                    }
+                }
+                Thread.sleep(4000)
+            }
+            println("退出当前计时器")
+        }
+
+        mAdapter?.setData(newUpdate!!)
+        mAdapter?.notifyDataSetChanged()
+    }
+
+    private lateinit var TopViewBanner: mTopViewBanner
+    private lateinit var TopViewVP: ViewPager
+    private var mAdapter: HotComicAda? = null
+
+    private fun mInitUI(view: View, position: Int) {
         when (getItemViewType(position)) {
             0 -> {
-                val pager_container = view.find<PagerContainer>(R.id.pager_container)
-                val pager = pager_container.getViewPager()
+                val mPagerContainer = view.find<PagerContainer>(R.id.pager_container)
+                TopViewVP = mPagerContainer.viewPager
                 CoverFlow.Builder()
-                        .with(pager)
+                        .with(TopViewVP)
                         .scale(0.3f)
                         .pagerMargin(0f)
                         .spaceSize(0f)
                         .rotationY(25f)
                         .build()
-                val adapter = MyPagerAdapter(view)
-                pager.setAdapter(adapter)
-
-                pager.setOffscreenPageLimit(adapter.getCount())
-
-                pager.setClipChildren(false)
-
-                pager_container.setPageItemClickListener(PageItemClickListener { mView, mPosition ->
-                    Toast.makeText(view.context, "position:$position", Toast.LENGTH_SHORT).show()
-                })
-
+                TopViewBanner = mTopViewBanner(view)
+            }
+            2 -> {
+                if (position == 2) {
+                    with(view) {
+                        tv_listName.text = "最近更新"
+                        list_item_data.layoutManager = GridLayoutManager(this.context, 2)
+                        list_item_data.setHasFixedSize(false)
+                        mAdapter = HotComicAda()
+                        list_item_data.adapter = mAdapter
+                        list_item_data.isFocusableInTouchMode = false
+                        list_item_data.addItemDecoration(SpaceItemDecoration(15))
+                    }
+                }
             }
         }
     }
 
-    private inner class MyPagerAdapter(val v: View) : PagerAdapter() {
-
+    private inner class mTopViewBanner(val mView: View) : PagerAdapter() {
+        @SuppressLint("SetTextI18n")
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val view = TextView(v.context)
-            view.text = "Item $position"
-            view.gravity = Gravity.CENTER
-            view.setBackgroundColor(Color.argb(255, position * 50, position * 10, position * 50))
-
+            val view = LayoutInflater.from(mView.context)
+                    .inflate(R.layout.vpitem_top_ad, null, false)
+            with(view) {
+                Glide.with(mView.context)
+                        .load(newUpdate[position].BookImgSrc)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(img_book)
+                tv_bookName.text = newUpdate[position].BookName
+                tv_bookAuthor.text = tv_bookAuthor.text.toString() + newUpdate[position].LastedPage_name
+                setOnClickListener {
+                    val i = android.content.Intent(this.context, ComicDetails::class.java)
+                    i.putExtras(android.os.Bundle().apply {
+                        putString("data", newUpdate[position].toString())
+                    })
+                    ContextCompat.startActivity(AppManager.appm.currentActivity(), i, null)
+                }
+            }
             container.addView(view)
             return view
+        }
+
+        fun getSize() = newUpdate.size
+
+        private var newUpdate: ArrayList<HotComicStrut> = ArrayList()
+        fun setTopDate(newUpdate: ArrayList<HotComicStrut>?) {
+            this.newUpdate = newUpdate ?: ArrayList()
         }
 
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -95,7 +160,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
         }
 
         override fun getCount(): Int {
-            return 15
+            return newUpdate.size
         }
 
         override fun isViewFromObject(view: View, `object`: Any): Boolean {

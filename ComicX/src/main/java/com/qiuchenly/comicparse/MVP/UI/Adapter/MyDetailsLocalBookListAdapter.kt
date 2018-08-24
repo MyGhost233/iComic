@@ -7,10 +7,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
-import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Bean.HotComicStrut
+import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
 import io.realm.Realm
 import org.jetbrains.anko.find
@@ -34,7 +34,7 @@ class MyDetailsLocalBookListAdapter : BaseRVAdapter<HotComicStrut>() {
             bookAuthor.text = data?.Author
 
             val mItem = Realm.getDefaultInstance().where(ComicBookInfo_Recently::class.java).equalTo("BookName", data?.BookName!!).findFirst()
-            curr_read.text = if (mItem != null) mItem.BookName_read_point else "无数据"
+            curr_read.text = if (mItem != null) mItem.BookName_read_point else "你还没有看喔"
             setOnClickListener {
                 val i = android.content.Intent(this.context, ComicDetails::class.java)
                 i.putExtras(android.os.Bundle().apply {

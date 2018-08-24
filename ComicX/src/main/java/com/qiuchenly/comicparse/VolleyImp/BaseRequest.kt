@@ -38,7 +38,7 @@ abstract class BaseRequest {
             }
 
             override fun getMethod(): Int {
-                return if (data.length > 0) {
+                return if (data.isNotEmpty()) {
                     Request.Method.POST
                 } else {
                     Request.Method.GET

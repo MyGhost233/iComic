@@ -3,14 +3,22 @@ package com.qiuchenly.comicparse.MVP.UI.Fragments
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.Presenter.RecommendPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.RecommendRecyclerViewAdapter
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseFragment
 import kotlinx.android.synthetic.main.fragment_my_details.*
+import org.jetbrains.anko.runOnUiThread
 
-class Net_RecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), NetRecommentContract.View {
+class NetRecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), NetRecommentContract.View {
+    override fun GetIndexPageSucc(mTopViewComicBook: ArrayList<HotComicStrut>?, newUpdate: ArrayList<HotComicStrut>?) {
+        context!!.runOnUiThread {
+            mRecommendRecyclerViewAdapter.SetDataByIndexPage(mTopViewComicBook,
+                    newUpdate)
+        }
+    }
 
 
     override fun getLayoutID(): Int {
@@ -31,5 +39,7 @@ class Net_RecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), Ne
         RecommendPresenter(this)
         RV_Details_My.layoutManager = LinearLayoutManager(activity)
         RV_Details_My.adapter = mRecommendRecyclerViewAdapter
+
+        mPres!!.getWebSiteByIndexData()
     }
 }

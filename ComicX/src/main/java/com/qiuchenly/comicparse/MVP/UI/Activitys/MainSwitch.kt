@@ -5,15 +5,17 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.support.v4.widget.DrawerLayout
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
-import com.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
-import com.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
 import com.qiuchenly.comicparse.MVP.Contract.MainSwitchContract
 import com.qiuchenly.comicparse.MVP.Presenter.MainSwichPresenter
+import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
+import com.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
+import com.qiuchenly.comicparse.MVP.UI.Fragments.Main
+import com.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
@@ -104,6 +106,25 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         switch_my_website_addition_img.imageAlpha = 100
 
         MainSwichPresenter(this)
+
+        dl_navigation_main.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {
+
+            }
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                isOpenDrawable = false
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                isOpenDrawable = true
+            }
+
+        })
     }
 
     override fun setPres(mPres: MainSwitchContract.Presenter) {
@@ -114,11 +135,10 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         (fragmentList[0] as MyDetailsFragment).notifyData()
     }
 
-    val fragmentList = ArrayList<Fragment>().apply {
+    private val fragmentList = ArrayList<Fragment>().apply {
         add(MyDetailsFragment())
         add(ComicBoardFragment())
-//        add(Main())
-        add(Fragment())
+        add(Main())
     }
 
     fun continueInit() {
@@ -147,10 +167,18 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         }
     }
 
+    private var lastTime = -1L
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (isOpenDrawable && keyCode == KeyEvent.KEYCODE_BACK) {
             dl_navigation_main.closeDrawer(Gravity.START)
-            return true
+            return false
+        } else {
+            val curr = System.currentTimeMillis()
+            if (curr - lastTime > 2000) {
+                ShowErrorMsg("再按一次退出")
+                lastTime = curr
+                return false
+            }
         }
         return super.onKeyUp(keyCode, event)
     }

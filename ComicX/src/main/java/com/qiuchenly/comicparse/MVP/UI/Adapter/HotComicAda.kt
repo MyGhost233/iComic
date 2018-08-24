@@ -37,14 +37,14 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
     override fun InitUI(item: View, data: HotComicStrut?, position: Int) {
         if (data != null) {
             with(item) {
-                val nb_bookName =find<TextView>(R.id.nb_bookName)
-                val nb_bookLasted =find<TextView>(R.id.nb_bookLasted)
-                val nb_bookImage =find<ImageView>(R.id.nb_bookImage)
+                val nb_bookName = find<TextView>(R.id.nb_bookName)
+                val nb_bookLasted = find<TextView>(R.id.nb_bookLasted)
+                val nb_bookImage = find<ImageView>(R.id.nb_bookImage)
                 kotlin.with(data) {
                     nb_bookName.text = this.BookName
                     nb_bookLasted.text = "更新到 " + this.LastedPage_name
                     com.bumptech.glide.Glide.with(AppManager.appm.currentActivity())
-                            .load("https://www.mh1234.com" + this.BookImgSrc)
+                            .load((if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc)
                             .into(nb_bookImage)
 
                 }
