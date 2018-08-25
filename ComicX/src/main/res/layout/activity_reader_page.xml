@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,6 +23,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent">
 
                 <TextView
@@ -30,11 +32,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:gravity="center"
-                    android:text="第145话 坐地起价与气极谋杀？！"
+                    android:text="Loading..."
                     android:textColor="#121212"
                     android:textSize="13sp" />
             </FrameLayout>
-
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

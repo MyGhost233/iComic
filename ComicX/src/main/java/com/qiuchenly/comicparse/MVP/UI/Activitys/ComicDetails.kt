@@ -22,6 +22,9 @@ import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Simple.WaveSideBarView
 import com.qiuchenly.comicparse.VolleyImp.BaseURL
+import com.r0adkll.slidr.Slidr
+import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.android.synthetic.main.activity_comicdetails.*
 import org.jetbrains.anko.find
 
 class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View, ComicPageAda.OnSaveCB {
@@ -99,6 +102,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Slidr.attach(this)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ComicDetailsPresenter(this)
         fa_add_local_list = find(R.id.add_local_list)
@@ -157,8 +161,18 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
         Glide.with(this)
                 .load(comicInfo.BookImgSrc)
+                .crossFade(500)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(img_book)
+
+        Glide.with(this)
+                .load(comicInfo.BookImgSrc)
+                .crossFade(500)
+                .bitmapTransform(BlurTransformation(this, 20))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(comicDetails_img)
+
+
         mPres.initPageInfo(comicInfo.BookLink!!)
         initFB()
     }

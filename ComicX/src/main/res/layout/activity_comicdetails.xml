@@ -2,123 +2,142 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="#ffffff"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="260dp"
         android:background="@color/cardview_dark_background"
         app:elevation="0dp">
 
-        <android.support.v7.widget.Toolbar
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="210dp"
-            android:layout_marginTop="26dp"
-            app:contentInsetStart="0dp"
+            android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/comicDetails_img"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/img_book_frame"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="15dp"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardElevation="15dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#5b000000" />
 
-                    <ImageView
-                        android:id="@+id/img_book"
-                        android:layout_width="126dp"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY"
-                        android:transitionName="srdv" />
-                </android.support.v7.widget.CardView>
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="26dp"
+                app:contentInsetStart="0dp">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_toRightOf="@id/img_book_frame"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_bookName"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/img_book_frame"
+                        android:layout_width="130dp"
+                        android:layout_height="180dp"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        app:cardBackgroundColor="#00000000"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:id="@+id/img_book"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:transitionName="srdv" />
+                    </android.support.v7.widget.CardView>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="指染成婚"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="16sp" />
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_toEndOf="@+id/img_book_frame"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_bookAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tv_bookName"
-                        android:layout_marginTop="5dp"
-                        android:text="原著作者：涂山君"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_bookName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="指染成婚"
+                            android:textColor="#e7e7e7"
+                            android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/tv_bookCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tv_bookName"
-                        android:layout_marginTop="5dp"
-                        android:text="剧情类别：少女爱情"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_bookAuthor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/tv_bookName"
+                            android:layout_marginTop="5dp"
+                            android:text="原著作者：涂山君"
+                            android:textColor="#e7e7e7"
+                            android:textSize="11sp" />
 
-                    <TextView
-                        android:id="@+id/tv_bookUpdateTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tv_bookName"
-                        android:layout_marginTop="5dp"
-                        android:text="更新时间：2016-07-23"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_bookCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/tv_bookName"
+                            android:layout_marginTop="5dp"
+                            android:text="剧情类别：少女爱情"
+                            android:textColor="#e7e7e7"
+                            android:textSize="11sp" />
 
-                    <TextView
-                        android:id="@+id/tv_bookScore"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tv_bookName"
-                        android:layout_marginTop="5dp"
-                        android:text="网友评分：9.2"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/tv_bookUpdateTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/tv_bookName"
+                            android:layout_marginTop="5dp"
+                            android:text="更新时间：2016-07-23"
+                            android:textColor="#e7e7e7"
+                            android:textSize="11sp" />
 
-                    <TextView
-                        android:id="@+id/tv_bookIntroduction"
-                        android:layout_width="match_parent"
-                        android:layout_height="76dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/tv_bookName"
-                        android:layout_marginTop="5dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:scrollbars="vertical"
-                        android:text="简介：漫画《指染成婚》改编自炎水淋同名都市言情小说《指染成婚》，一言不合就抽人家皮带？！这个腹黑女，果然引起了男人的注意！只是这套路玩得深，会不会有翻车的危险啊？“我看上的女人，就只能是我的女人。”
+                        <TextView
+                            android:id="@+id/tv_bookScore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/tv_bookName"
+                            android:layout_marginTop="5dp"
+                            android:text="网友评分：9.2"
+                            android:textColor="#e7e7e7"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/tv_bookIntroduction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/tv_bookName"
+                            android:layout_marginTop="5dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:scrollbars="vertical"
+                            android:text="简介：漫画《指染成婚》改编自炎水淋同名都市言情小说《指染成婚》，一言不合就抽人家皮带？！这个腹黑女，果然引起了男人的注意！只是这套路玩得深，会不会有翻车的危险啊？“我看上的女人，就只能是我的女人。”
 
 “我看上的女人，就只能是我的女人。”"
-                        android:textColor="#e8eaeaea"
-                        android:textSize="10sp" />
+                            android:textColor="#e7e7e7"
+                            android:textSize="10sp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-            </RelativeLayout>
-        </android.support.v7.widget.Toolbar>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout

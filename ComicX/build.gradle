@@ -110,5 +110,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
 
     implementation 'com.github.crosswall:Android-Coverflow:release-v1.0.5'
-
+    implementation 'jp.wasabeef:glide-transformations:2.0.1'
+    implementation 'com.r0adkll:slidableactivity:2.0.6'
 }

@@ -17,6 +17,8 @@ class NetRecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), Net
         context!!.runOnUiThread {
             mRecommendRecyclerViewAdapter.SetDataByIndexPage(mTopViewComicBook,
                     newUpdate)
+            if (MyDetails_Refresh.isRefreshing)
+                MyDetails_Refresh.isRefreshing = false
         }
     }
 
@@ -33,7 +35,7 @@ class NetRecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), Net
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         MyDetails_Refresh.setOnRefreshListener {
-
+            mPres!!.getWebSiteByIndexData()
         }
 
         RecommendPresenter(this)

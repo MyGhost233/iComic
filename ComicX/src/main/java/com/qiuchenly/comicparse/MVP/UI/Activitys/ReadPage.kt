@@ -9,6 +9,7 @@ import com.qiuchenly.comicparse.MVP.Presenter.ReadPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
+import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_reader_page.*
 
 
@@ -60,6 +61,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
     private var curr = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Slidr.attach(this)
         window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ReadPresenter(this)

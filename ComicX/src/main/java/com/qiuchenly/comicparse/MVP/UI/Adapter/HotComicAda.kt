@@ -1,12 +1,18 @@
 package com.qiuchenly.comicparse.MVP.UI.Adapter
 
 import android.animation.ObjectAnimator
+import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.support.v4.content.ContextCompat.startActivity
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
 import com.qiuchenly.comicparse.R
@@ -15,7 +21,7 @@ import com.qiuchenly.comicparse.Simple.BaseRVAdapter
 import org.jetbrains.anko.find
 
 
-class HotComicAda : BaseRVAdapter<HotComicStrut>() {
+open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
     override fun getLayout(): Int {
         return R.layout.nb_comic_details
     }
@@ -34,6 +40,12 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
         animator.start()
     }
 
+    fun getIntentEx(ctx: Context, data: HotComicStrut): Intent {
+        return Intent(ctx, ComicDetails::class.java).putExtras(Bundle().apply {
+            putString("data", data.toString())
+        })
+    }
+
     override fun InitUI(item: View, data: HotComicStrut?, position: Int) {
         if (data != null) {
             with(item) {
@@ -43,17 +55,14 @@ class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                 kotlin.with(data) {
                     nb_bookName.text = this.BookName
                     nb_bookLasted.text = "更新到 " + this.LastedPage_name
-                    com.bumptech.glide.Glide.with(AppManager.appm.currentActivity())
+                    Glide.with(AppManager.appm.currentActivity())
                             .load((if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc)
                             .into(nb_bookImage)
 
                 }
                 setOnClickListener {
-                    val i = android.content.Intent(this.context, ComicDetails::class.java)
-                    i.putExtras(android.os.Bundle().apply {
-                        putString("data", data.toString())
-                    })
-                    android.support.v4.content.ContextCompat.startActivity(this.context, i, android.app.ActivityOptions.makeSceneTransitionAnimation
+                    val i = getIntentEx(this.context, data)
+                    startActivity(this.context, i, ActivityOptions.makeSceneTransitionAnimation
                     (AppManager.appm.currentActivity(), this, "srdv")
                             .toBundle())
                 }
