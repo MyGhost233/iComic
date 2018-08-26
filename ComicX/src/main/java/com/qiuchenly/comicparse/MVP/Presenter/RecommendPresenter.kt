@@ -12,8 +12,27 @@ class RecommendPresenter(mView: NetRecommentContract.View) : BasePresenterImp<Ne
 
     override fun getWebSiteByIndexData() {
         SuperModel.GetIndexPage(object : FragmentRecommendModel.IndexPageGetter {
-            override fun mGetResult(retCode: Int, reasonStr: String, mTopViewComicBook: ArrayList<HotComicStrut>?, newUpdate: ArrayList<HotComicStrut>?) {
-                if (isShow && retCode == 200) SuperView.GetIndexPageSucc(mTopViewComicBook, newUpdate)
+            override fun mGetResult(retCode: Int,
+                                    reasonStr: String,
+                                    mTopViewComicBook: ArrayList<HotComicStrut>?,
+                                    newUpdate: ArrayList<HotComicStrut>?,
+                                    rhmh: ArrayList<HotComicStrut>?,
+                                    ommh: ArrayList<HotComicStrut>?,
+                                    dlmh: ArrayList<HotComicStrut>?,
+                                    rhhk: ArrayList<HotComicStrut>?,
+                                    omhk: ArrayList<HotComicStrut>?,
+                                    dlhk: ArrayList<HotComicStrut>?,
+                                    a_Z: ArrayList<HotComicStrut>?) {
+                if (isShow && retCode == 200)
+                    SuperView.GetIndexPageSucc(mTopViewComicBook,
+                            newUpdate ,
+                            rhmh,
+                            ommh,
+                            dlmh,
+                            rhhk,
+                            omhk,
+                            dlhk,
+                            a_Z)
             }
         })
     }

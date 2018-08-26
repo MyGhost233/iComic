@@ -4,6 +4,7 @@ import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.VolleyImp.BaseRequest
 import com.qiuchenly.comicparse.VolleyImp.BaseURL
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 
 open class BaseModelImp : BaseRequest(), BaseModel {
 
@@ -54,6 +55,56 @@ open class BaseModelImp : BaseRequest(), BaseModel {
                 this.LastedPage_name = obj[1].attr("title")
                 this.LastedPage_src = obj[1].attr("href")
             }))
+        }
+        return arr
+    }
+
+    protected fun parseRHMH(element: Element, hasUpdate: Boolean = false): ArrayList<HotComicStrut> {
+        val arr = ArrayList<HotComicStrut>()
+        for (li in getAllElement(element)) {
+            val obj = li.getElementsByTag("a")
+            arr.add(getComicInfoEx(HotComicStrut().apply {
+                this.BookImgSrc = obj[0].attr("i")
+                this.BookLink = obj[0].attr("href")
+                this.BookName = obj[0].text()
+                if (hasUpdate) {
+                    this.LastedPage_name = li.getElementsByTag("em").text()
+                }
+            }))
+        }
+        return arr
+    }
+
+    fun getAllElement(element: Element): Elements {
+        return element.getElementsByTag("li")
+    }
+
+    protected fun parseOMMH(element: Element): ArrayList<HotComicStrut> {
+        val arr = ArrayList<HotComicStrut>()
+        for (li in getAllElement(element)) {
+            val obj = li.getElementsByTag("a")
+            arr.add(getComicInfoEx(HotComicStrut().apply {
+                this.BookImgSrc = obj[0].getElementsByTag("img")[0].attr("src")
+                this.BookLink = obj[0].attr("href")
+                this.BookName = obj[0].getElementsByTag("img")[0].attr("alt")
+            }))
+        }
+        return arr
+    }
+
+    protected fun parseA_Z(element: Element): ArrayList<HotComicStrut> {
+        val arr = ArrayList<HotComicStrut>()
+        for (li in getAllElement(element)) {
+            val obj = li.getElementsByTag("a")
+            arr.add(getComicInfoEx(HotComicStrut().apply {
+                this.BookImgSrc = obj[0].attr("i")
+                this.BookLink = obj[0].attr("href")
+                this.BookName = obj[0].text()
+                this.LastedPage_name = li.getElementsByTag("em").text()
+            }))
+        }
+        arr.forEach {
+            it.Tag = element.getElementsByTag("h5").text()
         }
         return arr
     }

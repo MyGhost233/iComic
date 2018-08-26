@@ -27,6 +27,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="45dp"
                     android:layout_height="45dp"
+                    android:id="@+id/iv_privatefm_img_back"
                     android:src="#000000" />
 
                 <ImageView
@@ -34,7 +35,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_day_1" />
+                    android:src="@drawable/ic_wanjie" />
             </FrameLayout>
 
             <TextView
@@ -43,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/privatefm"
+                android:textSize="12sp"
+                android:text="完结漫画"
                 android:textColor="#ffffff" />
 
         </LinearLayout>
@@ -64,6 +66,7 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="45dp"
+                    android:id="@+id/iv_day_img_back"
                     android:layout_height="45dp"
                     android:src="#000000" />
 
@@ -73,14 +76,25 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_day_1" />
+
+                <TextView
+                    android:id="@+id/tv_times"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:text="31"
+                    android:textColor="#ffffff"
+                    android:textSize="10sp" />
             </FrameLayout>
 
             <TextView
                 android:id="@+id/iv_day_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="12sp"
                 android:gravity="center"
-                android:text="@string/days"
+                android:text="每日推荐"
                 android:textColor="#ffffff" />
 
         </LinearLayout>
@@ -101,6 +115,7 @@
                 android:gravity="center">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_mix_img_back"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:src="#000000" />
@@ -110,14 +125,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_day_1" />
+                    android:src="@drawable/ic_lianzai" />
             </FrameLayout>
 
             <TextView
                 android:id="@+id/iv_mix_title"
+                android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mix"
+                android:text="连载漫画"
                 android:textColor="#ffffff" />
 
         </LinearLayout>
@@ -139,6 +155,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="45dp"
                     android:layout_height="45dp"
+                    android:id="@+id/iv_charts_img_back"
                     android:src="#000000" />
 
                 <ImageView
@@ -146,14 +163,15 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_day_1" />
+                    android:src="@drawable/ic_quanbu" />
             </FrameLayout>
 
             <TextView
                 android:id="@+id/iv_charts_title"
                 android:layout_width="wrap_content"
+                android:textSize="12sp"
                 android:layout_height="wrap_content"
-                android:text="@string/charts"
+                android:text="全部漫画"
                 android:textColor="#ffffff" />
 
         </LinearLayout>
@@ -161,7 +179,7 @@
     </LinearLayout>
 
     <View
-        android:background="#72979797"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp" />
+        android:layout_height="0.5dp"
+        android:background="#72979797" />
 </LinearLayout>

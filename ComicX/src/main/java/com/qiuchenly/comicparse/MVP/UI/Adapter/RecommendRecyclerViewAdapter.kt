@@ -1,14 +1,15 @@
 package com.qiuchenly.comicparse.MVP.UI.Adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Rect
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,56 +17,63 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.qiuchenly.comicparse.Bean.HotComicStrut
+import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.android.synthetic.main.item_a_z.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
+import kotlinx.android.synthetic.main.item_rankview.view.*
 import kotlinx.android.synthetic.main.item_recommend_normal.view.*
 import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
 import org.jetbrains.anko.find
 
 class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : RecyclerView.Adapter<BaseVH>() {
 
-    private val TYPE_TOPVIEW = 0
-    private val TYPE_RANKVIEW = 1
-    private val TYPE_NORMAL = 2
-//    private val TYPE_NORMAL = 3
-//    private val TYPE_NORMAL = 4
-//    private val TYPE_NORMAL = 5
+    fun getSizeByItem(position: Int): Int {
+        return when (getItemViewType(position)) {
+            RecommendItemType.TYPE.TYPE_GRID -> 2
+            else -> 6
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
         return BaseVH(LayoutInflater.from(parent.context).inflate(
                 when (viewType) {
-                    TYPE_TOPVIEW -> R.layout.item_recommend_topview
-                    TYPE_RANKVIEW -> R.layout.item_rankview
+                    RecommendItemType.TYPE.TYPE_TOP -> R.layout.item_recommend_topview
+                    RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
+                    RecommendItemType.TYPE.TYPE_GRID -> R.layout.item_foosize_newupdate
+                    RecommendItemType.TYPE.TYPE_A_Z -> R.layout.item_a_z
+                    RecommendItemType.TYPE.TYPE_TITLE -> R.layout.item_recommend_normal
                     else -> R.layout.item_recommend_normal
                 }, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return 13
+        return mRealData.size
     }
 
     override fun onBindViewHolder(holder: BaseVH, position: Int) {
+        if (position == 0) {
+            if (willUpdate) {
+                mInitUI(holder.itemView, position)
+                willUpdate = false
+            }
+            return
+        }
         mInitUI(holder.itemView, position)
+
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> TYPE_TOPVIEW
-            1 -> TYPE_RANKVIEW
-            else -> TYPE_NORMAL
-        }
+        return mRealData[position].type
     }
 
-    private var newUpdate: ArrayList<HotComicStrut>? = null
     private var hand: Handler = Handler(Looper.getMainLooper())
 
-
     private var mThread: myWork? = null
-
 
     abstract class myWork : Thread() {
         //立刻同步到子线程中
@@ -76,102 +84,230 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
         override fun run() {
             //立刻同步到子线程中
             while (flag) {
-                runAble()
                 Thread.sleep(6000)
+                runAble()
             }
             println("线程彻底退出了")
         }
     }
 
-    fun SetDataByIndexPage(mTopViewComicBook: ArrayList<HotComicStrut>?, newUpdate: ArrayList<HotComicStrut>?) {
-        this.newUpdate = newUpdate
-        TopViewBanner!!.setTopDate(mTopViewComicBook)
-        TopViewVP!!.adapter = TopViewBanner
-        TopViewVP!!.offscreenPageLimit = 3
-        TopViewVP!!.clipChildren = false
+    private var mRealData: ArrayList<RecommendItemType> = getDefaultItem()
 
+    fun getDefaultItem(): ArrayList<RecommendItemType> {
+        val data = ArrayList<RecommendItemType>()
+        data.apply {
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TOP
+            })
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_RANK
+            })
+        }
+        return data
+    }
+
+    fun addAllObj(mData: ArrayList<RecommendItemType>, arr: ArrayList<HotComicStrut>?) {
+        for (a in arr!!) {
+            addAllObj(mData, a)
+        }
+    }
+
+    fun addAllObj(mData: ArrayList<RecommendItemType>, arr: HotComicStrut?) {
+        mData.add(RecommendItemType().apply {
+            type = RecommendItemType.TYPE.TYPE_GRID
+            BookInfo = arr!!
+        })
+    }
+
+    private var willUpdate = false
+    private var mTopViewComicBook: ArrayList<HotComicStrut>? = null
+    fun SetDataByIndexPage(mTopViewComicBook: ArrayList<HotComicStrut>?,
+                           newUpdate: ArrayList<HotComicStrut>?,
+                           rhmh: ArrayList<HotComicStrut>?,
+                           ommh: ArrayList<HotComicStrut>?,
+                           dlmh: ArrayList<HotComicStrut>?,
+                           rhhk: ArrayList<HotComicStrut>?,
+                           omhk: ArrayList<HotComicStrut>?,
+                           dlhk: ArrayList<HotComicStrut>?,
+                           a_Z: ArrayList<HotComicStrut>?) {
+        this.mTopViewComicBook = mTopViewComicBook
+        mRealData = getDefaultItem().apply {
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "最近更新"
+            })
+            addAllObj(this, newUpdate)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "日韩漫画"
+            })
+            addAllObj(this, rhmh)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "欧美漫画"
+            })
+            addAllObj(this, ommh)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "大陆漫画"
+            })
+            addAllObj(this, dlmh)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "日韩推荐"
+            })
+            addAllObj(this, rhhk)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "欧美推荐"
+            })
+            addAllObj(this, omhk)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_TITLE
+                title = "大陆推荐"
+            })
+            addAllObj(this, dlhk)
+            add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_A_Z
+            })
+
+            val tags = ArrayList<String>()
+            for (hotComicStrut in a_Z!!) {
+                if (!tags.contains(hotComicStrut.Tag))
+                    tags.add(hotComicStrut.Tag)
+            }
+            val singleList = a_Z.size / tags.size
+            var a = 0
+            while (a < a_Z.size) {
+                if (a % singleList == 0) {
+                    add(RecommendItemType().apply {
+                        type = RecommendItemType.TYPE.TYPE_TITLE
+                        title = a_Z[a].Tag
+                    })
+                }
+                addAllObj(this, a_Z[a])
+                a++
+            }
+        }
+        notifyDataSetChanged()
+        willUpdate = true
+    }
+
+    private var TopViewBanner: mTopViewBanner? = null
+    private var TopViewVP: ViewPager? = null
+
+    fun StopHandle() {
         if (mThread != null) {
             if (mThread!!.isAlive) {
                 mThread!!.flag = false
             }
             mThread = null
         }
-        mThread = object : myWork() {
-            override fun runAble() {
-                if (TopViewVP != null && TopViewBanner != null) {
-                    hand.post {
-                        if ((TopViewVP!!.currentItem + 1) >= TopViewBanner!!.getSize())
-                            TopViewVP!!.currentItem = 0
-                        else
-                            TopViewVP!!.currentItem++
-                    }
-                }
-            }
-        }
-        mAdapter?.setData(newUpdate!!)
-        mAdapter?.notifyDataSetChanged()
-        mThread!!.start()
     }
-
-    private var TopViewBanner: mTopViewBanner? = null
-    private var TopViewVP: ViewPager? = null
-    private var mAdapter: HotComicAda? = null
 
     private fun mInitUI(view: View, position: Int) {
         when (getItemViewType(position)) {
-            0 -> {
-                TopViewVP = view.find<ViewPager>(R.id.pager_container)
+            RecommendItemType.TYPE.TYPE_A_Z -> {
+                with(view) {
+                    if (mTopViewComicBook != null)
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![0].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(comic_img)
+                }
+            }
+
+            RecommendItemType.TYPE.TYPE_TOP -> {
+                TopViewVP = view.find(R.id.pager_container)
                 TopViewVP!!.pageMargin = 15
                 TopViewBanner = mTopViewBanner(view)
-            }
-            2 -> {
-                if (position == 2) {
-                    with(view) {
-                        tv_listName.text = "最近更新"
-                        list_item_data.layoutManager = GridLayoutManager(this.context, 3)
-                        list_item_data.setHasFixedSize(false)
-                        mAdapter = object : HotComicAda() {
-                            override fun getLayout(): Int {
-                                return R.layout.item_foosize_newupdate
-                            }
+                TopViewVP!!.adapter = TopViewBanner
+                TopViewVP!!.offscreenPageLimit = 3
+                TopViewVP!!.clipChildren = false
+                TopViewBanner!!.setTopDate(mTopViewComicBook)
+                TopViewBanner!!.notifyDataSetChanged()
 
-                            override fun InitUI(mItem: View, data: HotComicStrut?, position: Int) {
-                                if (data != null) {
-                                    with(mItem) {
-                                        Glide.with(mItem.context)
-                                                .load(data.BookImgSrc)
-                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                                .into(foo_bookImg)
-                                        foo_bookName_upNews.text = "更新:" + data.LastedPage_name
-                                        foo_bookName.text = data.BookName
-                                        setOnClickListener {
-                                            startActivity(mItem.context,
-                                                    getIntentEx(mItem.context, data), null)
-                                        }
-                                    }
-                                }
+                StopHandle()
+                mThread = object : RecommendRecyclerViewAdapter.myWork() {
+                    override fun runAble() {
+                        if (TopViewVP != null && TopViewBanner != null) {
+                            hand.post {
+                                if ((TopViewVP!!.currentItem + 1) >= TopViewBanner!!.getSize())
+                                    TopViewVP!!.currentItem = 0
+                                else
+                                    TopViewVP!!.currentItem++
                             }
                         }
-                        list_item_data.adapter = mAdapter
-                        list_item_data.isFocusableInTouchMode = false
-                        list_item_data.addItemDecoration(object : SpaceItemDecoration(5) {
-                            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
-                                val padding = 10
-                                //不是第一个的格子都设一个左边和底部的间距
-                                outRect.left = padding
-                                outRect.bottom = padding
-                                //由于每行都只有list个，所以第一个都是list的倍数，把左边距设为0
-                                if (parent.getChildLayoutPosition(view) % 3 == 0) {
-                                    outRect.left = padding
-                                } else {
-                                    outRect.right = 0
-                                }
-                            }
-                        })
+                    }
+                }
+                mThread!!.start()
+            }
+            RecommendItemType.TYPE.TYPE_RANK -> {
+                //RANK 点击
+                if (mTopViewComicBook != null)
+                    with(view) {
+                        tv_times.text = (java.util.Calendar.getInstance()
+                                .get(java.util.Calendar.DAY_OF_MONTH)
+                                ).toString()
+
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![0].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_privatefm_img_back)
+
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![1].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_day_img_back)
+
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![2].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_mix_img_back)
+
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![3].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_charts_img_back)
+                    }
+            }
+            RecommendItemType.TYPE.TYPE_TITLE -> {
+                //RANK 点击
+                with(view) {
+                    tv_listName.text = mRealData[position].title
+                }
+            }
+            RecommendItemType.TYPE.TYPE_GRID -> {
+                with(view) {
+                    val data = mRealData[position].BookInfo
+                    Glide.with(view.context)
+                            .load(data.BookImgSrc)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(foo_bookImg)
+                    if (data.LastedPage_name == null) {
+                        foo_bookName_upNews.visibility = View.GONE
+                    } else {
+                        foo_bookName_upNews.visibility = View.VISIBLE
+                        foo_bookName_upNews.text = "更新:" + data.LastedPage_name
+                    }
+                    foo_bookName.text = data.BookName
+                    setOnClickListener {
+                        startActivity(view.context, getIntentEx(view.context, data), null)
                     }
                 }
             }
         }
+    }
+
+    fun getIntentEx(ctx: Context, data: HotComicStrut): Intent {
+        return Intent(ctx, ComicDetails::class.java).putExtras(Bundle().apply {
+            putString("data", data.toString())
+        })
     }
 
     private inner class mTopViewBanner(val mView: View) : PagerAdapter() {
@@ -209,6 +345,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
         fun getSize() = newUpdate.size
 
         private var newUpdate: ArrayList<HotComicStrut> = ArrayList()
+
         fun setTopDate(newUpdate: ArrayList<HotComicStrut>?) {
             this.newUpdate = newUpdate ?: ArrayList()
         }
