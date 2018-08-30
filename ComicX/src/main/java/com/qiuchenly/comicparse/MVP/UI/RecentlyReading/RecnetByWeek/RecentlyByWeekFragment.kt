@@ -22,6 +22,7 @@ class RecentlyByWeekFragment : BaseFragment<WeekContract.Presenter>(), WeekContr
         RecentlyPresenter(this)
         val arr = ArrayList(mPres?.getAllRecently())
         mMyDetailsLocalBookList!!.setData(arr)
+        mMyDetailsLocalBookList!!.sort(1)
         rv_recently.adapter = mMyDetailsLocalBookList
     }
 

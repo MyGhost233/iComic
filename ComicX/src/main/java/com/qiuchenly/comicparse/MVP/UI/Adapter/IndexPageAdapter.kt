@@ -14,10 +14,11 @@ import android.view.animation.RotateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.MVP.Contract.MyDetailsContract
+import com.qiuchenly.comicparse.MVP.UI.Activitys.DownloaderComic
 import com.qiuchenly.comicparse.MVP.UI.Activitys.MainSwitch
 import com.qiuchenly.comicparse.MVP.UI.RecentlyReading.RecentlyRead
-import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
@@ -27,7 +28,7 @@ import org.jetbrains.anko.find
 @Suppress("ClassName", "FunctionName")
 class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter<BaseVH>() {
 
-    private var mList: List<String> = arrayListOf("", "", "", "", "", "", "")
+    private var mList: List<String> = arrayListOf("", "", "", "", "", "")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
         return BaseVH(LayoutInflater.from(parent.context).inflate(when (viewType) {
@@ -93,8 +94,14 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
                             "我的收藏(本地)"
                         }
                         4 -> {
-                            item_img.setImageResource(R.mipmap.other)
-                            "这个先空着，有意见吗"
+                            item_img.setImageResource(R.drawable.ic_down)
+                            this.setOnClickListener {
+                                startActivity(this.context,
+                                        Intent(this.context,
+                                                DownloaderComic::class.java),
+                                        null)
+                            }
+                            "下载管理"
                         }
                         else -> {
                             item_img.setImageResource(R.mipmap.other)
@@ -153,6 +160,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
                 rv_my_main_spec_list.visibility = View.GONE
             }
             mMyDetailsLocalBookList.setData(arr)
+            mMyDetailsLocalBookList.sort(1)
             rv_my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
             rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
             rv_my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
@@ -163,7 +171,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             0 -> TYPE_TOPVIEW
-            6, 7 -> {
+            5 -> {
                 TYPE_EXPAND_LIST
             }
             else -> TYPE_NORMAL

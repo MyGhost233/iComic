@@ -46,9 +46,7 @@ abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
             map = ret
             notifyDataSetChanged()
         }
-
         //排序算法2
-
     }
 
     override fun onBindViewHolder(holder: BaseVH, position: Int) {

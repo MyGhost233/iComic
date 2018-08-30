@@ -20,6 +20,7 @@ import com.qiuchenly.comicparse.Bean.HotComicStrut
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
+import com.qiuchenly.comicparse.MVP.UI.Activitys.EveryDayRecommend
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -274,6 +275,14 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                                 .bitmapTransform(BlurTransformation(view.context, 55))
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(iv_charts_img_back)
+
+                        iv_day_img_click.setOnClickListener {
+                            startActivity(view.context,
+                                    Intent(view.context, EveryDayRecommend::class.java),
+                                    null)
+                        }
+
+
                     }
             }
             RecommendItemType.TYPE.TYPE_TITLE -> {

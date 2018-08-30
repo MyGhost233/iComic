@@ -24,6 +24,10 @@ import kotlinx.android.synthetic.main.activity_switch_main.*
 import java.util.*
 
 class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.View, ViewPager.OnPageChangeListener {
+    override fun getUISet(mSet: UISet): UISet {
+        return mSet
+    }
+
     override fun onPageScrollStateChanged(state: Int) {
 
     }
@@ -77,7 +81,6 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         control_menu.visibility = View.INVISIBLE
 
         //start create appbar ui

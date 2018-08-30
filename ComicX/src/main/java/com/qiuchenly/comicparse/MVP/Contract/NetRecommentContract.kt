@@ -14,6 +14,8 @@ interface NetRecommentContract {
     interface View : BaseView<Presenter> {
         fun GetIndexPageSucc(mTopViewComicBook: ArrayList<HotComicStrut>?, newUpdate: ArrayList<HotComicStrut>?, rhmh: ArrayList<HotComicStrut>?, ommh: ArrayList<HotComicStrut>?, dlmh: ArrayList<HotComicStrut>?, rhhk: ArrayList<HotComicStrut>?, omhk: ArrayList<HotComicStrut>?, dlhk: ArrayList<HotComicStrut>?, a_Z: ArrayList<HotComicStrut>?)
 
+        fun OnNetFailed()
+
     }
 
     interface Model : BaseModel {

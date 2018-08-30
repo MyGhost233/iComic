@@ -55,6 +55,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/iv_day_img_click"
             android:orientation="vertical"
             android:padding="5dp">
 

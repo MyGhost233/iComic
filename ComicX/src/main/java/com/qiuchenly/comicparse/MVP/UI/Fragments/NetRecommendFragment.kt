@@ -15,6 +15,12 @@ import kotlinx.android.synthetic.main.fragment_my_details.*
 import org.jetbrains.anko.runOnUiThread
 
 class NetRecommendFragment : BaseFragment<NetRecommentContract.Presenter>(), NetRecommentContract.View {
+    override fun OnNetFailed() {
+        if (MyDetails_Refresh.isRefreshing)
+            MyDetails_Refresh.isRefreshing = false
+        ShowErrorMsg("网络似乎有点问题")
+    }
+
     override fun GetIndexPageSucc(
             mTopViewComicBook: ArrayList<HotComicStrut>?,
             newUpdate: ArrayList<HotComicStrut>?,

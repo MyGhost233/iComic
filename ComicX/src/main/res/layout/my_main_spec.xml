@@ -39,11 +39,11 @@
             android:clickable="true"
             android:focusable="true">
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/sets" />
+            <!--<ImageView-->
+                <!--android:layout_width="15dp"-->
+                <!--android:layout_height="15dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:src="@mipmap/sets" />-->
         </FrameLayout>
     </FrameLayout>
 

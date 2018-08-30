@@ -3,17 +3,20 @@ package com.qiuchenly.comicparse.MVP.UI.Activitys
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
 import com.qiuchenly.comicparse.MVP.Presenter.ReadPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
-import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_reader_page.*
 
 
 class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
+    override fun getUISet(mSet: UISet): UISet {
+        return mSet.apply {
+            isSlidr = true
+        }
+    }
 
     override fun onFailed(reasonStr: String) {
         ShowErrorMsg(reasonStr)
@@ -35,7 +38,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         mComicImagePageAda?.addData(lst)//removeAdultPicture(lst)
 
         currInfos.text = currInfo
-        mPres.updateReadPoint(currInfo)
+        getPres()?.updateReadPoint(currInfo)
         nextUrl = next
         loading = false
 
@@ -61,9 +64,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
     private var curr = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Slidr.attach(this)
-        window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         ReadPresenter(this)
 
         curr = intent.extras.getInt("curr")
@@ -84,7 +84,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
 //                    Log.d("Qiuchen", "$nextUrl 滑动到最底部状态$state1 state = $state")
                 if (state1) {
                     if (nextUrl != "" && !noMore) {
-                        mPres.getParsePicList(nextUrl, this@ReadPage)
+                        mPres?.getParsePicList(nextUrl, this@ReadPage)
                     } else {
                         noMore = true
                         onFailed("没有更多信息了")
@@ -95,6 +95,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
             }
         })
 
-        mPres.getParsePicList(url, this)
+        mPres?.getParsePicList(url, this)
     }
 }

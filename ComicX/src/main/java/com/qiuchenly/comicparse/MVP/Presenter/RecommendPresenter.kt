@@ -33,6 +33,8 @@ class RecommendPresenter(mView: NetRecommentContract.View) : BasePresenterImp<Ne
                             omhk,
                             dlhk,
                             a_Z)
+                else if (isShow)
+                    SuperView.OnNetFailed()
             }
         })
     }

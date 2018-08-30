@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.liulishuo.filedownloader.FileDownloader
 import com.qiuchenly.comicparse.VolleyImp.CookieHelper
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -22,6 +23,7 @@ class App : Application() {
         super.onCreate()
         ctx = this
         queue = Volley.newRequestQueue(this)
+        FileDownloader.init(applicationContext)
         cookieMaster = CookieHelper()
         sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
         cookieMaster!!.addCookie(sp!!.getString("Cookie", ""))

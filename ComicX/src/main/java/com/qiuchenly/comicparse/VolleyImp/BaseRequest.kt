@@ -1,9 +1,6 @@
 package com.qiuchenly.comicparse.VolleyImp
 
-import com.android.volley.AuthFailureError
-import com.android.volley.NetworkResponse
-import com.android.volley.Request
-import com.android.volley.Response
+import com.android.volley.*
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.StringRequest
 import com.qiuchenly.comicparse.App
@@ -72,6 +69,8 @@ abstract class BaseRequest {
                 return head
             }
         }
-        App.queue!!.add(req)
+        App.queue!!.add(req.apply {
+            retryPolicy = DefaultRetryPolicy(20 * 1000, 0, 1.0f)
+        })
     }
 }
