@@ -1,7 +1,12 @@
 package com.qiuchenly.comicparse.MVP.UI.Activitys
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,6 +23,7 @@ import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.qiuchenly.comicparse.MVP.Presenter.ComicDetailsPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Simple.WaveSideBarView
@@ -26,10 +32,15 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import org.jetbrains.anko.find
 
+
 class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View, ComicPageAda.OnSaveCB {
+    override fun onProgressChanged() {
+
+    }
+
     override fun getUISet(mSet: UISet): UISet {
         return mSet.apply {
-            isSlidr=true
+            isSlidr = true
         }
     }
 
@@ -105,11 +116,15 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
     lateinit var tv_bookIntroduction: TextView
     lateinit var mWaveSideBar: WaveSideBarView
     lateinit var img_book: ImageView
+    lateinit var mConnect: ServiceConnection
+    var mBinder: DownloadService.DownloadBinder? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         ComicDetailsPresenter(this)
+
         fa_add_local_list = find(R.id.add_local_list)
         rv_comicPage = find(R.id.rv_comicPage)
         tv_bookScore = find(R.id.tv_bookScore)
@@ -121,10 +136,37 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         mWaveSideBar = find(R.id.mWaveSideBar)
         img_book = find(R.id.img_book)
 
+        mConnect = object : ServiceConnection {
+            override fun onServiceDisconnected(name: ComponentName?) {
 
+            }
 
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                mBinder = service as DownloadService.DownloadBinder
+            }
+        }
+
+        download.setOnClickListener {
+            //this will call with download service
+            if (mBinder != null) {
+                if (mBinder!!.hasBookInList(comicInfo)) {
+                    ShowErrorMsg("已在下载列表中")
+                } else {
+                    mBinder?.AddDownloadBook(comicInfo, this)
+                }
+            }
+        }
+
+        bindService(
+                Intent(this, DownloadService::class.java),
+                mConnect,
+                Context.BIND_AUTO_CREATE)
         fa_add_local_list.setOnClickListener {
-            val book = realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst()
+            val book =
+                    realm.where(HotComicStrut::class.java)
+                            .equalTo("BookName",
+                                    comicInfo.BookName)
+                            .findFirst()
             if (book == null) {
                 realm.beginTransaction()
                 realm.createObject(HotComicStrut::class.java, comicInfo.BookName)
@@ -177,7 +219,6 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(comicDetails_img)
 
-
         mPres?.initPageInfo(comicInfo.BookLink!!)
         initFB()
     }
@@ -195,5 +236,11 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         } else {
             fa_add_local_list.setImageResource(R.drawable.ic_add_black_24dp)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(mConnect)
+        mBinder = null
     }
 }

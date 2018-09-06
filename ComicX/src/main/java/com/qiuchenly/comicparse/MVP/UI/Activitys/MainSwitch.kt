@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.MVP.UI.Activitys
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
 import com.qiuchenly.comicparse.MVP.UI.Fragments.Main
 import com.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
@@ -82,7 +84,7 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         control_menu.visibility = View.INVISIBLE
-
+        startService(Intent(this, DownloadService::class.java))
         //start create appbar ui
         fl_main_root_view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {

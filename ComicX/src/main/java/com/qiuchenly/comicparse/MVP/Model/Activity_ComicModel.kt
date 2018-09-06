@@ -42,7 +42,7 @@ class Activity_ComicModel : BaseModelImp(), ComicDetailContract.Model {
             override fun onSuccess(RetStr: String) {
                 val init = Jsoup.parse(RetStr)
                 val infoClass = init.getElementsByClass("info")[0]
-                var tmp = infoClass.getElementsByTag("span")
+                val tmp = infoClass.getElementsByTag("span")
                 val author = infoClass.getElementsByTag("p")[1]
                         .html().split("em>")[2]
                 val updateTime = tmp[0]
