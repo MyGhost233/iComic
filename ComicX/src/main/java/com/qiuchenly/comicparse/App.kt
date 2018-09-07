@@ -10,6 +10,7 @@ import com.qiuchenly.comicparse.VolleyImp.CookieHelper
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
+
 class App : Application() {
     /**
      * 64 bits

@@ -73,6 +73,7 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
     private var noMore = false
     fun setNoMore() {
         noMore = true
+        notifyItemChanged(getData()?.size!!)
     }
 
     val TYPE_NORMAL = 0

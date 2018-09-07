@@ -152,7 +152,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
                 if (mBinder!!.hasBookInList(comicInfo)) {
                     ShowErrorMsg("已在下载列表中")
                 } else {
-                    mBinder?.AddDownloadBook(comicInfo, this)
+                    mBinder?.download(comicInfo, this)
                 }
             }
         }

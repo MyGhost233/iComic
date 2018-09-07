@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat
 import android.view.View
 import com.qiuchenly.comicparse.R
 import net.qiujuer.genius.blur.StackBlur
+import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -116,5 +117,11 @@ class CustomUtils {
             }
             return ""
         }
+
+        fun getBytesByBitmap(bitmap: Bitmap): ByteArray {
+            val buffer = ByteBuffer.allocate(bitmap.byteCount)
+            return buffer.array()
+        }
+
     }
 }

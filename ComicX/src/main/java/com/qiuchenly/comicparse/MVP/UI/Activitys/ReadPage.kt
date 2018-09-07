@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.MVP.UI.Activitys
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
 import com.qiuchenly.comicparse.MVP.Presenter.ReadPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
@@ -46,6 +47,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
             mAppBarComicReader.setExpanded(true, true)
             rv_comicRead_list.scrollToPosition(lastPoint)
         }
+        if (InitLoading) InitLoading = false
     }
 
     private var nextUrl = ""
@@ -62,39 +64,38 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
     private var currUrl = ""
     private var mComicImagePageAda: ComicImagePageAda? = null
     private var curr = -1
+    var InitLoading = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ReadPresenter(this)
-
         curr = intent.extras.getInt("curr")
 //        intent.extras.getString("title")
-        var url = intent.extras.getString("link")
+        val url = intent.extras.getString("link")
         currUrl = url
         mComicImagePageAda = ComicImagePageAda()
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
-        rv_comicRead_list.setOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rv_comicRead_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, state: Int) {
+                Log.d("QiuChen", "$InitLoading")
                 val state1 = !recyclerView!!.canScrollVertically(1)
-                if (loading || noMore) return//cancel request and did't report information to user
+                if (InitLoading || loading || noMore) return
+                //cancel request and did't report information to user
                 if (state1) {
                     loading = true
                 }
-//                if (state1)
-//                    Log.d("Qiuchen", "$nextUrl 滑动到最底部状态$state1 state = $state")
                 if (state1) {
                     if (nextUrl != "" && !noMore) {
+                        InitLoading = true
                         mPres?.getParsePicList(nextUrl, this@ReadPage)
                     } else {
                         noMore = true
                         onFailed("没有更多信息了")
                         mComicImagePageAda?.setNoMore()
-                        mComicImagePageAda?.notifyItemChanged(mComicImagePageAda?.getData()?.size!!)
                     }
                 }
             }
         })
-
         mPres?.getParsePicList(url, this)
     }
 }
