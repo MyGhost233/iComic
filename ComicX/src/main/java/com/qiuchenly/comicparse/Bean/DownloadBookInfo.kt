@@ -13,7 +13,9 @@ open class DownloadBookInfo : RealmObject() {
     @PrimaryKey
     var BookName = ""
     var Author = ""
+    var DownOver = false
     var PageList = RealmList<PageInfo>()
+    var Booklink = ""
 }
 
 /**
@@ -22,6 +24,7 @@ open class DownloadBookInfo : RealmObject() {
 open class PageInfo : RealmObject() {
     var titleName = ""
     var imageList = RealmList<ImageUrl>()
+    var DownOver = false
 }
 
 /**
