@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff">
@@ -9,158 +12,132 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:background="@color/cardview_dark_background"
         app:elevation="0dp">
 
-        <RelativeLayout
+        <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="wrap_content"
+            app:expandedTitleMarginEnd="10dp"
+            app:expandedTitleMarginStart="10dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <ImageView
+                android:id="@+id/comicDetails_img_real"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5" />
 
             <ImageView
                 android:id="@+id/comicDetails_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#5b000000" />
 
-            <android.support.v7.widget.Toolbar
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="26dp"
-                app:contentInsetStart="0dp">
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom">
 
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/details"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/img_book_frame"
-                        android:layout_width="130dp"
-                        android:layout_height="180dp"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="5dp"
-                        app:cardBackgroundColor="#00000000"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:id="@+id/img_book"
-                            android:layout_width="150dp"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:transitionName="srdv" />
-                    </android.support.v7.widget.CardView>
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_bookname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_toEndOf="@+id/img_book_frame"
-                        android:orientation="vertical">
+                        android:text="指染成婚"
+                        android:textColor="#ffffff"
+                        android:textSize="17sp" />
 
-                        <TextView
-                            android:id="@+id/tv_bookName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="指染成婚"
-                            android:textColor="#e7e7e7"
-                            android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/tv_bookAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_bookName"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="原著作者：涂山君"
+                        android:textColor="#ffffff"
+                        android:textSize="11sp" />
 
-                        <TextView
-                            android:id="@+id/tv_bookAuthor"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/tv_bookName"
-                            android:layout_marginTop="5dp"
-                            android:text="原著作者：涂山君"
-                            android:textColor="#e7e7e7"
-                            android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/tv_bookCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_bookName"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="剧情类别：少女爱情"
+                        android:textColor="#ffffff"
+                        android:textSize="11sp" />
 
-                        <TextView
-                            android:id="@+id/tv_bookCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/tv_bookName"
-                            android:layout_marginTop="5dp"
-                            android:text="剧情类别：少女爱情"
-                            android:textColor="#e7e7e7"
-                            android:textSize="11sp" />
+                </LinearLayout>
+            </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/tv_bookUpdateTime"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/tv_bookName"
-                            android:layout_marginTop="5dp"
-                            android:text="更新时间：2016-07-23"
-                            android:textColor="#e7e7e7"
-                            android:textSize="11sp" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="26dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                        <TextView
-                            android:id="@+id/tv_bookScore"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/tv_bookName"
-                            android:layout_marginTop="5dp"
-                            android:text="网友评分：9.2"
-                            android:textColor="#e7e7e7"
-                            android:textSize="11sp" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                        <TextView
-                            android:id="@+id/tv_bookIntroduction"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_below="@+id/tv_bookName"
-                            android:layout_marginTop="5dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:scrollbars="vertical"
-                            android:text="简介：漫画《指染成婚》改编自炎水淋同名都市言情小说《指染成婚》，一言不合就抽人家皮带？！这个腹黑女，果然引起了男人的注意！只是这套路玩得深，会不会有翻车的危险啊？“我看上的女人，就只能是我的女人。”
+                    <FrameLayout
+                        android:id="@+id/back_up"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:clickable="true"
+                        android:focusable="true">
 
-“我看上的女人，就只能是我的女人。”"
-                            android:textColor="#e7e7e7"
-                            android:textSize="10sp" />
+                        <ImageView
+                            android:id="@+id/backImage"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ic_arrow_back"
+                            android:scaleType="centerInside" />
+                    </FrameLayout>
 
-                    </LinearLayout>
-
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tv_bookname_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="指染成婚"
+                        android:textColor="#ffffff"
+                        android:textSize="17sp" />
+                </FrameLayout>
             </android.support.v7.widget.Toolbar>
-        </RelativeLayout>
-
-
+        </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_comicPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_comicPage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <com.qiuchenly.comicparse.Simple.WaveSideBarView
-            android:id="@+id/mWaveSideBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp" />
-    </RelativeLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_local_list"

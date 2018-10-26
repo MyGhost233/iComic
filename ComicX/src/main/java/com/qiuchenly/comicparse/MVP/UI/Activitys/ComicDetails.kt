@@ -26,14 +26,18 @@ import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseApp
-import com.qiuchenly.comicparse.Simple.WaveSideBarView
 import com.qiuchenly.comicparse.VolleyImp.BaseURL
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.activity_comicdetails.*
+import org.jetbrains.anko.custom.async
 import org.jetbrains.anko.find
 
 
-class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContract.View, ComicPageAda.OnSaveCB {
+class ComicDetails :
+        BaseApp<ComicDetailContract.Presenter>(),
+        ComicDetailContract.View,
+        ComicPageAda.OnSaveCB {
+
     override fun onProgressChanged() {
 
     }
@@ -43,7 +47,6 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
             isSlidr = true
         }
     }
-
 
     override fun pleaseSave2DB() {
         mPres?.Save2DB(ComicBookInfo_Recently().apply {
@@ -55,7 +58,7 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
     }
 
     override fun getScoreSucc(rate: String) {
-        tv_bookScore.text = "网友评分：$rate"
+        //tv_bookScore.text = "网友评分：$rate"
     }
 
     @SuppressLint("SetTextI18n")
@@ -66,17 +69,14 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
                              introduction: String,
                              retPageList: ArrayList<ComicBookInfo>) {
         comicInfo.Author = author
-        tv_bookName.text = comicInfo.BookName
         tv_bookAuthor.text = "原著作者：$author"
         tv_bookCategory.text = "剧情类别：$category"
-        tv_bookUpdateTime.text = "最后更新：$updateTime"
-        tv_bookIntroduction.text = "简介：" + introduction.trim()
+        //tv_bookUpdateTime.text = "最后更新：$updateTime"
+        //tv_bookIntroduction.text = "简介：" + introduction.trim()
+        tv_bookname_title.text = comicInfo.BookName
+        tv_bookname.text = comicInfo.BookName
         comicPageAdas?.setData(retPageList)
         comicPageAdas?.sort(1)
-        val size = (1..retPageList.size).map { it.toString() }
-        mWaveSideBar.letters = size
-        mWaveSideBar.setOnTouchLetterChangeListener { letter, newChoose -> scrollWithPosition(newChoose) }
-
         val point = realm.where(ComicBookInfo_Recently::class.java)
                 .equalTo("BookName", comicInfo.BookName)
                 .findFirst()
@@ -100,21 +100,15 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
         return R.layout.activity_comicdetails
     }
 
-    override fun setPres(mPres: ComicDetailContract.Presenter) {
-        this.mPres = mPres
-    }
-
     var comicPageAdas: ComicPageAda? = null
 
     lateinit var fa_add_local_list: FloatingActionButton
     lateinit var rv_comicPage: RecyclerView
     lateinit var tv_bookScore: TextView
-    lateinit var tv_bookName: TextView
     lateinit var tv_bookAuthor: TextView
     lateinit var tv_bookCategory: TextView
     lateinit var tv_bookUpdateTime: TextView
     lateinit var tv_bookIntroduction: TextView
-    lateinit var mWaveSideBar: WaveSideBarView
     lateinit var img_book: ImageView
     lateinit var mConnect: ServiceConnection
     var mBinder: DownloadService.DownloadBinder? = null
@@ -122,20 +116,12 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         ComicDetailsPresenter(this)
-
         fa_add_local_list = find(R.id.add_local_list)
         rv_comicPage = find(R.id.rv_comicPage)
-        tv_bookScore = find(R.id.tv_bookScore)
-        tv_bookName = find(R.id.tv_bookName)
         tv_bookAuthor = find(R.id.tv_bookAuthor)
         tv_bookCategory = find(R.id.tv_bookCategory)
-        tv_bookUpdateTime = find(R.id.tv_bookUpdateTime)
-        tv_bookIntroduction = find(R.id.tv_bookIntroduction)
-        mWaveSideBar = find(R.id.mWaveSideBar)
-        img_book = find(R.id.img_book)
-
+        img_book = find(R.id.comicDetails_img_real)
         mConnect = object : ServiceConnection {
             override fun onServiceDisconnected(name: ComponentName?) {
 
@@ -221,6 +207,17 @@ class ComicDetails : BaseApp<ComicDetailContract.Presenter>(), ComicDetailContra
 
         mPres?.initPageInfo(comicInfo.BookLink!!)
         initFB()
+
+        comicDetails_img.alpha = 0f
+        tv_bookname_title.alpha = 0f
+        appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val CurrentPercents = (-verticalOffset * 1f) / appBarLayout.totalScrollRange
+            comicDetails_img.alpha = CurrentPercents
+            details.alpha = 1f - CurrentPercents
+            tv_bookname.alpha = 1f - CurrentPercents
+            tv_bookname_title.alpha = CurrentPercents
+        }
+        back_up.setOnClickListener { finish() }
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {

@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.r0adkll.slidr.Slidr
 import io.realm.Realm
+import org.greenrobot.eventbus.EventBus
 
 abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P> {
 

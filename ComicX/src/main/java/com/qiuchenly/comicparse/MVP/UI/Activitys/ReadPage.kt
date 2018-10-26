@@ -10,6 +10,8 @@ import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
 import kotlinx.android.synthetic.main.activity_reader_page.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
@@ -27,6 +29,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
     var noMore = false
 
     var lastPoint = 0
+
     override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String) {
         if (next.indexOf(".html") <= 0) {
             noMore = true
@@ -54,10 +57,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
 
     override fun getLayoutID(): Int {
         return R.layout.activity_reader_page
-    }
-
-    override fun setPres(mPres: ReaderContract.Presenter) {
-        this.mPres = mPres
     }
 
     private var loading = false

@@ -16,14 +16,8 @@ class EveryDayRecommend : BaseApp<EveryDayRecommendCotract.Presenter>(), EveryDa
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-    }
-
-    override fun setPres(mPres: EveryDayRecommendCotract.Presenter) {
-        super.setPres(mPres)
     }
 }

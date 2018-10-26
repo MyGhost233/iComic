@@ -1,1 +1,1 @@
-include ':ComicX'
+include ':ComicX', ':testnewfeatureapp'

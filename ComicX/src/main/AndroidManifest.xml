@@ -44,6 +44,8 @@
             android:name=".Service.DownloadService"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".MVP.UI.Activitys.SearchActivity"></activity>
     </application>
 
 </manifest>
