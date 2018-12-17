@@ -24,15 +24,13 @@ import kotlinx.android.synthetic.main.view_magic_indicator_base.*
  * 时间：⚽️⚽️你萌让我①个月拿驾驶证⑧
  */
 class RecentlyRead : AppCompatActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recently_read)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         Slidr.attach(this)
         if (supportActionBar != null) supportActionBar!!.hide()
-        InitUI(this,getFramList())
+        InitUI(this, getFramList())
     }
 
     fun getFramList(): ArrayList<RecentlyPagerAdapter.Struct> {
@@ -44,7 +42,7 @@ class RecentlyRead : AppCompatActivity() {
 
     companion object {
         private var mPgAdapter: RecentlyPagerAdapter? = null
-        fun InitUI(app: AppCompatActivity,arr:ArrayList<RecentlyPagerAdapter.Struct>) {
+        fun InitUI(app: AppCompatActivity, arr: ArrayList<RecentlyPagerAdapter.Struct>) {
             //init ui
             app.back_up.setOnClickListener {
                 app.finish()

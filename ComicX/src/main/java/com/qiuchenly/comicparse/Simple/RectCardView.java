@@ -23,7 +23,6 @@ class RectCardView extends CardView{
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-
     }
 }
 

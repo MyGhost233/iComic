@@ -13,7 +13,6 @@ import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
 import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
-import java.lang.Exception
 
 
 class ComicImagePageAda : BaseRVAdapter<String>() {
@@ -24,7 +23,7 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
     override fun InitUI(item: View, data: String?, position: Int) {
         if (data != null)
             Glide.with(AppManager.appm.currentActivity())
-                    .load("http://mhpic.dongzaojiage.com" + data)
+                    .load("http://mhpic.dongzaojiage.com$data")
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(object : RequestListener<String, GlideDrawable> {
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {

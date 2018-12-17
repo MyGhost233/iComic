@@ -3,6 +3,7 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,12 +12,13 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="295dp"
         app:elevation="0dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             app:expandedTitleMarginEnd="10dp"
             app:expandedTitleMarginStart="10dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -128,37 +130,64 @@
                         android:text="指染成婚"
                         android:textColor="#ffffff"
                         android:textSize="17sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end">
+
+                        <FrameLayout
+                            android:id="@+id/mBookDownload"
+                            android:layout_width="?attr/actionBarSize"
+                            android:layout_height="?attr/actionBarSize"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:id="@+id/mBookDownload_IV"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_down"
+                                android:scaleType="centerInside" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/mShareButton"
+                            android:layout_width="?attr/actionBarSize"
+                            android:layout_height="?attr/actionBarSize"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ic_share"
+                                android:scaleType="centerInside" />
+                        </FrameLayout>
+                    </LinearLayout>
+
                 </FrameLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
+
+        <include layout="@layout/view_magic_indicator_base" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_comicPage"
         android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        tools:itemCount="40"
+        tools:listitem="@layout/recycler_view_item" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_local_list"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="10dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_add_black_24dp"
-        app:elevation="0dp"
-        app:layout_anchor="@id/appBarLayout"
-        app:layout_anchorGravity="bottom|end" />
+   <!-- <android.support.v4.view.ViewPager
+        android:id="@+id/tl_recently_tab_setup_vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/download"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="65dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_download"
-        app:elevation="0dp"
-        app:layout_anchor="@id/appBarLayout"
-        app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>
