@@ -289,6 +289,9 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                 //RANK 点击
                 with(view) {
                     tv_listName.text = mRealData[position].title
+                    setOnClickListener {
+
+                    }
                 }
             }
             RecommendItemType.TYPE.TYPE_GRID -> {

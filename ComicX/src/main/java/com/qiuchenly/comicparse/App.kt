@@ -24,10 +24,11 @@ class App : Application() {
         super.onCreate()
         ctx = this
         queue = Volley.newRequestQueue(this)
-        FileDownloader.init(applicationContext)
+        FileDownloader.setup (applicationContext)
         cookieMaster = CookieHelper()
         sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
         cookieMaster!!.addCookie(sp!!.getString("Cookie", ""))
+
 
         Realm.init(this)
         val config = RealmConfiguration.Builder()

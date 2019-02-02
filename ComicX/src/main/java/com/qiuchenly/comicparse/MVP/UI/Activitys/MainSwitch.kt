@@ -23,6 +23,7 @@ import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
 import kotlinx.android.synthetic.main.activity_switch_main.*
+import org.greenrobot.eventbus.Subscribe
 import java.util.*
 
 class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.View, ViewPager.OnPageChangeListener {
@@ -75,42 +76,13 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
         return R.layout.activity_switch_main
     }
 
-    companion object BlurImageCache {
-        var contentView: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-        var imageGetters: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        control_menu.visibility = View.INVISIBLE
         startService(Intent(this, DownloadService::class.java))
-        //start create appbar ui
-        fl_main_root_view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                fl_main_root_view.buildDrawingCache()
-                var imageGetter = fl_main_root_view.drawingCache
-                imageGetters = blurs(imageGetter, 20)
-
-                var tmp = catchBitmap(ab_main_navigation_layout, imageGetter)
-                var retImg = blurs(tmp, 70)
-                ab_main_navigation_layout.background = BitmapDrawable(null, retImg)
-
-                tmp = catchBitmap(vp_main_pages, imageGetters)
-                contentView = tmp
-                vp_main_pages.background = BitmapDrawable(null, tmp)
-
-                control_menu.visibility = View.VISIBLE
-                iv_backimg_nv.setImageBitmap(imageGetters)
-                continueInit()
-                fl_main_root_view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
         switch_my_list_img.imageAlpha = 255
         switch_my_website_more_img.imageAlpha = 100
         switch_my_website_addition_img.imageAlpha = 100
-
         MainSwichPresenter(this)
-
         dl_navigation_main.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
 
@@ -129,6 +101,7 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
             }
 
         })
+        continueInit()
     }
 
     override fun setPres(mPres: MainSwitchContract.Presenter) {
@@ -151,7 +124,7 @@ class MainSwitch : BaseApp<MainSwitchContract.Presenter>(), MainSwitchContract.V
                 fragmentList)
         vp_main_pages.adapter = statement
         vp_main_pages.offscreenPageLimit = 4
-        vp_main_pages.setOnPageChangeListener(this)
+        vp_main_pages.addOnPageChangeListener(this)
 
         btn_menu_main.setOnClickListener {
             dl_navigation_main.openDrawer(Gravity.START)

@@ -8,30 +8,29 @@
     <FrameLayout
         android:id="@+id/fl_main_root_view"
         android:layout_width="match_parent"
+        android:background="@color/mDefaultDarkThemeColor"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/main_src"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/backs" />
+            android:scaleType="centerCrop"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#68000000" />
+            android:layout_height="match_parent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
+            <!--android:background="#00000000"-->
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/ab_main_navigation_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
+
                 app:elevation="0dp">
 
                 <android.support.v7.widget.Toolbar

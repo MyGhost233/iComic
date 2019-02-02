@@ -12,7 +12,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.qiuchenly.comicparse"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -24,17 +24,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jsoup:jsoup:1.9.2'
+
     // Using JCenter
     implementation 'eu.davidea:flexible-adapter:5.0.5'
     implementation 'eu.davidea:flexible-adapter-ui:1.0.0-b5'
     implementation 'eu.davidea:flexible-adapter-livedata:1.0.0-b2'
+
     // From 1.0.0-b3, library is compiled with data binding v2
     implementation 'eu.davidea:flexible-adapter-databinding:1.0.0-b3'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
@@ -51,24 +54,24 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+
     //renderscript
     implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
-
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
-
     implementation 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
 
     // kotlin使用realm的注解处理依赖库
-    kapt "io.realm:realm-annotations:4.2.0"
-    kapt "io.realm:realm-annotations-processor:0.87.1"
-
+    kapt "io.realm:realm-annotations:5.4.2"
+    kapt "io.realm:realm-annotations-processor:5.4.2"
     implementation 'com.android.support:support-v13:27.1.1'
     implementation "org.jetbrains.anko:anko:$anko_version"
+
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
     // Anko Layouts
     implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
+
     // sdk15, sdk19, sdk21, sdk23 are also available
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
 
@@ -78,6 +81,7 @@ dependencies {
 
     // Anko SQLite
     implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
+
     // Appcompat-v7 (only Anko Commons)
     implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
 
@@ -110,17 +114,20 @@ dependencies {
 
     // ConstraintLayout
     implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
-
     implementation 'com.github.crosswall:Android-Coverflow:release-v1.0.5'
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
     implementation 'com.r0adkll:slidableactivity:2.0.6'
-
     implementation 'com.liulishuo.filedownloader:library:1.7.5'
-
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     // Retrofit库
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //CallAdapterFactory的Rx依赖包---导这个包才能配合rxAndroid使用
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
+    //ConverterFactory的String依赖包----这个是解析数据的工厂.用来格式化数据的,配置编码啊,gson解析啊.
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    //api project(':core')
 }

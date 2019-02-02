@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_comic_board_view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 class ComicBoardFragment : BaseFragment<ComicBoardPresenter>() {
+
     override fun getLayoutID(): Int {
         return R.layout.fragment_comic_board_view
     }

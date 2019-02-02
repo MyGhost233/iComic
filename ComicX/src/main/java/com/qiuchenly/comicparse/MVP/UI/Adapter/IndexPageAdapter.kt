@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,9 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
 
     private var mList: List<String> = arrayListOf("", "", "", "", "", "")
 
+    private var TAG = "IndexPageAdapter"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
+        Log.d(TAG, "onCreateViewHolder:$viewType")
         return BaseVH(LayoutInflater.from(parent.context).inflate(when (viewType) {
             TYPE_TOPVIEW -> {
                 R.layout.my_main_topview
@@ -54,23 +57,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
         when (getItemViewType(position)) {
             TYPE_TOPVIEW -> {
                 with(holder.itemView) {
-                    val mFl_main_root_view = find<FrameLayout>(R.id.fl_main_root_view)
-                    val sb = object : ViewTreeObserver.OnGlobalLayoutListener {
-                        override fun onGlobalLayout() {
-                            val mtopview_back_for = find<ImageView>(R.id.topview_back_for)
-                            var tmp = catchBitmap(mtopview_back_for, MainSwitch.contentView)
-                            var ret = blurs(tmp, 70)
-                            mtopview_back_for.setImageBitmap(ret)
 
-                            val mtopview_back = find<ImageView>(R.id.topview_back)
-                            tmp = catchBitmap(mtopview_back, MainSwitch.contentView)
-                            ret = blurs(tmp, 100)
-                            mtopview_back.setImageBitmap(ret)
-
-                            mFl_main_root_view.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        }
-                    }
-                    mFl_main_root_view.viewTreeObserver.addOnGlobalLayoutListener(sb)
                 }
             }
             TYPE_NORMAL -> {
@@ -169,6 +156,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
     }
 
     override fun getItemViewType(position: Int): Int {
+        //return 1
         return when (position) {
             0 -> TYPE_TOPVIEW
             5 -> {

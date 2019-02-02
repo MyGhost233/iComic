@@ -19,7 +19,7 @@
         android:layout_marginStart="15dp"
         android:gravity="center"
         android:text="@string/lasted_position"
-        android:textColor="#ff0000"
+        android:textColor="#C24242"
         android:textSize="9sp"
         tools:ignore="SmallSp" />
 
@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="15dp"
         android:text="第一话"
-        android:textColor="#121212"
+        android:textColor="@color/mDefaultListTextColor"
         android:id="@+id/tv_comicPageName"
         android:textSize="16sp" />
 

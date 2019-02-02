@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -178,16 +176,15 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_comicPage"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mDefaultDarkThemeColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_height="match_parent"
-        tools:itemCount="40"
-        tools:listitem="@layout/recycler_view_item" />
+        tools:itemCount="40" />
 
-   <!-- <android.support.v4.view.ViewPager
-        android:id="@+id/tl_recently_tab_setup_vp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
-
+    <!-- <android.support.v4.view.ViewPager
+         android:id="@+id/tl_recently_tab_setup_vp"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
 </android.support.design.widget.CoordinatorLayout>

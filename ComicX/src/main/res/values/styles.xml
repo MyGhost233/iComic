@@ -20,7 +20,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="AppTheme.NoActionBar.LauncherImg">
-        <item name="android:windowBackground">@mipmap/backs</item>
+        <!--<item name="android:windowBackground">@mipmap/backs</item>-->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

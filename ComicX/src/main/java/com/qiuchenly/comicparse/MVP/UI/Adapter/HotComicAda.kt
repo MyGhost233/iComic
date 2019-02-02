@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.MotionEvent
@@ -62,9 +63,13 @@ open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                 }
                 setOnClickListener {
                     val i = getIntentEx(this.context, data)
-                    startActivity(this.context, i, ActivityOptions.makeSceneTransitionAnimation
-                    (AppManager.appm.currentActivity(), this, "srdv")
-                            .toBundle())
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        startActivity(this.context, i, ActivityOptions.makeSceneTransitionAnimation
+                        (AppManager.appm.currentActivity(), this, "srdv")
+                                .toBundle())
+                    } else {
+                        startActivity(AppManager.appm.currentActivity(), i, null)
+                    }
                 }
                 setOnTouchListener { v, event ->
                     when (event!!.action) {

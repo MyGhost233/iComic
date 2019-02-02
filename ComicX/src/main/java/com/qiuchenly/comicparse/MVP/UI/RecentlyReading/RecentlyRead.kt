@@ -56,15 +56,6 @@ class RecentlyRead : AppCompatActivity() {
 
             //create tips bottom
             BaseNavigatorCommon.setUpWithPager(app, list, app.magic_indicator, app.tl_recently_tab_setup_vp)
-            app.al_recently_bar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    var bit = CustomUtils.catchBitmap(app.al_recently_bar, MainSwitch.imageGetters)
-                    bit = CustomUtils.blurs(bit, 70)
-                    app.al_recently_bar.background = BitmapDrawable(bit)
-                    app.al_recently_bar.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    app.tl_recently_tab_setup_vp.background = BitmapDrawable(MainSwitch.contentView)
-                }
-            })
         }
     }
 }
