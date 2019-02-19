@@ -24,6 +24,7 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
         if (data != null)
             Glide.with(AppManager.appm.currentActivity())
                     .load("http://mhpic.dongzaojiage.com$data")
+                    .placeholder(R.drawable.loading)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(object : RequestListener<String, GlideDrawable> {
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
@@ -38,6 +39,7 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
                             val realHeight = Math.round(resource.intrinsicHeight * scale).toInt()
                             params.height = realHeight + item.iv_img_page.paddingTop + item.iv_img_page.paddingBottom
                             item.iv_img_page.layoutParams = params
+                            item.iv_img_page.invalidate()
                             return false
                         }
                     })

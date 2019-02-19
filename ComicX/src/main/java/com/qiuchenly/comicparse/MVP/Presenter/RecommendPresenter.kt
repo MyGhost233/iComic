@@ -1,17 +1,13 @@
 package com.qiuchenly.comicparse.MVP.Presenter
 
-import com.qiuchenly.comicparse.Bean.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.Model.FragmentRecommendModel
-import com.qiuchenly.comicparse.Simple.BasePresenterImp
 
-class RecommendPresenter(mView: NetRecommentContract.View) : BasePresenterImp<NetRecommentContract.View, NetRecommentContract.Model>(mView), NetRecommentContract.Presenter {
-    override fun createModel(): NetRecommentContract.Model {
-        return FragmentRecommendModel()
-    }
-
-    override fun getWebSiteByIndexData() {
-        SuperModel.GetIndexPage(object : FragmentRecommendModel.IndexPageGetter {
+class RecommendPresenter(private var mView: NetRecommentContract.View) {
+    var superModel = FragmentRecommendModel()
+    fun getWebSiteByIndexData() {
+        superModel.GetIndexPage(object : FragmentRecommendModel.IndexPageGetter {
             override fun mGetResult(retCode: Int,
                                     reasonStr: String,
                                     mTopViewComicBook: ArrayList<HotComicStrut>?,
@@ -23,9 +19,9 @@ class RecommendPresenter(mView: NetRecommentContract.View) : BasePresenterImp<Ne
                                     omhk: ArrayList<HotComicStrut>?,
                                     dlhk: ArrayList<HotComicStrut>?,
                                     a_Z: ArrayList<HotComicStrut>?) {
-                if (isShow && retCode == 200)
-                    SuperView.GetIndexPageSucc(mTopViewComicBook,
-                            newUpdate ,
+                if (retCode == 200)
+                    mView.GetIndexPageSucc(mTopViewComicBook,
+                            newUpdate,
                             rhmh,
                             ommh,
                             dlmh,
@@ -33,8 +29,8 @@ class RecommendPresenter(mView: NetRecommentContract.View) : BasePresenterImp<Ne
                             omhk,
                             dlhk,
                             a_Z)
-                else if (isShow)
-                    SuperView.OnNetFailed()
+                else
+                    mView.OnNetFailed()
             }
         })
     }

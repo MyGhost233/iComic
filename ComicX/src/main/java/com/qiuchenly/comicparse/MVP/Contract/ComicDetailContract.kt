@@ -2,12 +2,13 @@ package com.qiuchenly.comicparse.MVP.Contract
 
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Simple.BaseLoadingView
 import com.qiuchenly.comicparse.Simple.BaseModel
 import com.qiuchenly.comicparse.Simple.BasePresenter
 import com.qiuchenly.comicparse.Simple.BaseView
 
 interface ComicDetailContract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView, BaseLoadingView {
         fun GetInfoSucc(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
         fun getScoreSucc(rate: String)
         fun scrollWithPosition(position: Int)
@@ -20,8 +21,6 @@ interface ComicDetailContract {
     }
 
     interface Model : BaseModel {
-        fun getBookScore(bookID: String, cb: GetScore)
-        fun InitPageInfo(page: String, cb: GetPageInfo)
     }
 
     interface BaseGetCallBack {

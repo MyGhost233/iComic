@@ -2,9 +2,9 @@ package com.qiuchenly.comicparse.MVP.Model
 
 import com.qiuchenly.comicparse.MVP.Contract.MainContract
 import com.qiuchenly.comicparse.Simple.BaseModelImp
-import com.qiuchenly.comicparse.Bean.HotComicStrut
-import com.qiuchenly.comicparse.VolleyImp.BaseRequest
-import com.qiuchenly.comicparse.VolleyImp.BaseURL
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Http.BaseRequest
+import com.qiuchenly.comicparse.Http.BaseURL
 import org.jsoup.Jsoup
 import java.util.*
 

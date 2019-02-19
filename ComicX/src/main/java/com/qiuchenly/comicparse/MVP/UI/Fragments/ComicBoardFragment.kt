@@ -2,15 +2,15 @@ package com.qiuchenly.comicparse.MVP.UI.Fragments
 
 import android.os.Bundle
 import android.view.View
-import com.qiuchenly.comicparse.MVP.Presenter.ComicBoardPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.FragmentUI.TuiJian
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseFragment
 import com.qiuchenly.comicparse.Simple.BaseNavigatorCommon
 import kotlinx.android.synthetic.main.fragment_comic_board_view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
-class ComicBoardFragment : BaseFragment<ComicBoardPresenter>() {
+class ComicBoardFragment : BaseFragment() {
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_comic_board_view
@@ -21,7 +21,7 @@ class ComicBoardFragment : BaseFragment<ComicBoardPresenter>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val list = arrayListOf(
-                RecentlyPagerAdapter.Struct("推荐", NetRecommendFragment()),
+                RecentlyPagerAdapter.Struct("推荐", TuiJian()),
                 RecentlyPagerAdapter.Struct("朋友", Main()),
                 RecentlyPagerAdapter.Struct("电台", Main())
         )

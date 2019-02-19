@@ -5,7 +5,7 @@ import com.qiuchenly.comicparse.Simple.BasePresenter
 import com.qiuchenly.comicparse.Simple.BaseView
 
 interface ReaderContract {
-    interface View : BaseView<Presenter>, GetPageCB
+    interface View : BaseView, GetPageCB
 
     interface Presenter : BasePresenter {
         fun getParsePicList(url: String, CB: GetPageCB)

@@ -13,15 +13,11 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-open abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P> {
-
-    protected var mPres: P? = null
-    protected val mCtx = this
+abstract class BaseApp : AppCompatActivity(), BaseView {
     protected val realm = Realm.getDefaultInstance()
 
     private val REQUEST_EXTERNAL_STORAGE = 1
     private val PERMISSIONS_STORAGE = arrayOf("android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE")
-
 
     fun verifyStoragePermissions(activity: Activity) {
         try {
@@ -42,7 +38,8 @@ open abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P
         verifyStoragePermissions(this)
         AppManager.appm.addActivity(this)
         val windowSet = getUISet()
-        setContentView(windowSet.layout)
+        if (windowSet.layout != null)
+            setContentView(windowSet.layout!!)
         if (windowSet.isFullScreen) window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         if (windowSet.isSlidr) Slidr.attach(this)
@@ -50,14 +47,16 @@ open abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    open fun onSubscribe(str:String){
+    open fun onSubscribe(str: String) {
 
     }
 
-    abstract fun getLayoutID(): Int
-    abstract fun getUISet(mSet: UISet = UISet().apply {
+    abstract fun getLayoutID(): Int?
+    open fun getUISet(mSet: UISet = UISet().apply {
         isFullScreen = true
-    }): UISet
+    }): UISet {
+        return mSet
+    }
 
     inner class UISet {
         var isFullScreen = false
@@ -65,16 +64,8 @@ open abstract class BaseApp<P : BasePresenter> : AppCompatActivity(), BaseView<P
         var layout = getLayoutID()
     }
 
-    override fun setPres(mPres: P) {
-        this.mPres = mPres
-    }
-
-    fun getPres() = mPres
-
     override fun onDestroy() {
         super.onDestroy()
-        if (mPres != null)
-            mPres!!.Destory()
         realm.close()
         AppManager.appm.finishActivity(this)
         EventBus.getDefault().unregister(this)//订阅者事件绑定

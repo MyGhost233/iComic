@@ -155,18 +155,6 @@
         android:layout_gravity="start"
         app:insetForeground="@android:color/transparent">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/iv_backimg_nv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-
-        </FrameLayout>
-
         <include layout="@layout/navigation_main" />
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

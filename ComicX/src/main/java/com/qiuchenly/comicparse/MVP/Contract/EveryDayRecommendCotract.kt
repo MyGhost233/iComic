@@ -9,7 +9,7 @@ interface EveryDayRecommendCotract {
 
     }
 
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
     }
 

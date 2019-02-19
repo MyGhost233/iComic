@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import com.qiuchenly.comicparse.MVP.Contract.DownloaderContract
-import com.qiuchenly.comicparse.MVP.Presenter.DownloaderPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.RecentlyPagerAdapter
 import com.qiuchenly.comicparse.MVP.UI.Fragments.CurrDownItemFragment
 import com.qiuchenly.comicparse.MVP.UI.Fragments.DownSuccessItemFragment
@@ -18,7 +17,7 @@ import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.BaseApp
 import kotlinx.android.synthetic.main.activity_recently_read.*
 
-class DownloaderComic : BaseApp<DownloaderContract.Presenter>(), DownloaderContract.View,CurrDownItemFragment.OnListTaskInfo {
+class DownloaderComic : BaseApp(), DownloaderContract.View,CurrDownItemFragment.OnListTaskInfo {
     override fun onSuspendTask() {
 
     }
@@ -38,7 +37,7 @@ class DownloaderComic : BaseApp<DownloaderContract.Presenter>(), DownloaderContr
         return R.layout.activity_recently_read
     }
 
-    override fun getUISet(mSet: UISet): UISet {
+    override fun getUISet(mSet: BaseApp.UISet): BaseApp.UISet {
         return mSet.apply {
             isSlidr = true
         }
@@ -46,8 +45,6 @@ class DownloaderComic : BaseApp<DownloaderContract.Presenter>(), DownloaderContr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DownloaderPresenter(this)
-
         val list = arrayListOf(
                 RecentlyPagerAdapter.Struct("正在下载", CurrDownItemFragment.newInstance(1)),
                 RecentlyPagerAdapter.Struct("下载完成", DownSuccessItemFragment.newInstance(1))

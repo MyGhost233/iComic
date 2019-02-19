@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
-import com.liulishuo.filedownloader.FileDownloader
-import com.qiuchenly.comicparse.VolleyImp.CookieHelper
+import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Http.CookieHelper
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -22,14 +22,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        ctx = this
-        queue = Volley.newRequestQueue(this)
-        FileDownloader.setup (applicationContext)
-        cookieMaster = CookieHelper()
-        sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
-        cookieMaster!!.addCookie(sp!!.getString("Cookie", ""))
-
-
+        Comic.initialization(this)
         Realm.init(this)
         val config = RealmConfiguration.Builder()
                 .name("realm.my_hooks")// 库文件名
@@ -38,6 +31,12 @@ class App : Application() {
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
+
+
+        queue = Volley.newRequestQueue(this)
+        cookieMaster = CookieHelper()
+        sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
+        cookieMaster!!.addCookie(sp!!.getString("Cookie", ""))
     }
 
     companion object {
@@ -48,7 +47,6 @@ class App : Application() {
         var cookieMaster: CookieHelper? = null
             private set
         internal var sp: SharedPreferences? = null
-        lateinit var ctx: Context
 
         fun closedApp() {
             Save()

@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.MVP.UI.Fragments
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import com.qiuchenly.comicparse.Bean.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.MainContract
 import com.qiuchenly.comicparse.MVP.Presenter.MainPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.HotComicAda
@@ -13,7 +13,7 @@ import com.qiuchenly.comicparse.Simple.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class Main : BaseFragment<MainContract.Presenter>(), MainContract.View {
+class Main : BaseFragment(), MainContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         MainPresenter(this)
         rv_HotsComic.layoutManager = GridLayoutManager(this.context, 2)
@@ -23,9 +23,9 @@ class Main : BaseFragment<MainContract.Presenter>(), MainContract.View {
         rv_HotsComic.addItemDecoration(SpaceItemDecoration(15))
 
         refresh_.setOnRefreshListener {
-            mPres!!.getHotComic()
+            //mPres!!.getHotComic()
         }
-        mPres!!.getHotComic()
+        //mPres!!.getHotComic()
     }
 
     override fun getLayoutID(): Int {

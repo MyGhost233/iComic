@@ -10,12 +10,12 @@ import android.util.Log
 import com.qiuchenly.comicparse.Bean.*
 import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
-import com.qiuchenly.comicparse.MVP.Model.Activity_ComicModel
 import com.qiuchenly.comicparse.MVP.Model.Activity_ReaderModel
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.MD5
 import com.qiuchenly.comicparse.Utils.NotificationType
-import com.qiuchenly.comicparse.VolleyImp.BaseURL
+import com.qiuchenly.comicparse.Http.BaseURL
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
 import io.realm.Realm
 import io.realm.RealmResults
 import org.jetbrains.anko.runOnUiThread
@@ -160,6 +160,7 @@ class DownloadService : Service(), ServiceNotification {
          */
         fun download(comicInfo: HotComicStrut, view: ComicDetailContract.View?) {
             getDataBaseBook()
+            /*
             Activity_ComicModel().InitPageInfo(comicInfo.BookLink!!, object : ComicDetailContract.GetPageInfo {
                 override fun onFailed(reasonStr: String) {
                     mServiceNotification.onMessage(
@@ -224,6 +225,7 @@ class DownloadService : Service(), ServiceNotification {
                     }
                 }
             })
+            */
         }
     }
 

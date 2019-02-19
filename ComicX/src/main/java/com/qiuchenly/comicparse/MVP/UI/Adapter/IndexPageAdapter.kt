@@ -9,20 +9,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.MVP.Contract.MyDetailsContract
 import com.qiuchenly.comicparse.MVP.UI.Activitys.DownloaderComic
-import com.qiuchenly.comicparse.MVP.UI.Activitys.MainSwitch
 import com.qiuchenly.comicparse.MVP.UI.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.blurs
-import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.catchBitmap
 import io.realm.Realm
 import org.jetbrains.anko.find
 
@@ -134,8 +129,7 @@ class IndexPageAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter
                 })
             }
 
-            var arr = ArrayList(mview.getLocalListData())
-            if (arr == null) arr = ArrayList()
+            val arr = ArrayList(mview.getLocalListData())
             if (arr.size > 0) {
                 if (rv_my_main_spec_list.visibility == View.GONE) {
                     rv_my_main_spec_list.visibility = View.VISIBLE

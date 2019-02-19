@@ -5,11 +5,7 @@ import com.qiuchenly.comicparse.Simple.BasePresenter
 import com.qiuchenly.comicparse.Simple.BaseView
 
 interface MainSwitchContract {
-    interface Presenter : BasePresenter {
-
-    }
-
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
     }
 

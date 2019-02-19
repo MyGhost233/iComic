@@ -14,8 +14,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
-    override fun getUISet(mSet: UISet): UISet {
+class ReadPage : BaseApp(), ReaderContract.View {
+    override fun getUISet(mSet: BaseApp.UISet): UISet {
         return mSet.apply {
             isSlidr = true
         }
@@ -30,6 +30,8 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
 
     var lastPoint = 0
 
+    var mPres = ReadPresenter(this)
+
     override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String) {
         if (next.indexOf(".html") <= 0) {
             noMore = true
@@ -42,7 +44,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
         mComicImagePageAda?.addData(lst)//removeAdultPicture(lst)
 
         currInfos.text = currInfo
-        getPres()?.updateReadPoint(currInfo)
+
         nextUrl = next
         loading = false
 
@@ -86,7 +88,7 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
                 if (state1) {
                     if (nextUrl != "" && !noMore) {
                         InitLoading = true
-                        mPres?.getParsePicList(nextUrl, this@ReadPage)
+                        mPres.getParsePicList(nextUrl, this@ReadPage)
                     } else {
                         noMore = true
                         onFailed("没有更多信息了")
@@ -95,6 +97,6 @@ class ReadPage : BaseApp<ReaderContract.Presenter>(), ReaderContract.View {
                 }
             }
         })
-        mPres?.getParsePicList(url, this)
+        mPres.getParsePicList(url, this)
     }
 }

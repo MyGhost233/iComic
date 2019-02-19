@@ -13,7 +13,7 @@ interface ComicBoardContract {
 
     }
 
-    interface View : BaseView<Presenter> {
+    interface View : BaseView {
 
     }
 }

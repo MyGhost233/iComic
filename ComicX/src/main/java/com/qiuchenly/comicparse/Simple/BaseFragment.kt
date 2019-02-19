@@ -8,12 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.realm.Realm
 
-abstract class BaseFragment<P : BasePresenter> : Fragment(), BaseView<P> {
+abstract class BaseFragment : Fragment(), BaseView {
     protected val realm = Realm.getDefaultInstance()
-    protected var mPres: P? = null
-    override fun setPres(mPres: P) {
-        this.mPres = mPres
-    }
 
     abstract fun getLayoutID(): Int
 
@@ -28,6 +24,5 @@ abstract class BaseFragment<P : BasePresenter> : Fragment(), BaseView<P> {
     override fun onDestroyView() {
         super.onDestroyView()
         realm.close()
-        mPres?.Destory()
     }
 }

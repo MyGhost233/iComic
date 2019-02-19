@@ -1,5 +1,7 @@
 package com.qiuchenly.comicparse.Bean
 
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+
 class RecommendItemType {
     var type: Int = 0
     var title: String? = null

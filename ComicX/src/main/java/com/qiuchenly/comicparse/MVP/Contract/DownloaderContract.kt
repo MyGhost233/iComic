@@ -5,7 +5,7 @@ import com.qiuchenly.comicparse.Simple.BasePresenter
 import com.qiuchenly.comicparse.Simple.BaseView
 
 interface DownloaderContract {
-    interface View : BaseView<Presenter> {
+    interface View : BaseView{
 
     }
 

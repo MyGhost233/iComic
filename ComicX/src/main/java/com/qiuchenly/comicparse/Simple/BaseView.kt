@@ -1,7 +1,5 @@
 package com.qiuchenly.comicparse.Simple
 
-interface BaseView<P> {
-    fun setPres(mPres: P)
-
+interface BaseView {
     fun ShowErrorMsg(msg: String)
 }

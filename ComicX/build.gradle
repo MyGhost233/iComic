@@ -24,6 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
     productFlavors {
     }
 }
@@ -117,11 +120,8 @@ dependencies {
     implementation 'com.github.crosswall:Android-Coverflow:release-v1.0.5'
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
     implementation 'com.r0adkll:slidableactivity:2.0.6'
-    implementation 'com.liulishuo.filedownloader:library:1.7.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
     // Retrofit库
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
     //CallAdapterFactory的Rx依赖包---导这个包才能配合rxAndroid使用
@@ -130,4 +130,16 @@ dependencies {
     //ConverterFactory的String依赖包----这个是解析数据的工厂.用来格式化数据的,配置编码啊,gson解析啊.
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     //api project(':core')
+
+    implementation 'com.arialyy.aria:aria-core:3.5.4'
+    annotationProcessor 'com.arialyy.aria:aria-compiler:3.5.4'
+
+
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
 }

@@ -7,8 +7,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Bean.HotComicStrut
-import com.qiuchenly.comicparse.MVP.UI.Activitys.ComicDetails
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter

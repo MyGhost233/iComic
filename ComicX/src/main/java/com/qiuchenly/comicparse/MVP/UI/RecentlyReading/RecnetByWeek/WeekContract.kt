@@ -11,7 +11,7 @@ interface WeekContract {
         fun getAllRecently(): MutableList<ComicBookInfo_Recently>
     }
 
-    interface View : BaseView<Presenter>
+    interface View : BaseView
 
     interface Model : BaseModel
 
