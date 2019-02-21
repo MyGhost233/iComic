@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Request
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Request
 
 import okhttp3.ResponseBody
 import retrofit2.Call

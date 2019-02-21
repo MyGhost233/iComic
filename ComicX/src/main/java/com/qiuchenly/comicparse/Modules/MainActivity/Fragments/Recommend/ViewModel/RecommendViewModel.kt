@@ -1,13 +1,13 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.ViewModel
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.ViewModel
 
 import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Request.Requests
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Request.Requests
 import com.qiuchenly.comicparse.Simple.BaseViewModel
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class TuiJianViewModel() : BaseViewModel<ResponseBody>() {
+class RecommendViewModel : BaseViewModel<ResponseBody>() {
 
     override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 

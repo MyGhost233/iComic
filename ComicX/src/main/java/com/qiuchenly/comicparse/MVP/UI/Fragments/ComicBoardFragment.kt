@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.MVP.UI.Fragments
 import android.os.Bundle
 import android.view.View
 import com.qiuchenly.comicparse.MVP.UI.Adapter.RecentlyPagerAdapter
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.FragmentUI.TuiJian
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.FragmentUI.Recommend
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseFragment
 import com.qiuchenly.comicparse.Simple.BaseNavigatorCommon
@@ -21,7 +21,7 @@ class ComicBoardFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val list = arrayListOf(
-                RecentlyPagerAdapter.Struct("推荐", TuiJian()),
+                RecentlyPagerAdapter.Struct("推荐", Recommend()),
                 RecentlyPagerAdapter.Struct("朋友", Main()),
                 RecentlyPagerAdapter.Struct("电台", Main())
         )

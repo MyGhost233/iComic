@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.MVP.Model
 import android.util.Base64
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
 import com.qiuchenly.comicparse.Simple.BaseModelImp
+import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 
 class Activity_ReaderModel : ReaderContract.Model, BaseModelImp() {
     override fun getParsePicList(url: String, CB: ReaderContract.GetPageCB) {

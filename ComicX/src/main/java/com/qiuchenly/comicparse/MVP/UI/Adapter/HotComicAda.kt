@@ -13,12 +13,12 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import org.jetbrains.anko.find
 
 
@@ -53,13 +53,11 @@ open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                 val nb_bookName = find<TextView>(R.id.nb_bookName)
                 val nb_bookLasted = find<TextView>(R.id.nb_bookLasted)
                 val nb_bookImage = find<ImageView>(R.id.nb_bookImage)
-                kotlin.with(data) {
+                with(data) {
                     nb_bookName.text = this.BookName
                     nb_bookLasted.text = "更新到 " + this.LastedPage_name
-                    Glide.with(AppManager.appm.currentActivity())
-                            .load((if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc)
-                            .into(nb_bookImage)
-
+                    val imgSrc = (if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc
+                    CustomUtils.loadImage(imageSrc = imgSrc, mView = nb_bookImage)
                 }
                 setOnClickListener {
                     val i = getIntentEx(this.context, data)

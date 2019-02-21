@@ -1,28 +1,12 @@
 package com.qiuchenly.comicparse.Simple
 
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Http.BaseRequest
 import com.qiuchenly.comicparse.Http.BaseURL
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 open class BaseModelImp : BaseRequest(), BaseModel {
-
-    companion object {
-        /**
-         * 取文本中间
-         *
-         * @param all   欲取文本中间的全文本
-         * @param left  欲取文本的左边文本
-         * @param right 欲取文本的右边文本
-         * @return 返回得到的文本
-         */
-        public fun subStr(all: String, left: String, right: String): String {
-            val sta = all.indexOf(left) + left.length
-            return all.substring(sta, all.indexOf(right, sta))
-        }
-    }
-
 
     /**
      * 修复前缀网址高级方法

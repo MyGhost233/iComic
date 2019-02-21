@@ -2,6 +2,8 @@ package com.qiuchenly.comicparse.Http
 
 object BaseURL {
     var BASE_URL = "https://www.mh1234.com/"
+    var BASE_URL_BING = "https://cn.bing.com"
+    var BASE_IMAGE_DEFAULT = "https://www.baidu.com/img/bd_logo1.png"
     var GET_BOOK_SCORE = "${BASE_URL}qTcms_Inc/Ajax.asp?action=GetScore&id="
     val GET_TODAY_BOOK = "${BASE_URL}comic/one/page_recent.html"
     val GET_HOT_SEARCH = "${BASE_URL}wap/comic/one/page_waptop.js"

@@ -32,7 +32,7 @@
         <ImageView
             android:id="@+id/topview_back"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="105dp"
             android:scaleType="fitXY"
             android:src="#000000" />
 
@@ -61,7 +61,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
                     android:layout_toEndOf="@+id/top_userImg"
-                    android:text="秋城落叶"
+                    android:text="二刺螈游客,你好嗷!"
                     android:textColor="#ffffff"
                     android:textSize="15sp" />
 
@@ -73,7 +73,7 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="end|center_vertical"
                     android:background="@drawable/btn_openvip"
-                    android:text="白金会员"
+                    android:text="Hi"
                     android:textColor="#ffffff"
                     android:textSize="14sp" />
 

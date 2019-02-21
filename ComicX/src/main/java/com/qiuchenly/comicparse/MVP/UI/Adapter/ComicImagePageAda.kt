@@ -11,6 +11,7 @@ import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
@@ -21,30 +22,38 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
     }
 
     override fun InitUI(item: View, data: String?, position: Int) {
-        if (data != null)
-            Glide.with(AppManager.appm.currentActivity())
-                    .load("http://mhpic.dongzaojiage.com$data")
-                    .placeholder(R.drawable.loading)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .listener(object : RequestListener<String, GlideDrawable> {
-                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
+        if (data != null) {
+            item.mRetryLoad.setOnClickListener {
+                InitUI(item, data, position)
+                item.mRetryLoad.text = "加载中..."
+                item.mRetryLoad.isClickable = false
+            }
 
-                        override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                            if (resource == null) return false
-                            val params = item.iv_img_page.layoutParams
-                            val realWidth = item.iv_img_page.width - item.iv_img_page.paddingLeft - item.iv_img_page.paddingRight
-                            val scale = realWidth / (resource.intrinsicWidth * 1.0000)
-                            val realHeight = Math.round(resource.intrinsicHeight * scale).toInt()
-                            params.height = realHeight + item.iv_img_page.paddingTop + item.iv_img_page.paddingBottom
-                            item.iv_img_page.layoutParams = params
-                            item.iv_img_page.invalidate()
+            CustomUtils.loadImage(
+                    "http://mhpic.dongzaojiage.com$data",
+                    item.iv_img_page,
+                    R.drawable.loading,
+                    object : CustomUtils.ImageListener {
+                        override fun onRet(state: CustomUtils.GlideState, resource: GlideDrawable?, fromMemoryCache: Boolean, model: String?, target: Target<GlideDrawable>?): Boolean {
+                            if (state == CustomUtils.GlideState.ON_EXCEPTION) {
+                                item.mRetryLoad.visibility = View.VISIBLE
+                                item.mRetryLoad.isClickable = true
+                                item.mRetryLoad.text = "加载失败,点击重试!"
+                            } else {
+                                if (resource == null) return false
+                                item.mRetryLoad.visibility = View.INVISIBLE
+                                val params = item.iv_img_page.layoutParams
+                                val realWidth = item.iv_img_page.width - item.iv_img_page.paddingLeft - item.iv_img_page.paddingRight
+                                val scale = realWidth / (resource.intrinsicWidth * 1.0000)
+                                val realHeight = Math.round(resource.intrinsicHeight * scale).toInt()
+                                params.height = realHeight + item.iv_img_page.paddingTop + item.iv_img_page.paddingBottom
+                                item.iv_img_page.layoutParams = params
+                                item.iv_img_page.invalidate()
+                            }
                             return false
                         }
                     })
-                    .into(item.iv_img_page)
-
+        }
         when (getItemViewType(position)) {
             TYPE_LOAD_MORE -> {
                 with(item) {

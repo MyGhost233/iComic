@@ -5,8 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/mDefaultDarkThemeColor"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/mDefaultDarkThemeColor">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/mCoordinatorLayout"
@@ -106,7 +106,7 @@
                         app:layout_collapseMode="pin"
                         app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                        <FrameLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
@@ -114,6 +114,7 @@
                                 android:id="@+id/back_up"
                                 android:layout_width="?attr/actionBarSize"
                                 android:layout_height="?attr/actionBarSize"
+                                android:layout_alignParentStart="true"
                                 android:clickable="true"
                                 android:focusable="true">
 
@@ -126,19 +127,40 @@
                                     android:scaleType="centerInside" />
                             </FrameLayout>
 
-                            <TextView
-                                android:id="@+id/tv_bookname_title"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="指染成婚"
-                                android:textColor="#ffffff"
-                                android:textSize="17sp" />
+                                android:id="@+id/mTitleLayout"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_bookname_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="指染成婚"
+                                    android:textColor="#ffffff"
+                                    android:textSize="17sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_bookname_title_small"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="作者:NMSL"
+                                    android:textColor="#ffffff"
+                                    android:textSize="10sp"
+                                    tools:ignore="SmallSp" />
+
+                            </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:layout_gravity="end">
 
                                 <FrameLayout
@@ -154,6 +176,7 @@
                                         android:layout_height="24dp"
                                         android:layout_gravity="center"
                                         android:background="@drawable/ic_down"
+                                        android:contentDescription="download it!"
                                         android:scaleType="centerInside" />
                                 </FrameLayout>
 
@@ -169,11 +192,12 @@
                                         android:layout_height="24dp"
                                         android:layout_gravity="center"
                                         android:background="@drawable/ic_share"
+                                        android:contentDescription="share more!"
                                         android:scaleType="centerInside" />
                                 </FrameLayout>
                             </LinearLayout>
 
-                        </FrameLayout>
+                        </RelativeLayout>
                     </android.support.v7.widget.Toolbar>
                 </android.support.design.widget.CollapsingToolbarLayout>
 

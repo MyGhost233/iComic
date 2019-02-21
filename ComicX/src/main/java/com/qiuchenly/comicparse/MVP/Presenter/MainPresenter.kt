@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.MVP.Presenter
 
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.MainContract
 import com.qiuchenly.comicparse.MVP.Model.Fragment_MainModel
 import java.util.*

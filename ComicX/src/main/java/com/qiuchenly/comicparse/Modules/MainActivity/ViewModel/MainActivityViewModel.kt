@@ -7,7 +7,7 @@ import android.widget.ImageView
 import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
 import com.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
 import com.qiuchenly.comicparse.MVP.UI.Fragments.Main
-import com.qiuchenly.comicparse.MVP.UI.Fragments.MyDetailsFragment
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Fragmets.MyDetailsFragment
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.Callbacks
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.MainActivityCallback

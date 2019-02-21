@@ -13,6 +13,10 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import java.util.*
 
+/**
+ * Activity管理类
+ * 作者:网络
+ */
 class AppManager {
 
     /**

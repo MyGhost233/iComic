@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Adapter
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,7 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.UI.Activitys.EveryDayRecommend
@@ -24,6 +24,7 @@ import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.item_a_z.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
@@ -33,7 +34,6 @@ import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
 import org.jetbrains.anko.find
 
 class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : RecyclerView.Adapter<BaseVH>() {
-    //todo 测试图片加载去除
     fun getSizeByItem(position: Int): Int {
         return when (getItemViewType(position)) {
             RecommendItemType.TYPE.TYPE_GRID -> 2
@@ -121,6 +121,16 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
         })
     }
 
+    fun <T> getIndex(arr: ArrayList<T>): ArrayList<T> {
+        val a: ArrayList<T> = ArrayList()
+        arr.forEachIndexed { index, t ->
+            if (index < 9) {
+                a.add(t)
+            }
+        }
+        return a
+    }
+
     private var willUpdate = false
     private var mTopViewComicBook: ArrayList<HotComicStrut>? = null
     fun SetDataByIndexPage(mTopViewComicBook: ArrayList<HotComicStrut>?,
@@ -138,37 +148,37 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "最近更新"
             })
-            addAllObj(this, newUpdate)
+            addAllObj(this, getIndex(newUpdate!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "日韩漫画"
             })
-            addAllObj(this, rhmh)
+            addAllObj(this, getIndex(rhmh!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "欧美漫画"
             })
-            addAllObj(this, ommh)
+            addAllObj(this, getIndex(ommh!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "大陆漫画"
             })
-            addAllObj(this, dlmh)
+            addAllObj(this, getIndex(dlmh!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "日韩推荐"
             })
-            addAllObj(this, rhhk)
+            addAllObj(this, getIndex(rhhk!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "欧美推荐"
             })
-            addAllObj(this, omhk)
+            addAllObj(this, getIndex(omhk!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_TITLE
                 title = "大陆推荐"
             })
-            addAllObj(this, dlhk)
+            addAllObj(this, getIndex(dlhk!!))
             add(RecommendItemType().apply {
                 type = RecommendItemType.TYPE.TYPE_A_Z
             })
@@ -214,12 +224,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                     if (mTopViewComicBook != null) {
 
                     }
-                     Glide.with(view.context)
-                            .load(mTopViewComicBook!![0].BookImgSrc)
-                            .bitmapTransform(BlurTransformation(view.context, 55))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(comic_img)
-
+                    CustomUtils.loadImage(mTopViewComicBook!![0].BookImgSrc!!, comic_img, 55)
                 }
             }
 
@@ -252,42 +257,42 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                 //RANK 点击
                 if (mTopViewComicBook != null) {
                     with(view) {
-                         tv_times.text = (java.util.Calendar.getInstance()
-                                 .get(java.util.Calendar.DAY_OF_MONTH)
-                                 ).toString()
+                        tv_times.text = (java.util.Calendar.getInstance()
+                                .get(java.util.Calendar.DAY_OF_MONTH)
+                                ).toString()
 
-                         Glide.with(view.context)
-                                 .load(mTopViewComicBook!![0].BookImgSrc)
-                                 .bitmapTransform(BlurTransformation(view.context, 55))
-                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                 .into(iv_privatefm_img_back)
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![0].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_privatefm_img_back)
 
-                         Glide.with(view.context)
-                                 .load(mTopViewComicBook!![1].BookImgSrc)
-                                 .bitmapTransform(BlurTransformation(view.context, 55))
-                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                 .into(iv_day_img_back)
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![1].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_day_img_back)
 
-                         Glide.with(view.context)
-                                 .load(mTopViewComicBook!![2].BookImgSrc)
-                                 .bitmapTransform(BlurTransformation(view.context, 55))
-                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                 .into(iv_mix_img_back)
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![2].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_mix_img_back)
 
-                         Glide.with(view.context)
-                                 .load(mTopViewComicBook!![3].BookImgSrc)
-                                 .bitmapTransform(BlurTransformation(view.context, 55))
-                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                 .into(iv_charts_img_back)
+                        Glide.with(view.context)
+                                .load(mTopViewComicBook!![3].BookImgSrc)
+                                .bitmapTransform(BlurTransformation(view.context, 55))
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(iv_charts_img_back)
 
-                         iv_day_img_click.setOnClickListener {
-                             startActivity(view.context,
-                                     Intent(view.context, EveryDayRecommend::class.java),
-                                     null)
-                         }
+                        iv_day_img_click.setOnClickListener {
+                            startActivity(view.context,
+                                    Intent(view.context, EveryDayRecommend::class.java),
+                                    null)
+                        }
 
 
-                     }
+                    }
 
                 }
             }
@@ -303,7 +308,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
             RecommendItemType.TYPE.TYPE_GRID -> {
                 with(view) {
                     val data = mRealData[position].BookInfo
-                     Glide.with(view.context)
+                    Glide.with(view.context)
                             .load(data.BookImgSrc)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(foo_bookImg)
@@ -336,7 +341,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
             val view = LayoutInflater.from(mView.context)
                     .inflate(R.layout.vpitem_top_ad, null, false)
             with(view) {
-                 Glide.with(mView.context)
+                Glide.with(mView.context)
                         .load(newUpdate[position].BookImgSrc)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

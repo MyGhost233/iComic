@@ -1,21 +1,20 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.FragmentUI
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.FragmentUI
 
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.MVP.Presenter.RecommendPresenter
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Adapter.RecommendRecyclerViewAdapter
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.ViewModel.TuiJianViewModel
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Adapter.RecommendRecyclerViewAdapter
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.ViewModel.RecommendViewModel
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseFragment
 import com.qiuchenly.comicparse.Simple.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_my_details.*
-import org.jetbrains.anko.runOnUiThread
 
-class TuiJian : BaseFragment(), NetRecommentContract.View {
+class Recommend : BaseFragment(), NetRecommentContract.View {
     override fun OnNetFailed() {
         if (MyDetails_Refresh.isRefreshing)
             MyDetails_Refresh.isRefreshing = false
@@ -49,13 +48,13 @@ class TuiJian : BaseFragment(), NetRecommentContract.View {
         return R.layout.fragment_my_details
     }
 
-    private var mViewModel: TuiJianViewModel? = null
+    private var mViewModel: RecommendViewModel? = null
     var mPres = RecommendPresenter(this)
     private val mRecommendRecyclerViewAdapter = RecommendRecyclerViewAdapter(this)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel = TuiJianViewModel()
+        mViewModel = RecommendViewModel()
 
         MyDetails_Refresh.setOnRefreshListener {
             mPres.getWebSiteByIndexData()

@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Adapter
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Adapter
 
 import android.support.v4.view.PagerAdapter
 import android.view.View

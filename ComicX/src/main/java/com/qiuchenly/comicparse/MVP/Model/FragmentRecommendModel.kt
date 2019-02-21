@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.MVP.Model
 
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.NetRecommentContract
 import com.qiuchenly.comicparse.Simple.BaseModelImp
 import com.qiuchenly.comicparse.Http.BaseURL

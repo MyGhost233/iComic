@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans
+package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

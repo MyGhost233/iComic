@@ -12,10 +12,10 @@ import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
 import com.qiuchenly.comicparse.MVP.Model.Activity_ReaderModel
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import com.qiuchenly.comicparse.Utils.CustomUtils.Companion.MD5
 import com.qiuchenly.comicparse.Utils.NotificationType
 import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Utils.CustomUtils.MD5
 import io.realm.Realm
 import io.realm.RealmResults
 import org.jetbrains.anko.runOnUiThread

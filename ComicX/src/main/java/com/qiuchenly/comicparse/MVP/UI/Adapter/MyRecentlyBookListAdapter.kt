@@ -9,6 +9,7 @@ import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetai
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
 import kotlinx.android.synthetic.main.comic_local_list.view.*
 
@@ -22,10 +23,7 @@ class MyRecentlyBookListAdapter : BaseRVAdapter<ComicBookInfo_Recently>() {
         val itemData = realm.where(ComicBookInfo_Recently::class.java)
                 .equalTo("BookName", data?.BookName).findFirst()
         with(item) {
-            Glide.with(item.context)
-                    .load(itemData?.BookImgSrc)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(bookNameImg)
+            CustomUtils.loadImage(itemData?.BookImgSrc, bookNameImg)
             bookName.text = itemData?.BookName
             bookAuthor.text = itemData?.Author
             realm.close()

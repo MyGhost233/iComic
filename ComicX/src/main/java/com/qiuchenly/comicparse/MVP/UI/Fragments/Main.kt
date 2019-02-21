@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.MVP.UI.Fragments
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.MVP.Contract.MainContract
 import com.qiuchenly.comicparse.MVP.Presenter.MainPresenter
 import com.qiuchenly.comicparse.MVP.UI.Adapter.HotComicAda

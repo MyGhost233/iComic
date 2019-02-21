@@ -48,6 +48,8 @@ class ReadPage : BaseApp(), ReaderContract.View {
         nextUrl = next
         loading = false
 
+        mPres.updateReadPoint(currInfo)
+
         if (lastPoint < 0) {
             mAppBarComicReader.setExpanded(true, true)
             rv_comicRead_list.scrollToPosition(lastPoint)

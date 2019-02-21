@@ -7,6 +7,7 @@ import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Request.Requests
 import com.qiuchenly.comicparse.Simple.BaseModelImp
 import com.qiuchenly.comicparse.Simple.BaseViewModel
+import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import io.realm.Realm
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
@@ -81,8 +82,8 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
             callback.GetInfoSucc(author, updateTime, hits, category, introduction, retPageList)
         } else if (path == getBookScoreURI) {
             val ret = retStr.replace("var Scorepl=", "")
-            val peopleLimit = Integer.valueOf(BaseModelImp.subStr(ret, ":", ","))
-            val list = BaseModelImp.subStr(ret, "[", "]").split(",")
+            val peopleLimit = Integer.valueOf(subStr(ret, ":", ","))
+            val list = subStr(ret, "[", "]").split(",")
             val s = ArrayList<Int>()
             for (a: String in list) {
                 s.add(Integer.valueOf(a))

@@ -26,7 +26,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Modules.MainActivity.Activity.MainActivityUI"
-            android:theme="@style/AppTheme.NoActionBar.LauncherImg">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Modules.SplashActivity.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,5 +53,4 @@
 
         <activity android:name=".MVP.UI.Activitys.SearchActivity"></activity>
     </application>
-
 </manifest>

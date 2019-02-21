@@ -4,14 +4,13 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
 import org.jetbrains.anko.find
 
@@ -26,10 +25,7 @@ class MyDetailsLocalBookListAdapter : BaseRVAdapter<HotComicStrut>() {
             val bookName = find<TextView>(R.id.bookName)
             val bookAuthor = find<TextView>(R.id.bookAuthor)
             val curr_read = find<TextView>(R.id.curr_read)
-            Glide.with(item.context)
-                    .load(data?.BookImgSrc)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(bookNameImg)
+            CustomUtils.loadImage(data?.BookImgSrc!!, bookNameImg)
             bookName.text = data?.BookName
             bookAuthor.text = data?.Author
 

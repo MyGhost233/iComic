@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
@@ -19,14 +18,16 @@ import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
 import com.qiuchenly.comicparse.MVP.UI.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDetailsViewModel
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.TuiJian.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.BaseApp
 import com.qiuchenly.comicparse.Simple.BaseModelImp
+import com.qiuchenly.comicparse.Utils.CustomUtils
+import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import org.jetbrains.anko.find
-import java.nio.file.Files.find
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 class ComicDetails :
         BaseApp(),
@@ -36,6 +37,7 @@ class ComicDetails :
     override fun onLoading() {
         onFailed.visibility = View.INVISIBLE
         onSuccess.visibility = View.INVISIBLE
+        onFailed.isClickable = false
         onLoading.visibility = View.VISIBLE
     }
 
@@ -43,10 +45,16 @@ class ComicDetails :
         onFailed.visibility = View.INVISIBLE
         onSuccess.visibility = View.VISIBLE
         onLoading.visibility = View.INVISIBLE
+        onFailed.isClickable = false
     }
 
 
     override fun onLoadFailed() {
+        onFailed.isClickable = true
+        onFailed.setOnClickListener {
+            mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
+
+        }
         onFailed.visibility = View.VISIBLE
         onSuccess.visibility = View.INVISIBLE
         onLoading.visibility = View.INVISIBLE
@@ -103,6 +111,7 @@ class ComicDetails :
         comicInfo.Author = author
         tv_bookAuthor.text = author
         tv_bookCategory.text = category
+        tv_bookname_title_small.text = author
         //tv_bookUpdateTime.text = "最后更新：$updateTime"
         //tv_bookIntroduction.text = "简介：" + introduction.trim()
         tv_bookname_title.text = comicInfo.BookName
@@ -113,11 +122,15 @@ class ComicDetails :
                 .equalTo("BookName", comicInfo.BookName)
                 .findFirst()
                 ?.BookName_read_point
-        if (point != null)
+        if (point != null) {
             retPageList.forEachIndexed { index, comicBookInfo ->
                 if (comicBookInfo.title == point)
                     scrollWithPosition(retPageList.size - index - 1)
             }
+        }
+
+        CustomUtils.loadImage(comicInfo.BookImgSrc!!, mRealImageNoBlur, 0, null, 500)
+        CustomUtils.loadImage(comicInfo.BookImgSrc!!, comicDetails_img, 300, 500)
     }
 
     override fun onProgressChanged() {
@@ -210,7 +223,7 @@ class ComicDetails :
             BookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
         }
 
-        mViewModel.getBookDetails(BaseModelImp.subStr(comicInfo.BookLink!!, "comic/", ".html"))
+        mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
 
         val point = realm.where(ComicBookInfo_Recently::class.java)
                 .equalTo("BookName", comicInfo.BookName)
@@ -220,37 +233,19 @@ class ComicDetails :
 
         rv_comicPage.layoutManager = LinearLayoutManager(this)
         rv_comicPage.adapter = comicPageAdas
-
-        /*
-        Glide.with(this)
-                .load(comicInfo.BookImgSrc)
-                .crossFade(500)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mRealImageNoBlur)
-
-        Glide.with(this)
-                .load(comicInfo.BookImgSrc)
-                .crossFade(500)
-                .bitmapTransform(BlurTransformation(this, 20))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(comicDetails_img)
-               */
-
-        // mPres?.initPageInfo(comicInfo.BookLink!!)
-
         /* if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
              add_local_list_iv.setImageResource(R.drawable.ic_remove_black_24dp)
          }*/
 
         comicDetails_img.alpha = 0f
-        tv_bookname_title.alpha = 0f
+        mTitleLayout.alpha = 0f
         //此处实现淡入淡出效果
         appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val mCurrentPercents = (-verticalOffset * 1f) / appBarLayout.totalScrollRange
             comicDetails_img.alpha = mCurrentPercents//实现渐变模糊特效
             details.alpha = 1f - mCurrentPercents
             tv_bookname.alpha = 1f - mCurrentPercents
-            tv_bookname_title.alpha = mCurrentPercents
+            mTitleLayout.alpha = mCurrentPercents
         }
         back_up.setOnClickListener { finish() }
         mShareButton.setOnClickListener {

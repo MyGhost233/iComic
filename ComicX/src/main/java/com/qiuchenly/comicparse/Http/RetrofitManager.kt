@@ -11,9 +11,10 @@ import java.util.concurrent.TimeUnit
 object RetrofitManager {
 
     val BASE_URL = BaseURL.BASE_URL
-    private var mRetrofitClient = buildRetrofit()
+    private var mRetrofitClient = buildRetrofit(BASE_URL)
     fun get() = mRetrofitClient
-    private fun buildRetrofit(): Retrofit {
+    fun getCusUrl(BaseUrl: String) = buildRetrofit(BaseUrl)
+    private fun buildRetrofit(): Retrofit.Builder {
         val mHttpInterceptor = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
@@ -26,10 +27,13 @@ object RetrofitManager {
         }.build()
 
         return Retrofit.Builder().apply {
-            baseUrl(BASE_URL)
             client(mHttp)
             //addConverterFactory(GsonConverterFactory.create())
-        }.build()
+        }
+    }
+
+    private fun buildRetrofit(mBaseUrl: String): Retrofit {
+        return buildRetrofit().baseUrl(mBaseUrl).build()
     }
 
 //    fun getBookDetails()
