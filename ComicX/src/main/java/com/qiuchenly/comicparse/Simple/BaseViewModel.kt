@@ -19,10 +19,15 @@ abstract class BaseViewModel<T> : Callback<T> {
     }
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
-        GetSuccess(call, response)
+        if (!cancel)
+            GetSuccess(call, response)
     }
 
+    private var cancel = false
     abstract fun GetSuccess(call: Call<T>, response: Response<T>)
+    open fun cancel() {
+        cancel = true
+    }
 
     fun Call<T>.getUrl(): String {
         return request().url().toString()

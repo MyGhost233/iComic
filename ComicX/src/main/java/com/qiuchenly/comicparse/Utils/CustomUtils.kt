@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
@@ -17,11 +16,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.qiuchenly.comicparse.Bean.ApplicationSetting
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
+import io.realm.Realm
 import jp.wasabeef.glide.transformations.BlurTransformation
 import net.qiujuer.genius.blur.StackBlur
-import java.lang.Exception
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -101,6 +101,7 @@ object CustomUtils {
         }
         mBuilder.diskCacheStrategy(DiskCacheStrategy.ALL)
         mBuilder.into(mView)
+        mBuilder.crossFade(crossFade)
         mBuilder = null
         System.gc()
     }
@@ -115,6 +116,14 @@ object CustomUtils {
             ret.add(if (MODE == 1) 0 else ret.size, m)
         }
         return ret
+    }
+
+    /**
+     * 快速排序算法
+     */
+    fun <T> sortEx(map: ArrayList<T>): ArrayList<T> {
+        map.reverse()
+        return map
     }
 
     private var notify: NotificationManager? = null
@@ -208,6 +217,26 @@ object CustomUtils {
     fun subStr(all: String, left: String, right: String): String {
         val sta = all.indexOf(left) + left.length
         return all.substring(sta, all.indexOf(right, sta))
+    }
+
+    fun setCachedBingUrl(url: String) {
+        val instance = Realm.getDefaultInstance()
+        var single = instance.where(ApplicationSetting::class.java).findFirst()
+        instance.beginTransaction()
+        if (single == null) {
+            single = ApplicationSetting().apply {
+                mBingCachedUrl = url
+            }
+            instance.copyToRealm(single)
+        } else {
+            single.mBingCachedUrl = url
+        }
+        instance.commitTransaction()
+    }
+
+    fun getCachedBingUrl(): String {
+        val single = Realm.getDefaultInstance().where(ApplicationSetting::class.java).findFirst()
+        return if (single?.mBingCachedUrl != null) single.mBingCachedUrl!! else ""
     }
 
 }

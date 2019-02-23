@@ -19,6 +19,7 @@ class MainActivityUI : BaseApp() {
         //viewModel处理UI
         mViewModel = MainActivityViewModel(this)
         startService(Intent(this, DownloadService::class.java))
+        mViewModel?.getWeathers()
     }
 
     override fun onDestroy() {

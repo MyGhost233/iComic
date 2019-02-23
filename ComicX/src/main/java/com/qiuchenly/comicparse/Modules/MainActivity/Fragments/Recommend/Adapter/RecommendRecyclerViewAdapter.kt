@@ -260,31 +260,10 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
                         tv_times.text = (java.util.Calendar.getInstance()
                                 .get(java.util.Calendar.DAY_OF_MONTH)
                                 ).toString()
-
-                        Glide.with(view.context)
-                                .load(mTopViewComicBook!![0].BookImgSrc)
-                                .bitmapTransform(BlurTransformation(view.context, 55))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(iv_privatefm_img_back)
-
-                        Glide.with(view.context)
-                                .load(mTopViewComicBook!![1].BookImgSrc)
-                                .bitmapTransform(BlurTransformation(view.context, 55))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(iv_day_img_back)
-
-                        Glide.with(view.context)
-                                .load(mTopViewComicBook!![2].BookImgSrc)
-                                .bitmapTransform(BlurTransformation(view.context, 55))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(iv_mix_img_back)
-
-                        Glide.with(view.context)
-                                .load(mTopViewComicBook!![3].BookImgSrc)
-                                .bitmapTransform(BlurTransformation(view.context, 55))
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(iv_charts_img_back)
-
+                        CustomUtils.loadImage(view.context, mTopViewComicBook!![0].BookImgSrc!!, iv_privatefm_img_back, 55, 500)
+                        CustomUtils.loadImage(view.context, mTopViewComicBook!![1].BookImgSrc!!, iv_day_img_back, 55, 500)
+                        CustomUtils.loadImage(view.context, mTopViewComicBook!![2].BookImgSrc!!, iv_mix_img_back, 55, 500)
+                        CustomUtils.loadImage(view.context, mTopViewComicBook!![3].BookImgSrc!!, iv_charts_img_back, 55, 500)
                         iv_day_img_click.setOnClickListener {
                             startActivity(view.context,
                                     Intent(view.context, EveryDayRecommend::class.java),
@@ -308,12 +287,7 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
             RecommendItemType.TYPE.TYPE_GRID -> {
                 with(view) {
                     val data = mRealData[position].BookInfo
-                    Glide.with(view.context)
-                            .load(data.BookImgSrc)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(foo_bookImg)
-
-
+                    CustomUtils.loadImage(view.context, data.BookImgSrc!!, foo_bookImg, 0, 500)
                     if (data.LastedPage_name == null) {
                         foo_bookName_upNews.visibility = View.GONE
                     } else {
@@ -341,19 +315,8 @@ class RecommendRecyclerViewAdapter(var view: NetRecommentContract.View) : Recycl
             val view = LayoutInflater.from(mView.context)
                     .inflate(R.layout.vpitem_top_ad, null, false)
             with(view) {
-                Glide.with(mView.context)
-                        .load(newUpdate[position].BookImgSrc)
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_book)
-
-                Glide.with(mView.context)
-                        .load(newUpdate[position].BookImgSrc)
-                        .bitmapTransform(BlurTransformation(mView.context, 15))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(vp_item_topad_cv)
-
-
+                CustomUtils.loadImage(mView.context, newUpdate[position].BookImgSrc!!, img_book, 0, 500)
+                CustomUtils.loadImage(mView.context, newUpdate[position].BookImgSrc!!, vp_item_topad_cv, 55, 500)
 
                 tv_bookName.text = newUpdate[position].BookName
                 tv_bookAuthor.text = tv_bookAuthor.text.toString() + newUpdate[position].LastedPage_name

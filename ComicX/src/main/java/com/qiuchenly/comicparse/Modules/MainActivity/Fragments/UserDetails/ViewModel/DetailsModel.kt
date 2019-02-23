@@ -1,6 +1,5 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel
 
-import android.support.v4.widget.SwipeRefreshLayout
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
@@ -13,7 +12,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class DetailsModel(private val mView: MyDetailsContract.View) : BaseViewModel<ResponseBody>() {
+class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<ResponseBody>() {
 
     fun getBingSrc() {
         mCall = RetrofitManager.getCusUrl(BaseUrl = BaseURL.BASE_URL_BING)
@@ -31,13 +30,17 @@ class DetailsModel(private val mView: MyDetailsContract.View) : BaseViewModel<Re
         if (str == null) str = ""
         if (str.indexOf(BaseURL.BASE_URL_BING) == -1)
             str = BaseURL.BASE_URL_BING + str
-        mView.onSrcReady(str)
+        if (str != CustomUtils.getCachedBingUrl()) {
+            mView?.onSrcReady(str)
+            CustomUtils.setCachedBingUrl(str)
+        }
+
     }
 
     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
         super.onFailure(call, t)
-        mView.ShowErrorMsg("无法访问Bing美图服务器,使用默认图片替换.")
-        mView.onSrcReady(BaseURL.BASE_IMAGE_DEFAULT)
+        mView?.ShowErrorMsg("无法访问Bing美图服务器,使用默认图片替换.")
+        mView?.onSrcReady(CustomUtils.getCachedBingUrl())
     }
 
     private var mCall: Call<ResponseBody>? = null

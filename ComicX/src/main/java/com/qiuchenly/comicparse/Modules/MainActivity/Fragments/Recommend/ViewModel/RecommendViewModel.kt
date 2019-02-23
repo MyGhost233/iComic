@@ -30,7 +30,8 @@ class RecommendViewModel : BaseViewModel<ResponseBody>() {
         mCall!!.enqueue(this)
     }
 
-    fun cancel() {
+    override fun cancel() {
+        super.cancel()
         if (mCall != null) mCall!!.cancel()
     }
 }

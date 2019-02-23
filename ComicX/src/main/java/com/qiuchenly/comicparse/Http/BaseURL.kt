@@ -4,6 +4,16 @@ object BaseURL {
     var BASE_URL = "https://www.mh1234.com/"
     var BASE_URL_BING = "https://cn.bing.com"
     var BASE_IMAGE_DEFAULT = "https://www.baidu.com/img/bd_logo1.png"
+    val BASE_WEATHER = "https://www.so.com"
+
+    val WEATHER_YING = "https://p.ssl.qhimg.com/d/f239f0e2/02.png"
+    val WEATHER_DUO_YUN = "https://p.ssl.qhimg.com/d/f239f0e2/01.png"
+    val WEATHER_RAIN = "https://p.ssl.qhimg.com/d/f239f0e2/03.png"
+    val WEATHER_MIDDLE_RAIN = "https://p.ssl.qhimg.com/d/f239f0e2/08.png"
+    val WEATHER_NIGHT_MOON = "https://p.ssl.qhimg.com/d/f239f0e2/00n.png"
+    val WEATHER_NIGHT_MOON_YUN = "https://p.ssl.qhimg.com/d/f239f0e2/01n.png"
+
+
     var GET_BOOK_SCORE = "${BASE_URL}qTcms_Inc/Ajax.asp?action=GetScore&id="
     val GET_TODAY_BOOK = "${BASE_URL}comic/one/page_recent.html"
     val GET_HOT_SEARCH = "${BASE_URL}wap/comic/one/page_waptop.js"

@@ -15,11 +15,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.MVP.UI.Activitys.DownloaderComic
 import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
 import com.qiuchenly.comicparse.MVP.UI.Adapter.MyDetailsLocalBookListAdapter
 import com.qiuchenly.comicparse.MVP.UI.RecentlyReading.RecentlyRead
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
@@ -33,18 +33,14 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
 
     private var TAG = "UserDetailsAdapter"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
-        Log.d(TAG, "onCreateViewHolder:$viewType")
         return BaseVH(LayoutInflater.from(parent.context).inflate(when (viewType) {
             TYPE_TOPVIEW -> {
-                Log.d(TAG, "onCreateViewHolder:TYPE_TOPVIEW")
                 R.layout.my_main_topview
             }
             TYPE_EXPAND_LIST -> {
-                Log.d(TAG, "onCreateViewHolder:TYPE_EXPAND_LIST")
                 R.layout.my_main_spec
             }
             else -> {
-                Log.d(TAG, "onCreateViewHolder:my_main_normal_item")
                 R.layout.my_main_normal_item
             }
         }, parent, false))
@@ -63,11 +59,11 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BaseVH, position: Int) {
-        Log.d(TAG, "onBindViewHolder:$position -- $this")
         when (getItemViewType(position)) {
             TYPE_TOPVIEW -> {
                 Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
                 with(holder.itemView) {
+                    if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
                     if (bingSrc != "") {
                         CustomUtils.loadImage(this.context, bingSrc, topview_back, 300, 500)
                         CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 500)

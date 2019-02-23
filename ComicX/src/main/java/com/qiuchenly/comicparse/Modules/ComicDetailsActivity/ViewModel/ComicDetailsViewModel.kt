@@ -97,10 +97,10 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
 
     private var mCall: Call<ResponseBody>? = null
 
-    fun cancel() {
+    override fun cancel() {
+        super.cancel()
         if (mCall != null) mCall!!.cancel()
     }
-
     private var getDetailsURI = ""
     fun getBookDetails(bookID: String) {
         callback.onLoading()
