@@ -1,11 +1,10 @@
 package com.qiuchenly.comicparse.MVP.UI.Activitys
 
 import android.os.Bundle
-import com.qiuchenly.comicparse.MVP.Contract.EveryDayRecommendCotract
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.BaseApp
 
-class EveryDayRecommend : BaseApp(), EveryDayRecommendCotract.View {
+class EveryDayRecommend : BaseApp(){
     override fun getLayoutID(): Int {
         return R.layout.activity_everyday_recommend
     }

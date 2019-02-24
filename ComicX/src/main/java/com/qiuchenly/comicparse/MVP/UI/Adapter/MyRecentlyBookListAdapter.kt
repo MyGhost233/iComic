@@ -2,10 +2,8 @@ package com.qiuchenly.comicparse.MVP.UI.Adapter
 
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Activity.ComicDetails
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Simple.AppManager
 import com.qiuchenly.comicparse.Simple.BaseRVAdapter

@@ -7,9 +7,8 @@ import android.widget.ImageView
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
-import com.qiuchenly.comicparse.MVP.UI.Fragments.ComicBoardFragment
-import com.qiuchenly.comicparse.MVP.UI.Fragments.Main
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.ComicBoardFragment
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Fragmets.MyDetailsFragment
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.Callbacks
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.MainActivityCallback
@@ -77,6 +76,8 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
                 }
             }
             CustomUtils.loadImage(imgUrl, mWeather_img, 0, 200)
+
+            mUpdateInfo.isRefreshing = false
         }
     }
 
@@ -86,11 +87,12 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
         mContentView.ShowErrorMsg("天气信息加载失败!")
         val errInfo = "网络异常."
         with(mContentView) {
-            mDateInfo.text = errInfo
+            mDateInfo.text = "请下拉刷新"
             mDateStatus.text = errInfo
             mDateTemp.text = "?"
             mDatePM.text = errInfo
             CustomUtils.loadImage("https://p.ssl.qhimg.com/d/inn/b4c1bd75/mini/02.png.webp", mWeatherImg, 50, 500)
+            mUpdateInfo.isRefreshing = false
         }
     }
 
@@ -106,7 +108,8 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
     private val mFragments = ArrayList<Fragment>().apply {
         add(MyDetailsFragment())
         add(ComicBoardFragment())
-        add(Main())
+        //TODO will add thirty page
+        //add(Main())
     }
 
     private var mCallback: MainActivityCallback = MainActivityCallback(this)

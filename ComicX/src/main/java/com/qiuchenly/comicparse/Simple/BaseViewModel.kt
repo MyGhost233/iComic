@@ -1,6 +1,5 @@
 package com.qiuchenly.comicparse.Simple
 
-import android.databinding.ObservableBoolean
 import android.util.Log
 import retrofit2.Callback
 import okhttp3.ResponseBody

@@ -3,10 +3,9 @@ package com.qiuchenly.comicparse
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.CookieHelper
+import com.qiuchenly.comicparse.Http.RetrofitManager
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -31,9 +30,8 @@ class App : Application() {
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
-
-
-        queue = Volley.newRequestQueue(this)
+        Comic.initialization(this)
+        RetrofitManager.biCaClient(this)
         cookieMaster = CookieHelper()
         sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
         cookieMaster!!.addCookie(sp!!.getString("Cookie", ""))
@@ -41,16 +39,12 @@ class App : Application() {
 
     companion object {
         private val TAG = "App"
-
-        var queue: RequestQueue? = null
-            private set
         var cookieMaster: CookieHelper? = null
             private set
         internal var sp: SharedPreferences? = null
 
         fun closedApp() {
             Save()
-            queue = null
             cookieMaster = null
             sp = null
             System.exit(0)

@@ -69,8 +69,8 @@ abstract class BaseRequest {
                 return head
             }
         }
-        App.queue!!.add(req.apply {
-            retryPolicy = DefaultRetryPolicy(20 * 1000, 0, 1.0f)
-        })
+//        App.queue!!.add(req.apply {
+//            retryPolicy = DefaultRetryPolicy(20 * 1000, 0, 1.0f)
+//        })
     }
 }

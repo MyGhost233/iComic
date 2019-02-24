@@ -24,8 +24,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
+        }
+    }
     dataBinding {
-        enabled = true
+        enabled = false
     }
     productFlavors {
     }
@@ -72,42 +78,11 @@ dependencies {
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
-    // Anko Layouts
-    implementation "org.jetbrains.anko:anko-sdk25:$anko_version"
-
     // sdk15, sdk19, sdk21, sdk23 are also available
     implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
 
-    // Coroutine listeners for Anko Layouts
-    implementation "org.jetbrains.anko:anko-sdk25-coroutines:$anko_version"
-    implementation "org.jetbrains.anko:anko-appcompat-v7-coroutines:$anko_version"
-
     // Anko SQLite
     implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
-
-    // Appcompat-v7 (only Anko Commons)
-    implementation "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
-
-    // Appcompat-v7 (Anko Layouts)
-    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
-
-    // CardView-v7
-    implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
-
-    // Design
-    implementation "org.jetbrains.anko:anko-design:$anko_version"
-    implementation "org.jetbrains.anko:anko-design-coroutines:$anko_version"
-
-    // GridLayout-v7
-    implementation "org.jetbrains.anko:anko-gridlayout-v7:$anko_version"
-
-    // Percent
-    implementation "org.jetbrains.anko:anko-percent:$anko_version"
-
-    // RecyclerView-v7
-    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
-    implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
 
     // Support-v4 (only Anko Commons)
     implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
@@ -134,7 +109,6 @@ dependencies {
     implementation 'com.arialyy.aria:aria-core:3.5.4'
     annotationProcessor 'com.arialyy.aria:aria-compiler:3.5.4'
 
-
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
@@ -142,4 +116,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.github.satyan:sugar:1.5'
 }

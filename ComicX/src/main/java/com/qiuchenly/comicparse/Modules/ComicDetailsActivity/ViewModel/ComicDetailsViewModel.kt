@@ -3,9 +3,8 @@ package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Request.Requests
-import com.qiuchenly.comicparse.Simple.BaseModelImp
 import com.qiuchenly.comicparse.Simple.BaseViewModel
 import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import io.realm.Realm
@@ -13,7 +12,6 @@ import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import java.nio.charset.Charset
 import java.text.DecimalFormat
@@ -101,6 +99,7 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
         super.cancel()
         if (mCall != null) mCall!!.cancel()
     }
+
     private var getDetailsURI = ""
     fun getBookDetails(bookID: String) {
         callback.onLoading()

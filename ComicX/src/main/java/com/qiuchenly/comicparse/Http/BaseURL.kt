@@ -1,7 +1,7 @@
 package com.qiuchenly.comicparse.Http
 
 object BaseURL {
-    var BASE_URL = "https://www.mh1234.com/"
+    var BASE_URL = "https://www.mh1234.com"
     var BASE_URL_BING = "https://cn.bing.com"
     var BASE_IMAGE_DEFAULT = "https://www.baidu.com/img/bd_logo1.png"
     val BASE_WEATHER = "https://www.so.com"

@@ -7,6 +7,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.ViewModel.MainActivityViewM
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Simple.BaseApp
+import kotlinx.android.synthetic.main.navigation_main.*
 
 class MainActivityUI : BaseApp() {
     override fun getLayoutID(): Int {
@@ -19,6 +20,9 @@ class MainActivityUI : BaseApp() {
         //viewModel处理UI
         mViewModel = MainActivityViewModel(this)
         startService(Intent(this, DownloadService::class.java))
+        mUpdateInfo.setOnRefreshListener {
+            mViewModel?.getWeathers()
+        }
         mViewModel?.getWeathers()
     }
 

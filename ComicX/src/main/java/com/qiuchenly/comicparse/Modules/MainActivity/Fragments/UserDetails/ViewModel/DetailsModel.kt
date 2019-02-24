@@ -2,7 +2,7 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.View
 
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.Simple.BaseViewModel

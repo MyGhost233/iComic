@@ -2,31 +2,20 @@ package com.qiuchenly.comicparse.Service
 
 import android.app.Service
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Binder
 import android.os.Environment
 import android.util.Log
 import com.qiuchenly.comicparse.Bean.*
-import com.qiuchenly.comicparse.MVP.Contract.ComicDetailContract
-import com.qiuchenly.comicparse.MVP.Contract.ReaderContract
-import com.qiuchenly.comicparse.MVP.Model.Activity_ReaderModel
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import com.qiuchenly.comicparse.Utils.NotificationType
-import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.Recommend.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Utils.CustomUtils.MD5
 import io.realm.Realm
 import io.realm.RealmResults
 import org.jetbrains.anko.runOnUiThread
 import java.io.File
-import java.io.FileOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.concurrent.thread
-import kotlin.math.roundToInt
 
 /**
  * 认真的写①次注释
@@ -248,7 +237,6 @@ class DownloadService : Service(), ServiceNotification {
          */
         abstract fun onThreadStart()
 
-        private val mReader = Activity_ReaderModel()
         private var mBookID = System.currentTimeMillis().toString().substring(7, 13).toInt()
         private var mIsDown = false
         private val mFileName = Environment.getExternalStorageDirectory().path + "/ComicParseReader/"
@@ -269,7 +257,7 @@ class DownloadService : Service(), ServiceNotification {
                 val pageMD5 = MD5(comic.title!!)
                 val single = PageInfo().apply {
                     titleName = comic.title!!
-                }
+                }/*
                 mReader.getParsePicList(BaseURL.BASE_URL + comic.link!!,
                         object : ReaderContract.GetPageCB {
                             override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String) {
@@ -329,7 +317,7 @@ class DownloadService : Service(), ServiceNotification {
                                         System.currentTimeMillis().toInt())
                                 mIsDown = false
                             }
-                        })
+                        })*/
                 while (mIsDown) {
                     Thread.sleep(500)
                 }
