@@ -10,7 +10,8 @@ import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAd
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import io.realm.Realm
 import org.jetbrains.anko.find
 
 class ComicList : BaseFragment() {
@@ -43,9 +44,9 @@ class ComicList : BaseFragment() {
     fun initializationData(retPageList: ArrayList<ComicBookInfo>) {
 //        retPageList.reverse()
         comicPageAdas?.setData(retPageList)
-        //comicPageAdas?.sort(1)
+        comicPageAdas?.sort(1)
     }
-
+    val realm = Realm.getDefaultInstance()!!
     fun scrollWithPosition(position: Int) {
         rv_comicPage.scrollToPosition(position)
         val manager = rv_comicPage.layoutManager as LinearLayoutManager
@@ -54,6 +55,7 @@ class ComicList : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val point =
                 realm.where(ComicBookInfo_Recently::class.java)
                         .equalTo("BookName", mComicInfo?.BookName)
@@ -64,5 +66,10 @@ class ComicList : BaseFragment() {
         rv_comicPage.layoutManager = LinearLayoutManager(context)
         rv_comicPage.adapter = comicPageAdas
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (!realm.isClosed) realm.close()
     }
 }

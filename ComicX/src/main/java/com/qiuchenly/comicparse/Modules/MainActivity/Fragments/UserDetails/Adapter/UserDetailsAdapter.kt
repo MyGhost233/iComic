@@ -15,10 +15,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.MVP.UI.Activitys.DownloaderComic
-import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
-import com.qiuchenly.comicparse.MVP.UI.Adapter.MyDetailsLocalBookListAdapter
-import com.qiuchenly.comicparse.MVP.UI.RecentlyReading.RecentlyRead
+import com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic
+import com.qiuchenly.comicparse.BaseImp.BaseVH
+import com.qiuchenly.comicparse.MVP.OtherTemp.MyDetailsLocalBookListAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils

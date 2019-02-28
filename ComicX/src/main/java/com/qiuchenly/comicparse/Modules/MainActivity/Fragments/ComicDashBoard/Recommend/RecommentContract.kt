@@ -1,7 +1,7 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend
 
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
-import com.qiuchenly.comicparse.Simple.BaseView
+import com.qiuchenly.comicparse.BaseImp.BaseView
 
 interface RecommentContract {
     interface View : BaseView {

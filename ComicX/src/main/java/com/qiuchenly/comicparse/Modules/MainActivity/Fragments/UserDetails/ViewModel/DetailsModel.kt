@@ -5,7 +5,7 @@ import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
-import com.qiuchenly.comicparse.Simple.BaseViewModel
+import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
 import okhttp3.ResponseBody

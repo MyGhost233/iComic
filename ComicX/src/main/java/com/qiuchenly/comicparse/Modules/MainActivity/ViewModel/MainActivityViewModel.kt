@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import android.widget.ImageView
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseFragmentPagerStatement
+import com.qiuchenly.comicparse.MVP.OtherTemp.BaseFragmentPagerStatement
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.ComicBoardFragment
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Fragmets.MyDetailsFragment
@@ -14,7 +14,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Interface.Callbacks
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.MainActivityCallback
 import com.qiuchenly.comicparse.Modules.MainActivity.Model.TempInfo
 import com.qiuchenly.comicparse.Modules.MainActivity.Request.WeatherRequest
-import com.qiuchenly.comicparse.Simple.BaseViewModel
+import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*

@@ -1,8 +1,9 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface
 
+import com.qiuchenly.comicparse.BaseImp.BaseLoadingView
+import com.qiuchenly.comicparse.BaseImp.BaseView
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
-import com.qiuchenly.comicparse.Simple.BaseLoadingView
-import com.qiuchenly.comicparse.Simple.BaseView
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 
 interface ComicDetailContract {
     interface View : BaseView, BaseLoadingView {

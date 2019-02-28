@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import com.qiuchenly.comicparse.Modules.MainActivity.ViewModel.MainActivityViewModel
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
-import com.qiuchenly.comicparse.Simple.BaseApp
+import com.qiuchenly.comicparse.BaseImp.BaseApp
 import kotlinx.android.synthetic.main.navigation_main.*
 
 class MainActivityUI : BaseApp() {

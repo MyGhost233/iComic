@@ -37,13 +37,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MVP.UI.RecentlyReading.RecentlyRead"
+            android:name="com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MVP.UI.Activitys.EveryDayRecommend"
+            android:name=".MVP.OtherTemp.EveryDayRecommend"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MVP.UI.Activitys.DownloaderComic"
+            android:name=".MVP.OtherTemp.DownloaderComic"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -51,6 +51,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MVP.UI.Activitys.SearchActivity"></activity>
+        <activity android:name=".MVP.OtherTemp.SearchActivity"></activity>
     </application>
 </manifest>

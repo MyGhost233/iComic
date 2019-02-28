@@ -2,13 +2,13 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard
 
 import android.os.Bundle
 import android.view.View
-import com.qiuchenly.comicparse.MVP.UI.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.AndMore.AndMore
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.FriendShip.FriendShip
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Recommend
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.BaseFragment
-import com.qiuchenly.comicparse.Simple.BaseNavigatorCommon
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import kotlinx.android.synthetic.main.fragment_comic_board_view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 

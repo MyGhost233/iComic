@@ -5,7 +5,7 @@ import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Request.Requests
-import com.qiuchenly.comicparse.Simple.BaseViewModel
+import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import io.realm.Realm
 import okhttp3.ResponseBody

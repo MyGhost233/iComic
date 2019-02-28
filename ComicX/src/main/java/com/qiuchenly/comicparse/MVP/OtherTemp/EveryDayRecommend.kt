@@ -1,0 +1,22 @@
+package com.qiuchenly.comicparse.MVP.OtherTemp
+
+import android.os.Bundle
+import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.BaseImp.BaseApp
+
+class EveryDayRecommend : BaseApp(){
+    override fun getLayoutID(): Int {
+        return R.layout.activity_everyday_recommend
+    }
+
+    override fun getUISet(mSet: BaseApp.UISet): BaseApp.UISet {
+        return mSet.apply {
+            isSlidr = true
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+}

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/mDefaultDarkThemeColor"
-    tools:context=".MVP.UI.RecentlyReading.RecentlyRead">
+    tools:context=".Modules.RecentlyReading.RecentlyRead">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/al_recently_bar"

@@ -8,8 +8,8 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Re
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.ViewModel.RecommendViewModel
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.BaseFragment
-import com.qiuchenly.comicparse.Simple.GridSpacingItemDecoration
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class Recommend : BaseFragment(), RecommentContract.View {
@@ -65,8 +65,8 @@ class Recommend : BaseFragment(), RecommentContract.View {
         }
 
         RV_Details_My.adapter = mRecommendRecyclerViewAdapter
-        RV_Details_My.addItemDecoration(object : GridSpacingItemDecoration(view.context, 3, 5) {
-            override fun needFixd(position: Int): Boolean {
+        RV_Details_My.addItemDecoration(object : GridSpacingItemDecoration() {
+            override fun needFixed(position: Int): Boolean {
                 return mRecommendRecyclerViewAdapter.getItemViewType(position) == RecommendItemType.TYPE.TYPE_GRID
             }
         })

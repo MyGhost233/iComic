@@ -1,9 +1,9 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views
 
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
-import com.qiuchenly.comicparse.Simple.BaseModel
-import com.qiuchenly.comicparse.Simple.BasePresenter
-import com.qiuchenly.comicparse.Simple.BaseView
+import com.qiuchenly.comicparse.BaseImp.BaseModel
+import com.qiuchenly.comicparse.BaseImp.BasePresenter
+import com.qiuchenly.comicparse.BaseImp.BaseView
 import io.realm.RealmResults
 
 interface MyDetailsContract {

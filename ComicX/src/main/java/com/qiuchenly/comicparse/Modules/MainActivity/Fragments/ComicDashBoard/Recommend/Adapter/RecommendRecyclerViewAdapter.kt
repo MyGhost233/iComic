@@ -17,11 +17,11 @@ import android.view.ViewGroup
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
-import com.qiuchenly.comicparse.MVP.UI.Activitys.EveryDayRecommend
-import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
+import com.qiuchenly.comicparse.MVP.OtherTemp.EveryDayRecommend
+import com.qiuchenly.comicparse.BaseImp.BaseVH
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.AppManager
+import com.qiuchenly.comicparse.BaseImp.AppManager
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_a_z.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*

@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.AppManager
+import com.qiuchenly.comicparse.BaseImp.AppManager
 import io.realm.Realm
 import jp.wasabeef.glide.transformations.BlurTransformation
 import net.qiujuer.genius.blur.StackBlur

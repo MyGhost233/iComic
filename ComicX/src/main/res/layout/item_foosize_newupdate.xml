@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.qiuchenly.comicparse.Simple.RectCardView
+    <com.qiuchenly.comicparse.BaseImp.RectCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -33,7 +33,7 @@
                 android:textColor="#000000"
                 android:textSize="8sp" />
         </FrameLayout>
-    </com.qiuchenly.comicparse.Simple.RectCardView>
+    </com.qiuchenly.comicparse.BaseImp.RectCardView>
 
     <TextView
         android:id="@+id/foo_bookName"

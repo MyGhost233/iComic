@@ -4,7 +4,7 @@ import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Request.Requests
-import com.qiuchenly.comicparse.Simple.BaseViewModel
+import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.getComicInfoByAuto
 import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseA_Z
 import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseByNewUpdate

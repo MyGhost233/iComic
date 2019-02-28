@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel.DetailsModel
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Adapter.UserDetailsAdapter
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel.DetailsModel
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.BaseFragment
+import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
@@ -19,7 +20,7 @@ class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     }
 
     override fun getLocalListData(): RealmResults<HotComicStrut>? {
-        return realm.where(HotComicStrut::class.java)
+        return Realm.getDefaultInstance().where(HotComicStrut::class.java)
                 .findAll()
     }
 

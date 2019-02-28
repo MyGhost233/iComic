@@ -5,15 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.target.Target
-import com.qiuchenly.comicparse.MVP.UI.Adapter.BaseVH
+import com.qiuchenly.comicparse.BaseImp.BaseVH
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Simple.BaseRVAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 
-class ComicImagePageAda : BaseRVAdapter<String>() {
+class ComicImagePageAda(private val onLoad: onLoadMore) : BaseRVAdapter<String>() {
+
+    interface onLoadMore {
+        fun onLoadMore()
+        fun showMsg(str: String)
+    }
+
+
     override fun getLayout(): Int {
         return R.layout.item_comicpage
     }
@@ -54,9 +61,31 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
         when (getItemViewType(position)) {
             TYPE_LOAD_MORE -> {
                 with(item) {
-                    if (noMore) {
-                        noMore_tip.visibility = android.view.View.VISIBLE
-                        loadingView.visibility = android.view.View.GONE
+                    when (currentState) {
+                        ON_NOMORE -> {
+                            noMore_tip.visibility = android.view.View.VISIBLE
+                            loadingView.visibility = android.view.View.INVISIBLE
+                            clickRetry.visibility = android.view.View.INVISIBLE
+                            setOnClickListener {
+                                onLoad.showMsg("都说了没有更多章节辣!")
+                            }
+                        }
+                        ON_LOAD_FAILED -> {
+                            noMore_tip.visibility = android.view.View.INVISIBLE
+                            loadingView.visibility = android.view.View.INVISIBLE
+                            clickRetry.visibility = android.view.View.VISIBLE
+                            setOnClickListener {
+                                onLoading()
+                            }
+                        }
+                        else -> {
+                            noMore_tip.visibility = android.view.View.INVISIBLE
+                            loadingView.visibility = android.view.View.VISIBLE
+                            clickRetry.visibility = android.view.View.INVISIBLE
+                            onLoad.onLoadMore()
+                            setOnClickListener {
+                            }
+                        }
                     }
                 }
             }
@@ -68,18 +97,34 @@ class ComicImagePageAda : BaseRVAdapter<String>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
-        return if (viewType == TYPE_LOAD_MORE) {
-            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.loadmore_view, parent, false)
-            BaseVH(itemView)
-        } else {
-            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_comicpage, parent, false)
-            BaseVH(itemView)
-        }
+        return BaseVH(LayoutInflater.from(parent.context).inflate(
+                when (viewType) {
+                    TYPE_LOAD_MORE -> R.layout.loadmore_view
+                    else -> R.layout.item_comicpage
+                }
+                , parent, false))
     }
 
-    private var noMore = false
-    fun setNoMore() {
-        noMore = true
+    companion object {
+        val ON_NOMORE = 0
+        val ON_LOAD_FAILED = 1
+        val ON_LOADING = -1
+        val ON_SUCC = 2
+    }
+
+    private var currentState = ON_LOADING
+    fun onNoMore() {
+        currentState = ON_NOMORE
+        notifyItemChanged(getData()?.size!!)
+    }
+
+    fun onLoading() {
+        currentState = ON_LOADING
+        notifyItemChanged(getData()?.size!!)
+    }
+
+    fun onLoadNextFailed() {
+        currentState = ON_LOAD_FAILED
         notifyItemChanged(getData()?.size!!)
     }
 
