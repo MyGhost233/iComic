@@ -48,7 +48,7 @@ class ReadViewModel(private var mView: ReaderContract.View?) : BaseViewModel<Res
         lastUrl = url
         mCall = RetrofitManager.get()
                 .create(ReadingRequest::class.java)
-                .getAllImages(url)
+                .getAllImages(url.replace("%2F", "/"))
         mCall?.enqueue(this)
     }
 

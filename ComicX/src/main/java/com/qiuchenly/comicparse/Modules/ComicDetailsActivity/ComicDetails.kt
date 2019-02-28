@@ -127,7 +127,7 @@ class ComicDetails :
         }
 
         ComicList.getInstance().initializationData(retPageList)
-        BasicInfo.getInstance().setDefaultIndexUrl(retPageList[retPageList.size].link!!)
+        BasicInfo.getInstance().setDefaultIndexUrl(retPageList[retPageList.size - 1].link!!)
         CustomUtils.loadImage(comicInfo.BookImgSrc!!, mRealImageNoBlur, 0, null, 500)
         CustomUtils.loadImage(comicInfo.BookImgSrc!!, comicDetails_img, 300, 500)
     }

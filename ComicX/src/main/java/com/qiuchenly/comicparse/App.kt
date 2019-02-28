@@ -58,7 +58,7 @@ class App : Application() {
             //这就是完整的错误信息了，你可以拿来上传服务器，或者做成本地文件保存等等等等
             val errorLog = stringBuilder.toString()
 
-            Log.d(TAG,"onCreate:$errorLog")
+            //Log.d(TAG,"onCreate:$errorLog")
 
             //最后如何处理这个崩溃，这里使用默认的处理方式让APP停止运行
             //defaultHandler.uncaughtException(thread, throwable)

@@ -83,7 +83,26 @@ class BasicInfo : BaseFragment() {
         startRead.setOnClickListener {
             val bin = Intent(AppManager.appm.currentActivity(), ReadPage::class.java)
             var link = lastReadPageUrl
-            if (lastReadPageUrl == "") link = defaultUrl
+            if (lastReadPageUrl == "") {
+                link = defaultUrl
+                var obj = realm.where(ComicBookInfo_Recently::class.java)
+                        .equalTo("BookName", comicDetails?.BookName)
+                        .findFirst()
+                realm.beginTransaction()
+                obj?.deleteFromRealm()
+                realm.commitTransaction()
+                realm.beginTransaction()
+                if (obj == null) {
+                    obj = realm.createObject(ComicBookInfo_Recently::class.java, comicDetails?.BookName)
+                }
+                obj!!.BookName_read_point = ""
+                obj.LastedPage_name = comicDetails?.LastedPage_name
+                obj.BookImgSrc = comicDetails?.BookImgSrc
+                obj.BookLink = comicDetails?.BookLink
+                obj.Author = comicDetails?.Author
+                obj.LastedPage_src = link
+                realm.commitTransaction()
+            }
             bin.putExtras(Bundle().apply {
                 putString("link", link)
                 putString("title", comicDetails?.BookName)
