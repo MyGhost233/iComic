@@ -6,6 +6,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Re
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
 import okhttp3.ResponseBody
@@ -34,7 +35,6 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
             mView?.onSrcReady(str)
             CustomUtils.setCachedBingUrl(str)
         }
-
     }
 
     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -46,6 +46,6 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
     private var mCall: Call<ResponseBody>? = null
 
     fun getLocalBookByDB(): ArrayList<HotComicStrut>? {
-        return ArrayList(Realm.getDefaultInstance().where(HotComicStrut::class.java).findAll())
+        return ArrayList(Comic.getRealm().where(HotComicStrut::class.java).findAll())
     }
 }

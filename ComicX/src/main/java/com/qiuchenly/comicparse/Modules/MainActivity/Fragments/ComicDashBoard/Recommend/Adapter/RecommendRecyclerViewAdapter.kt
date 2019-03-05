@@ -14,14 +14,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
-import com.qiuchenly.comicparse.Bean.RecommendItemType
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
-import com.qiuchenly.comicparse.MVP.OtherTemp.EveryDayRecommend
-import com.qiuchenly.comicparse.BaseImp.BaseVH
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
-import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.BaseImp.AppManager
+import com.qiuchenly.comicparse.BaseImp.BaseVH
+import com.qiuchenly.comicparse.Bean.RecommendItemType
+import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
+import com.qiuchenly.comicparse.Http.BikaApi.Tools
+import com.qiuchenly.comicparse.MVP.OtherTemp.EveryDayRecommend
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
+import com.qiuchenly.comicparse.Modules.SearchResult.SearchResult
+import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_a_z.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
@@ -30,10 +33,12 @@ import kotlinx.android.synthetic.main.item_recommend_normal.view.*
 import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
 import org.jetbrains.anko.find
 
+
 class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : RecyclerView.Adapter<BaseVH>() {
     fun getSizeByItem(position: Int): Int {
         return when (getItemViewType(position)) {
-            RecommendItemType.TYPE.TYPE_GRID -> 2
+            RecommendItemType.TYPE.TYPE_GRID,
+            RecommendItemType.TYPE.TYPE_BIKA -> 2
             else -> 6
         }
     }
@@ -43,7 +48,8 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : RecyclerV
                 when (viewType) {
                     RecommendItemType.TYPE.TYPE_TOP -> R.layout.item_recommend_topview
                     RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
-                    RecommendItemType.TYPE.TYPE_GRID -> R.layout.item_foosize_newupdate
+                    RecommendItemType.TYPE.TYPE_GRID,
+                    RecommendItemType.TYPE.TYPE_BIKA -> R.layout.item_foosize_newupdate
                     RecommendItemType.TYPE.TYPE_A_Z -> R.layout.item_a_z
                     RecommendItemType.TYPE.TYPE_TITLE -> R.layout.item_recommend_normal
                     else -> R.layout.item_recommend_normal
@@ -221,7 +227,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : RecyclerV
                     if (mTopViewComicBook != null) {
 
                     }
-                    CustomUtils.loadImage(mTopViewComicBook!![0].BookImgSrc!!, comic_img, 55)
+                    CustomUtils.loadImage(view.context, mTopViewComicBook!![0].BookImgSrc!!, comic_img, 55)
                 }
             }
 
@@ -297,6 +303,21 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : RecyclerV
                     }
                 }
             }
+            RecommendItemType.TYPE.TYPE_BIKA -> {
+                with(view) {
+                    val data = mRealData[position].BikaInfo
+                    val img = Tools.getThumbnailImagePath(data?.thumb)
+                    CustomUtils.loadImage(view.context, img, foo_bookImg, 0, 500)
+                    foo_bookName.text = data?.title
+                    foo_bookName_upNews.visibility = View.GONE
+                    setOnClickListener {
+                        startActivity(view.context, Intent(context, SearchResult::class.java).apply {
+                            putExtra("title", data?.title)
+                            putExtra("isBika", true)
+                        }, null)
+                    }
+                }
+            }
         }
     }
 
@@ -304,6 +325,23 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : RecyclerV
         return Intent(ctx, ComicDetails::class.java).putExtras(Bundle().apply {
             putString("data", data.toString())
         })
+    }
+
+    fun addBikaData(arrayList_categories: java.util.ArrayList<CategoryObject>) {
+        if (mTopViewComicBook == null) {
+            mRealData = getDefaultItem()
+        }
+        mRealData.add(RecommendItemType().apply {
+            this.title = "Bika 分类 - 全网禁区,肾好者进!"
+            type = RecommendItemType.TYPE.TYPE_TITLE
+        })
+        for (a in arrayList_categories) {
+            mRealData.add(RecommendItemType().apply {
+                type = RecommendItemType.TYPE.TYPE_BIKA
+                this.BikaInfo = a
+            })
+        }
+        notifyDataSetChanged()
     }
 
     private inner class mTopViewBanner(val mView: View) : PagerAdapter() {

@@ -17,9 +17,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.AppManager
-import io.realm.Realm
 import jp.wasabeef.glide.transformations.BlurTransformation
 import net.qiujuer.genius.blur.StackBlur
 import java.nio.ByteBuffer
@@ -64,28 +63,24 @@ object CustomUtils {
         return bit1
     }
 
-    fun loadImage(imageSrc: String?, mView: ImageView) {
-        loadImage(imageSrc!!, mView, 0)
+    fun loadImage(ctx: Context, imageSrc: String?, mView: ImageView) {
+        loadImage(ctx, imageSrc!!, mView, 0)
     }
 
-    fun loadImage(imageSrc: String, mView: ImageView, BlurRadius: Int) {
-        loadImage(AppManager.appm.currentActivity(), imageSrc, mView, BlurRadius, 0, null, 0)
-    }
-
-    fun loadImage(imageSrc: String, mView: ImageView, BlurRadius: Int, crossFade: Int) {
-        loadImage(AppManager.appm.currentActivity(), imageSrc, mView, BlurRadius, 0, null, crossFade)
+    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int) {
+        loadImage(ctx, imageSrc, mView, BlurRadius, 0, null, 0)
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, crossFade: Int) {
         loadImage(ctx, imageSrc, mView, BlurRadius, 0, null, crossFade)
     }
 
-    fun loadImage(imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
-        loadImage(AppManager.appm.currentActivity(), imageSrc, mView, 0, loadingImg, lister, crossFade)
+    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
+        loadImage(ctx, imageSrc, mView, 0, loadingImg, lister, crossFade)
     }
 
-    fun loadImage(imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?) {
-        loadImage(AppManager.appm.currentActivity(), imageSrc, mView, 0, loadingImg, lister, 0)
+    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?) {
+        loadImage(ctx, imageSrc, mView, 0, loadingImg, lister, 0)
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
@@ -220,7 +215,7 @@ object CustomUtils {
     }
 
     fun setCachedBingUrl(url: String) {
-        val instance = Realm.getDefaultInstance()
+        val instance = Comic.getRealm()
         var single = instance.where(ApplicationSetting::class.java).findFirst()
         instance.beginTransaction()
         if (single == null) {
@@ -235,7 +230,7 @@ object CustomUtils {
     }
 
     fun getCachedBingUrl(): String {
-        val single = Realm.getDefaultInstance().where(ApplicationSetting::class.java).findFirst()
+        val single = Comic.getRealm().where(ApplicationSetting::class.java).findFirst()
         return if (single?.mBingCachedUrl != null) single.mBingCachedUrl!! else ""
     }
 

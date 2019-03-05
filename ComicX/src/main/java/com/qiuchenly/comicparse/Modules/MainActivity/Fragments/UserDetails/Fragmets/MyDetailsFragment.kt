@@ -5,12 +5,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Adapter.UserDetailsAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel.DetailsModel
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.R
-import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
@@ -20,7 +20,7 @@ class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     }
 
     override fun getLocalListData(): RealmResults<HotComicStrut>? {
-        return Realm.getDefaultInstance().where(HotComicStrut::class.java)
+        return Comic.getRealm().where(HotComicStrut::class.java)
                 .findAll()
     }
 
@@ -47,14 +47,9 @@ class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     private var mUserDetailsAdapter: UserDetailsAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mUserDetailsAdapter = UserDetailsAdapter(this)
         RV_Details_My.layoutManager = LinearLayoutManager(this.context)
         RV_Details_My.adapter = mUserDetailsAdapter
-        RV_Details_My.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-        })
-
         MyDetails_Refresh.setOnRefreshListener {
             initializationInfo()
             MyDetails_Refresh.isRefreshing = false

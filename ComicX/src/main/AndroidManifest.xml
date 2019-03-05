@@ -51,6 +51,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MVP.OtherTemp.SearchActivity"></activity>
+        <activity
+            android:name=".Modules.SearchActivity.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Modules.SearchResult.SearchResult"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>

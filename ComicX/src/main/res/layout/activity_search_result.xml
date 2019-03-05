@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mDefaultDarkThemeColor"
-    android:orientation="vertical"
-    tools:context=".Modules.RecentlyReading.RecentlyRead">
+    android:background="@color/mDefaultDarkThemeColor">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/al_recently_bar"
@@ -49,38 +46,41 @@
                                 android:src="@drawable/ic_arrow_back" />
                         </FrameLayout>
 
-                        <TextView
-                            android:id="@+id/activityName"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="最近阅读"
-                            android:textColor="#ffffff"
-                            android:textSize="16sp" />
-                    </LinearLayout>
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/clear_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="24dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:text="清空"
-                        android:textColor="#ffffff"
-                        android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/activityName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="最近阅读"
+                                android:textColor="#ffffff"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/activityName_secondTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="第二标题"
+                                android:textColor="#ffffff"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                    </LinearLayout>
                 </FrameLayout>
             </android.support.v7.widget.Toolbar>
         </FrameLayout>
 
-        <include layout="@layout/view_magic_indicator_base" />
+        <include  layout="@layout/view_magic_indicator_base" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/tl_recently_tab_setup_vp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mResultList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/al_recently_bar" />
+</RelativeLayout>

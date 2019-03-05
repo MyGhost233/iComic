@@ -1,13 +1,12 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
+import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Modules.MainActivity.ViewModel.MainActivityViewModel
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Service.DownloadService
-import com.qiuchenly.comicparse.BaseImp.BaseApp
 import kotlinx.android.synthetic.main.navigation_main.*
+
 
 class MainActivityUI : BaseApp() {
     override fun getLayoutID(): Int {
@@ -19,11 +18,12 @@ class MainActivityUI : BaseApp() {
         super.onCreate(savedInstanceState)
         //viewModel处理UI
         mViewModel = MainActivityViewModel(this)
-        startService(Intent(this, DownloadService::class.java))
         mUpdateInfo.setOnRefreshListener {
             mViewModel?.getWeathers()
         }
         mViewModel?.getWeathers()
+        //TODO 此处启动后台下载服务暂时不写
+        //startService(Intent(this, DownloadService::class.java))
     }
 
     override fun onDestroy() {

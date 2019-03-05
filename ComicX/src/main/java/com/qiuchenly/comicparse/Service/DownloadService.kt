@@ -6,6 +6,7 @@ import android.os.Binder
 import android.os.Environment
 import android.util.Log
 import com.qiuchenly.comicparse.Bean.*
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
@@ -25,7 +26,7 @@ import java.util.concurrent.Executors
  */
 class DownloadService : Service(), ServiceNotification {
     override fun onBookPageWasDown(bookName: String, title: String): Boolean {
-        val book = Realm.getDefaultInstance().where(DownloadBookInfo::class.java)
+        val book = Comic.getRealm().where(DownloadBookInfo::class.java)
                 .equalTo("BookName", bookName)
                 .findFirst()
         if (book != null) {
@@ -98,7 +99,7 @@ class DownloadService : Service(), ServiceNotification {
         CustomUtils.SendNotificationEx(this, title, content, NoticeID)
     }
 
-    private val mRealm = Realm.getDefaultInstance()
+    private val mRealm = Comic.getRealm()
     private var mBinder = DownloadBinder(this)
     override fun onBind(intent: Intent) = mBinder
 
@@ -110,7 +111,6 @@ class DownloadService : Service(), ServiceNotification {
 
     override fun onDestroy() {
         super.onDestroy()
-        mRealm.close()
         mBinder.mThreadPool.shutdownNow()
     }
 

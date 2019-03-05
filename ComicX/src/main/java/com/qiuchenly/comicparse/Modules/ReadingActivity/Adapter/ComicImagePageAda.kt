@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.target.Target
+import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.BaseImp.BaseVH
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
@@ -15,14 +15,20 @@ import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 class ComicImagePageAda(private val onLoad: onLoadMore) : BaseRVAdapter<String>() {
 
-    interface onLoadMore {
-        fun onLoadMore()
-        fun showMsg(str: String)
+
+
+
+    override fun getLayout(viewType: Int): Int {
+        return R.layout.item_comicpage
     }
 
+    enum class SourceType {
+        BIKA, MH1234
+    }
 
-    override fun getLayout(): Int {
-        return R.layout.item_comicpage
+    var currentSource = SourceType.MH1234
+    fun setBikaMode() {
+        currentSource = SourceType.BIKA
     }
 
     override fun InitUI(item: View, data: String?, position: Int) {
@@ -32,9 +38,8 @@ class ComicImagePageAda(private val onLoad: onLoadMore) : BaseRVAdapter<String>(
                 item.mRetryLoad.text = "加载中..."
                 item.mRetryLoad.isClickable = false
             }
-
             CustomUtils.loadImage(
-                    "http://mhpic.dongzaojiage.com$data",
+                    item.context, data,
                     item.iv_img_page,
                     R.drawable.loading,
                     object : CustomUtils.ImageListener {
@@ -82,7 +87,10 @@ class ComicImagePageAda(private val onLoad: onLoadMore) : BaseRVAdapter<String>(
                             noMore_tip.visibility = android.view.View.INVISIBLE
                             loadingView.visibility = android.view.View.VISIBLE
                             clickRetry.visibility = android.view.View.INVISIBLE
-                            onLoad.onLoadMore()
+                            if (currentSource == SourceType.BIKA) {
+
+                            } else
+                                onLoad.onLoadMore(true)
                             setOnClickListener {
                             }
                         }

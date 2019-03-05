@@ -10,6 +10,6 @@ interface ReaderContract {
     }
 
     interface GetPageCB : BaseGetCallBack {
-        fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String)
+        fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String, isOver: Boolean)
     }
 }

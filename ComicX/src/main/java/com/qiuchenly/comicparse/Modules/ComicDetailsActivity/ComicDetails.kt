@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -15,6 +16,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.BasicInfo
@@ -27,7 +29,6 @@ import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 import org.jetbrains.anko.find
@@ -115,7 +116,7 @@ class ComicDetails :
         //tv_bookIntroduction.text = "简介：" + introduction.trim()
         tv_bookname_title.text = comicInfo.BookName
         tv_bookname.text = comicInfo.BookName
-        val point = Realm.getDefaultInstance().where(ComicBookInfo_Recently::class.java)
+        val point = Comic.getRealm().where(ComicBookInfo_Recently::class.java)
                 .equalTo("BookName", comicInfo.BookName)
                 .findFirst()
                 ?.BookName_read_point
@@ -128,8 +129,8 @@ class ComicDetails :
 
         ComicList.getInstance().initializationData(retPageList)
         BasicInfo.getInstance().setDefaultIndexUrl(retPageList[retPageList.size - 1].link!!)
-        CustomUtils.loadImage(comicInfo.BookImgSrc!!, mRealImageNoBlur, 0, null, 500)
-        CustomUtils.loadImage(comicInfo.BookImgSrc!!, comicDetails_img, 300, 500)
+        CustomUtils.loadImage(this, comicInfo.BookImgSrc!!, mRealImageNoBlur, 0, null, 500)
+        CustomUtils.loadImage(this, comicInfo.BookImgSrc!!, comicDetails_img, 300, 500)
     }
 
     override fun onProgressChanged() {
@@ -180,15 +181,22 @@ class ComicDetails :
                 mServerConnect,
                 Context.BIND_AUTO_CREATE)
 
-        val string = (intent.extras["data"] as String).split("|")
-        comicInfo = HotComicStrut().apply {
-            BookName = string[0]
-            BookImgSrc = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[1]
-            LastedPage_name = string[2]
-            LastedPage_src = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[3]
-            BookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
+        val isBika = intent.getBooleanExtra("isBika", false)
+        if (isBika) {
+            comicInfo = HotComicStrut().apply {
+                this.BookLink = intent.getStringExtra("comicID")
+                this.isBika = true
+            }
+        } else {
+            val string = (intent.extras["data"] as String).split("|")
+            comicInfo = HotComicStrut().apply {
+                BookName = string[0]
+                BookImgSrc = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[1]
+                LastedPage_name = string[2]
+                LastedPage_src = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[3]
+                BookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
+            }
         }
-
         val mFragmentsList = arrayListOf(
                 RecentlyPagerAdapter.Struct("漫画信息", BasicInfo.getInstance(this, comicInfo)),
                 RecentlyPagerAdapter.Struct("漫画章节", ComicList.getInstance(comicInfo, this, this))
@@ -222,8 +230,26 @@ class ComicDetails :
                 magic_indicator,
                 mDetailsInfoViewPager)
 
+        mDetailsInfoViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
 
-        mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                if (position == 0) {
+                    appBarLayout.setExpanded(true, true)
+                }
+            }
+        })
+        if (!isBika)
+            mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
+        else{
+            onLoadSuccess()
+        }
     }
 
     private var mAdapter: PagerAdapter? = null

@@ -4,8 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.qiuchenly.comicparse.Bean.BaseComicInfo;
 
-public class ComicEpisodeObject implements Parcelable {
+public class ComicEpisodeObject extends BaseComicInfo implements Parcelable {
     public static final Creator<ComicEpisodeObject> CREATOR = new Creator<ComicEpisodeObject>() {
         public ComicEpisodeObject createFromParcel(Parcel source) {
             return new ComicEpisodeObject(source);

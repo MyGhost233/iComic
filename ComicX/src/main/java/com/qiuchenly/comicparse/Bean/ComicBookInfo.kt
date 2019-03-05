@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.Bean
 
-class ComicBookInfo {
+class ComicBookInfo: BaseComicInfo() {
     var link: String? = null
     var title: String? = null
 }

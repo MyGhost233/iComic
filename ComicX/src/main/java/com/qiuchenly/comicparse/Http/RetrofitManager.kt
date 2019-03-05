@@ -47,6 +47,8 @@ object RetrofitManager {
         }
     }
 
+
+
     private fun buildRetrofit(mBaseUrl: String): Retrofit {
         return buildRetrofit().baseUrl(mBaseUrl).build()
     }

@@ -17,6 +17,7 @@ import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic
 import com.qiuchenly.comicparse.BaseImp.BaseVH
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.MVP.OtherTemp.MyDetailsLocalBookListAdapter
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
@@ -86,7 +87,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
                         }
                         2 -> {
                             item_img.setImageResource(R.mipmap.recently_read)
-                            recently_Size.text = "(${Realm.getDefaultInstance().where(ComicBookInfo_Recently::class.java).findAll().size})"
+                            recently_Size.text = "(${Comic.getRealm().where(ComicBookInfo_Recently::class.java).findAll().size})"
                             click_recently_read_item(this)
                             "最近浏览(本地)"
                         }
@@ -164,7 +165,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
             rv_my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
             rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
             rv_my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
-            item_name.text = "我的漫画（本地有${arr.size}本）"
+            item_name.text = "我的收藏（本地有${arr.size}本）"
         }
     }
 

@@ -7,15 +7,15 @@ import android.widget.TextView
 import com.qiuchenly.comicparse.BaseImp.AppManager
 import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import io.realm.Realm
 import org.jetbrains.anko.find
 
 class MyDetailsLocalBookListAdapter : BaseRVAdapter<HotComicStrut>() {
-    override fun getLayout(): Int {
+    override fun getLayout(viewType: Int): Int {
         return R.layout.comic_local_list
     }
 
@@ -26,11 +26,11 @@ class MyDetailsLocalBookListAdapter : BaseRVAdapter<HotComicStrut>() {
             val bookAuthor = find<TextView>(R.id.bookAuthor)
             val curr_read = find<TextView>(R.id.curr_read)
             if (data?.BookImgSrc == null) return
-            CustomUtils.loadImage(data.BookImgSrc!!, bookNameImg)
+            CustomUtils.loadImage(item.context, data.BookImgSrc!!, bookNameImg)
             bookName.text = data.BookName
             bookAuthor.text = data.Author
 
-            val mItem = Realm.getDefaultInstance().where(ComicBookInfo_Recently::class.java).equalTo("BookName", data.BookName!!).findFirst()
+            val mItem = Comic.getRealm().where(ComicBookInfo_Recently::class.java).equalTo("BookName", data.BookName!!).findFirst()
             curr_read.text = if (mItem != null) mItem.BookName_read_point else "你还没有看喔"
             setOnClickListener {
                 val i = android.content.Intent(this.context, ComicDetails::class.java)

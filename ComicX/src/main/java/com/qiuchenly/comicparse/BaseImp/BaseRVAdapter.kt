@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 
 abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
+    interface onLoadMore {
+        fun onLoadMore(isRetry: Boolean)
+        fun showMsg(str: String)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
-        return BaseVH(LayoutInflater.from(parent.context).inflate(getLayout(), parent, false))
+        return BaseVH(LayoutInflater.from(parent.context).inflate(getLayout(viewType), parent, false))
     }
 
     private var map: ArrayList<T>? = ArrayList()
@@ -25,7 +30,7 @@ abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
 
     fun getData() = map
 
-    abstract fun getLayout(): Int
+    abstract fun getLayout(viewType: Int): Int
 
     override fun getItemCount(): Int {
         return if (map != null) map?.size!!

@@ -80,7 +80,7 @@ public interface ApiService {
     Call<GeneralResponse<ComicEpisodeResponse>> getComicEpisode(@Header("authorization") String str, @Path("comicId") String str2, @Query("page") int i);
 
     @GET("comics")
-    Call<GeneralResponse<ComicListResponse>> getComicList(@Header("authorization") String str, @Query("page") int i, @Query("c") String str2, @Query("t") String str3, @Query("a") String str4, @Query("f") String str5, @Query("s") String str6, @Query("ct") String str7, @Query("ca") String str8);
+    Call<GeneralResponse<ComicListResponse>> getComicList(@Header("authorization") String authorization, @Query("page") int page, @Query("c") String c, @Query("t") String t, @Query("a") String a, @Query("f") String f, @Query("s") String s, @Query("ct") String ct, @Query("ca") String ca);
 
     @GET("comics/search")
     Call<GeneralResponse<ComicListResponse>> getComicListWithSearchKey(@Header("authorization") String str, @Query("page") int i, @Query("q") String str2);

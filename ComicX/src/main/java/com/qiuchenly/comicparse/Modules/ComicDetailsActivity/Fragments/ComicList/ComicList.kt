@@ -4,17 +4,25 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.Bean.BaseComicInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Http.BikaApi.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicListViewModel
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseFragment
-import io.realm.Realm
 import org.jetbrains.anko.find
 
-class ComicList : BaseFragment() {
+class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
+    override fun SetBikaPages(docs: java.util.ArrayList<ComicEpisodeObject>?, id: String) {
+        comicPageAdas?.setBaseID(id)
+        comicPageAdas?.setData(docs as ArrayList<BaseComicInfo>)
+        comicPageAdas?.sort(1)
+    }
 
     companion object {
         private var mComicList: ComicList? = null
@@ -34,6 +42,7 @@ class ComicList : BaseFragment() {
         }
     }
 
+    var mViewModel: ComicListViewModel? = null
     private var comicPageAdas: ComicPageAda? = null
     private var mComicInfo: HotComicStrut? = null
     private var mView: ComicDetailContract.View? = null
@@ -43,10 +52,11 @@ class ComicList : BaseFragment() {
 
     fun initializationData(retPageList: ArrayList<ComicBookInfo>) {
 //        retPageList.reverse()
-        comicPageAdas?.setData(retPageList)
+        comicPageAdas?.setData(retPageList as ArrayList<BaseComicInfo>)
         comicPageAdas?.sort(1)
     }
-    val realm = Realm.getDefaultInstance()!!
+
+    val realm = Comic.getRealm()
     fun scrollWithPosition(position: Int) {
         rv_comicPage.scrollToPosition(position)
         val manager = rv_comicPage.layoutManager as LinearLayoutManager
@@ -55,21 +65,25 @@ class ComicList : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val point =
-                realm.where(ComicBookInfo_Recently::class.java)
-                        .equalTo("BookName", mComicInfo?.BookName)
-                        .findFirst()
-                        ?.BookName_read_point
+        mViewModel = ComicListViewModel(this)
+        val point = if (mComicInfo?.isBika == true) mComicInfo?.BookLink else realm.where(ComicBookInfo_Recently::class.java)
+                .equalTo("BookName", mComicInfo?.BookName)
+                .findFirst()
+                ?.BookName_read_point
         comicPageAdas = ComicPageAda(mCallback, point, mView)
         rv_comicPage = view.find(R.id.rv_comicPage)
         rv_comicPage.layoutManager = LinearLayoutManager(context)
         rv_comicPage.adapter = comicPageAdas
+        if (mComicInfo?.isBika == true) {
+            mViewModel?.getComicList(point!!)
+        }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (!realm.isClosed) realm.close()
+        mViewModel?.cancel()
+        mViewModel = null
+        mComicList = null
     }
 }

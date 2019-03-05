@@ -1,12 +1,16 @@
-package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Request
+package com.qiuchenly.comicparse.Http.MH1234Api
 
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.HTTP
-import retrofit2.http.Path
+import retrofit2.http.*
 
-interface Requests {
+interface mh1234Api {
+
+    //key=%C8%EB%B9%C7&button=%CB%D1%CB%F7%C2%FE%BB%AD
+    @POST("/search.asp")
+    @FormUrlEncoded
+    fun searchComic(@Field("key") name: String, @Field("button") button: String)
+
     //https://www.mh1234.com/comic/15149.html
     @HTTP(method = "GET", path = "/comic/{bookid}.html", hasBody = false)
     fun getBookInfo(@Path("bookid") bookID: String): Call<ResponseBody>

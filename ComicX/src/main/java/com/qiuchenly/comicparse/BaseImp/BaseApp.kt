@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.qiuchenly.comicparse.App
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
@@ -74,7 +75,7 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
 
     override fun onDestroy() {
         super.onDestroy()
-        AppManager.appm.finishActivity(this)
+//        AppManager.appm.finishActivity(this)
         EventBus.getDefault().unregister(this)//订阅者事件绑定
     }
 

@@ -1,13 +1,13 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel
 
+import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Http.MH1234Api.mh1234Api
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Request.Requests
-import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
-import io.realm.Realm
 import okhttp3.ResponseBody
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -22,7 +22,7 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
     }
 
     fun Save2DB(comicInfo: ComicBookInfo_Recently) {
-        val realm = Realm.getDefaultInstance()
+        val realm = Comic.getRealm()
         if (realm.where(ComicBookInfo_Recently::class.java).equalTo("BookName", comicInfo.BookName)
                         .findFirst() == null) {
             realm.beginTransaction()
@@ -33,7 +33,6 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
             }
             realm.commitTransaction()
         }
-        realm.close()
     }
 
     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -106,7 +105,7 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
 
         mCall = RetrofitManager
                 .get()
-                .create(Requests::class.java)
+                .create(mh1234Api::class.java)
                 .getBookInfo(bookID)
         getDetailsURI = mCall!!.request().url().toString()
         mCall!!.enqueue(this)
@@ -117,7 +116,7 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
         callback.onLoading()
         mCall = RetrofitManager
                 .get()
-                .create(Requests::class.java)
+                .create(mh1234Api::class.java)
                 .getBookScore(bookID)
         getBookScoreURI = mCall!!.request().url().toString()
         mCall!!.enqueue(this)

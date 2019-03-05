@@ -13,16 +13,16 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import com.qiuchenly.comicparse.BaseImp.AppManager
+import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.AppManager
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import org.jetbrains.anko.find
 
 open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
-    override fun getLayout(): Int {
+    override fun getLayout(viewType: Int): Int {
         return R.layout.nb_comic_details
     }
 
@@ -56,7 +56,7 @@ open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
                     nb_bookName.text = this.BookName
                     nb_bookLasted.text = "更新到 " + this.LastedPage_name
                     val imgSrc = (if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc
-                    CustomUtils.loadImage(imageSrc = imgSrc, mView = nb_bookImage)
+                    CustomUtils.loadImage(item.context, imageSrc = imgSrc, mView = nb_bookImage)
                 }
                 setOnClickListener {
                     val i = getIntentEx(this.context, data)

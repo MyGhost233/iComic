@@ -3,16 +3,21 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.R
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
 import com.qiuchenly.comicparse.Bean.RecommendItemType
+import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Adapter.RecommendRecyclerViewAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.ViewModel.RecommendViewModel
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseFragment
-import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class Recommend : BaseFragment(), RecommentContract.View {
+    override fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?) {
+        mRecommendRecyclerViewAdapter.addBikaData(arrayList_categories!!)
+    }
+
     override fun OnNetFailed() {
         if (MyDetails_Refresh.isRefreshing)
             MyDetails_Refresh.isRefreshing = false
@@ -55,6 +60,7 @@ class Recommend : BaseFragment(), RecommentContract.View {
 
         MyDetails_Refresh.setOnRefreshListener {
             mViewModel?.getIndex()
+            mViewModel?.initBikaApi()
         }
         RV_Details_My.layoutManager = GridLayoutManager(activity, 6).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -67,10 +73,15 @@ class Recommend : BaseFragment(), RecommentContract.View {
         RV_Details_My.adapter = mRecommendRecyclerViewAdapter
         RV_Details_My.addItemDecoration(object : GridSpacingItemDecoration() {
             override fun needFixed(position: Int): Boolean {
-                return mRecommendRecyclerViewAdapter.getItemViewType(position) == RecommendItemType.TYPE.TYPE_GRID
+                return when (mRecommendRecyclerViewAdapter.getItemViewType(position)) {
+                    RecommendItemType.TYPE.TYPE_GRID,
+                    RecommendItemType.TYPE.TYPE_BIKA -> true
+                    else -> false
+                }
             }
         })
         mViewModel?.getIndex()
+        mViewModel?.initBikaApi()
     }
 
     override fun onDestroyView() {

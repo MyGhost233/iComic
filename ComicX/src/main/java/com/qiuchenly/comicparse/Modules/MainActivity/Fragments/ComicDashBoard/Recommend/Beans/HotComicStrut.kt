@@ -14,6 +14,7 @@ open class HotComicStrut : RealmObject() {
     var BookLink: String? = null
     var Author: String? = null
     var Tag = ""
+    var isBika: Boolean? = false
 
     override fun toString(): String {
         return "$BookName|$BookImgSrc|$LastedPage_name|$LastedPage_src|$BookLink"
