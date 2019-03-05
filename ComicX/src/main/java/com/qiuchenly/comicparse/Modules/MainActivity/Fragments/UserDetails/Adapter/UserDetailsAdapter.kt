@@ -13,17 +13,16 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
+import com.qiuchenly.comicparse.BaseImp.BaseVH
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic
-import com.qiuchenly.comicparse.BaseImp.BaseVH
-import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.MVP.OtherTemp.MyDetailsLocalBookListAdapter
-import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
+import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import io.realm.Realm
 import kotlinx.android.synthetic.main.my_main_topview.view.*
 import org.jetbrains.anko.find
 
@@ -66,11 +65,11 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
                 with(holder.itemView) {
                     if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
                     if (bingSrc != "") {
-                        CustomUtils.loadImage(this.context, bingSrc, topview_back, 300, 500)
-                        CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 500)
+                        CustomUtils.loadImage(this.context, bingSrc, topview_back, 10, 50)
+                        CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
                     } else {
-                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, topview_back, 300, 500)
-                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 500)
+                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, topview_back, 10, 50)
+                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 50)
                     }
                     Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
                 }

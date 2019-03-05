@@ -86,7 +86,7 @@ object CustomUtils {
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
         var mBuilder = Glide.with(ctx).load(imageSrc)
         if (BlurRadius > 0) {
-            mBuilder.bitmapTransform(BlurTransformation(ctx, BlurRadius))
+            mBuilder.bitmapTransform(BlurTransformation(ctx, BlurRadius, 20))
         }
         if (loadingImg > 0) {
             mBuilder.placeholder(loadingImg)

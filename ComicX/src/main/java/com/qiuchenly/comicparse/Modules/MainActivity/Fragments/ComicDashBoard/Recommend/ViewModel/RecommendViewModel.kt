@@ -8,10 +8,8 @@ import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
 import com.qiuchenly.comicparse.Http.BikaApi.DefaultCategoryObject
 import com.qiuchenly.comicparse.Http.BikaApi.PreferenceHelper
 import com.qiuchenly.comicparse.Http.BikaApi.RestWakaClient
-import com.qiuchenly.comicparse.Http.BikaApi.requests.SignInBody
 import com.qiuchenly.comicparse.Http.BikaApi.responses.CategoryResponse
 import com.qiuchenly.comicparse.Http.BikaApi.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.BikaApi.responses.SignInResponse
 import com.qiuchenly.comicparse.Http.BikaApi.responses.WakaInitResponse
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
@@ -88,13 +86,16 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
     private var indexUrl = ""
     fun getIndex() {
-        mCall = RetrofitManager.get()
-                .create(Requests::class.java)
-                .getIndex()
-        indexUrl = mCall!!.getUrl()
-        mCall!!.enqueue(this)
+        if (PreferenceHelper.getUseMH1234(Comic.getContext())) {
+            mCall = RetrofitManager.get()
+                    .create(Requests::class.java)
+                    .getIndex()
+            indexUrl = mCall!!.getUrl()
+            mCall!!.enqueue(this)
+        } else {
+            getRandomBika()
+        }
     }
-
 
     fun initBikaApi() {
         RestWakaClient().apiService.wakaInit.enqueue(object : Callback<WakaInitResponse> {
@@ -114,39 +115,31 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 } else {
                     mView?.ShowErrorMsg("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
                 }
+                mView?.final()
             }
 
             override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
                 t.printStackTrace()
+                this.onFailure(call, t)
                 mView?.ShowErrorMsg("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载.")
             }
         })
     }
 
-    val userName = "963084062@qq.com"
-    val pass = "wawyl2016"
+    var userName = ""
+    var pass = ""
     fun getBikaIndex() {
-        RetrofitManager.getBiCaApi()?.signIn(SignInBody(userName, pass))?.enqueue(object : Callback<GeneralResponse<SignInResponse>> {
-            override fun onFailure(call: Call<GeneralResponse<SignInResponse>>, t: Throwable) {
-                //onFailure(null, t)
-                println(t.message)
-            }
-
-            override fun onResponse(call: Call<GeneralResponse<SignInResponse>>, response: Response<GeneralResponse<SignInResponse>>) {
-                if (response.code() == 200) {
-                    PreferenceHelper.setUserLoginEmail(Comic.getContext(), userName)
-                    PreferenceHelper.setUserLoginPassword(Comic.getContext(), pass)
-                    PreferenceHelper.setToken(Comic.getContext(), response.body()?.data?.token)
-                    mView?.ShowErrorMsg("登录Bika获取Token成功!")
-                    if (PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()) != "") {
-                        arrayList_categories = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
-                        mView?.onGetBikaCategorySucc(arrayList_categories)
-                    } else getRandomBika()
-                } else {
-                    mView?.ShowErrorMsg("登录Bika获取Token失败!")
-                }
-            }
-        })
+        userName = PreferenceHelper.getUserLoginEmail(Comic.getContext())
+        pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
+        if (userName == "" || pass == "") {
+            mView?.ShowErrorMsg("请先登录bika账号后再刷新!")
+            mView?.goLoginBika()
+        } else {
+            if (PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()) != "") {
+                arrayList_categories = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
+                mView?.onGetBikaCategorySucc(arrayList_categories)
+            } else getRandomBika()
+        }
     }
 
     var arrayList_categories: ArrayList<CategoryObject>? = null
@@ -156,10 +149,16 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     private val CATEGORY_RANDOM = "CATEGORY_RANDOM"
     private val KEY_LOCAL_API_CATEGORY = "KEY_LOCAL_API_CATEGORY"
     fun getRandomBika() {
+        if (PreferenceHelper.getToken(Comic.getContext()) == "") {
+            if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
+            } else
+                initBikaApi()
+            return
+        }
         RetrofitManager.getBiCaApi()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
                 object : Callback<GeneralResponse<CategoryResponse>> {
                     override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
-
+                        this.onFailure(call, t)
                     }
 
                     override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {

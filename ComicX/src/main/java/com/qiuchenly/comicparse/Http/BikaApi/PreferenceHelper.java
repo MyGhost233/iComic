@@ -139,6 +139,29 @@ public class PreferenceHelper {
         return context.getSharedPreferences(PREFERENCE_NAME, 0).getString(KEY_LOCAL_API_DATA_CATEGORY_LIST, "");
     }
 
+    /**
+     * 设置为false打开认证页
+     *
+     * @param context
+     * @param value
+     * @return
+     */
+    public static boolean setNoLoginBika(Context context, boolean value) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).edit().putBoolean("NO_LOGIN_BIKA", value).commit();
+    }
+
+    public static boolean getNoLoginBika(Context context) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).getBoolean("NO_LOGIN_BIKA", true);
+    }
+
+    public static boolean setUseMH1234(Context context, boolean value) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).edit().putBoolean("USB_MH1234", value).commit();
+    }
+
+    public static boolean getUseMH1234(Context context) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).getBoolean("USB_MH1234", false);
+    }
+
     public static boolean setLocalApiDataCategoryList(Context context, String apiString) {
         return context.getSharedPreferences(PREFERENCE_NAME, 0).edit().putString(KEY_LOCAL_API_DATA_CATEGORY_LIST, apiString).commit();
     }

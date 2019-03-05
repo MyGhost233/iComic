@@ -32,7 +32,7 @@ import kotlin.concurrent.thread
 class MainActivityViewModel(private var mContentView: MainActivityUI) : Callbacks, BaseViewModel<ResponseBody>() {
     override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
         val retStr = response.body()?.string()
-        if (retStr == null) onFailure(call, Throwable("服务器返回数据异常!"))
+        if (retStr == null || retStr.indexOf("mh-date-wraper") == -1) onFailure(call, Throwable("服务器返回数据异常!"))
         else thread {
             val js = Jsoup.parse(retStr)
             val mNode = js.getElementsByClass("mh-date-wraper")

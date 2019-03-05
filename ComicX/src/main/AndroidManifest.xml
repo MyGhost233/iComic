@@ -57,5 +57,12 @@
         <activity
             android:name=".Modules.SearchResult.SearchResult"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Modules.AuthBika.AuthBika"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".Modules.PerferenceActivity.ViewModel.PerferenceActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>
