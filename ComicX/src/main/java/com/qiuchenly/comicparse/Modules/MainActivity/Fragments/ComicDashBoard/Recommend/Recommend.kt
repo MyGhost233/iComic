@@ -21,6 +21,8 @@ class Recommend : BaseFragment(), RecommentContract.View {
     override fun OnNetFailed() {
         if (MyDetails_Refresh.isRefreshing)
             MyDetails_Refresh.isRefreshing = false
+        mRecommendRecyclerViewAdapter.setInitialization()//先清空mh1234的数据,然后加载bika的数据.毕竟加载失败了嘛
+        mViewModel?.getRandomBika()
         ShowErrorMsg("网络似乎有点问题")
     }
 
@@ -34,7 +36,7 @@ class Recommend : BaseFragment(), RecommentContract.View {
             omhk: ArrayList<HotComicStrut>?,
             dlhk: ArrayList<HotComicStrut>?,
             a_Z: ArrayList<HotComicStrut>?) {
-        mRecommendRecyclerViewAdapter.SetDataByIndexPage(mTopViewComicBook,
+        mRecommendRecyclerViewAdapter.setMH1234(mTopViewComicBook,
                 newUpdate,
                 rhmh,
                 ommh,
@@ -43,6 +45,7 @@ class Recommend : BaseFragment(), RecommentContract.View {
                 omhk,
                 dlhk,
                 a_Z)
+        mViewModel?.getRandomBika()
         if (MyDetails_Refresh.isRefreshing)
             MyDetails_Refresh.isRefreshing = false
     }
@@ -60,7 +63,6 @@ class Recommend : BaseFragment(), RecommentContract.View {
 
         MyDetails_Refresh.setOnRefreshListener {
             mViewModel?.getIndex()
-            mViewModel?.initBikaApi()
         }
         RV_Details_My.layoutManager = GridLayoutManager(activity, 6).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -81,7 +83,6 @@ class Recommend : BaseFragment(), RecommentContract.View {
             }
         })
         mViewModel?.getIndex()
-        mViewModel?.initBikaApi()
     }
 
     override fun onDestroyView() {

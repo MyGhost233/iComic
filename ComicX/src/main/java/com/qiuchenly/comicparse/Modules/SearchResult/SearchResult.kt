@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 class SearchResult : BaseApp(), ResultViews, BaseRVAdapter.onLoadMore {
     override fun onLoadMore(isRetry: Boolean) {
+        activityName_secondTitle.text = "搜索结果 (正在加载下一页...)"
         mViewModel?.getCategoryList(titleBika, nextPage)
     }
 
@@ -46,6 +47,11 @@ class SearchResult : BaseApp(), ResultViews, BaseRVAdapter.onLoadMore {
     }
 
     override fun getLayoutID() = R.layout.activity_search_result
+    override fun getUISet(mSet: UISet): UISet {
+        return mSet.apply {
+            this.isSlidr = true
+        }
+    }
 
     var mViewModel: SearchResultViewModel? = SearchResultViewModel(this)
     var titleBika = ""

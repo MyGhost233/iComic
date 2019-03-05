@@ -15,12 +15,22 @@ abstract class BaseRVAdapter<T> : RecyclerView.Adapter<BaseVH>() {
         return BaseVH(LayoutInflater.from(parent.context).inflate(getLayout(viewType), parent, false))
     }
 
+    fun getItemData(position: Int): T {
+        return map!![position]
+    }
+
     private var map: ArrayList<T>? = ArrayList()
 
     fun addData(map: ArrayList<T>) {
         val startPoint = this.map?.size
         this.map?.addAll(map)
         notifyItemRangeInserted(startPoint!!, map.size)
+    }
+
+    fun addData(map: T) {
+        val startPoint = this.map?.size
+        this.map?.add(map)
+        notifyItemRangeInserted(startPoint!!, 1)
     }
 
     fun setData(map: ArrayList<T>) {
