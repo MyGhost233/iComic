@@ -6,34 +6,96 @@ import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.qiuchenly.comicparse.BaseImp.BaseViewHolder
-import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.MVP.OtherTemp.MyDetailsLocalBookListAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.my_main_topview.view.*
 import org.jetbrains.anko.find
 
 @Suppress("ClassName", "FunctionName")
-class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter<BaseViewHolder>() {
+class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapter<String>() {
+    override fun canLoadMore(): Boolean {
+        return false
+    }
 
-    private var mList: List<String> = arrayListOf("", "", "", "", "", "")
+    @SuppressLint("SetTextI18n")
+    override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
+        when (getItemViewType(position)) {
+            TYPE_TOPVIEW -> {
+                Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
 
-    private var TAG = "UserDetailsAdapter"
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        return BaseViewHolder(LayoutInflater.from(parent.context).inflate(when (viewType) {
+                with(item) {
+                    if (bingSrc == "") bingSrc = com.qiuchenly.comicparse.Utils.CustomUtils.getCachedBingUrl()
+                    if (bingSrc != "") {
+                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
+                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, bingSrc, topview_back, 30, 50)
+                    } else {
+                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, com.qiuchenly.comicparse.Http.BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 50)
+                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, com.qiuchenly.comicparse.Http.BaseURL.BASE_IMAGE_DEFAULT, topview_back, 30, 50)
+                    }
+                    android.util.Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
+                }
+            }
+            TYPE_NORMAL -> {
+                with(item) {
+                    val normal_item = find<TextView>(com.qiuchenly.comicparse.R.id.normal_item)
+                    val item_img = find<ImageView>(com.qiuchenly.comicparse.R.id.item_img)
+                    val recently_Size = find<TextView>(com.qiuchenly.comicparse.R.id.recently_Size)
+                    normal_item.text = when (position) {
+                        1 -> {
+                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.local_img)
+                            "本地漫画"
+                        }
+                        2 -> {
+                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.recently_read)
+                            recently_Size.text = "(${com.qiuchenly.comicparse.Core.Comic.getRealm().where(com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently::class.java).findAll().size})"
+                            click_recently_read_item(this)
+                            "最近浏览(本地)"
+                        }
+                        3 -> {
+                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.favorite)
+                            "我的收藏(本地)"
+                        }
+                        4 -> {
+                            item_img.setImageResource(com.qiuchenly.comicparse.R.drawable.ic_down)
+                            this.setOnClickListener {
+                                android.support.v4.content.ContextCompat.startActivity(this.context,
+                                        android.content.Intent(this.context,
+                                                com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic::class.java),
+                                        null)
+                            }
+                            "下载管理"
+                        }
+                        else -> {
+                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.other)
+                            "同上"
+                        }
+                    } + "  "
+                }
+            }
+            TYPE_EXPAND_LIST -> {
+                init_SpecItem(item)
+            }
+        }
+    }
+
+    override fun getViewType(position: Int): Int {
+        if (position > 4) return TYPE_EXPAND_LIST
+        return when (position) {
+            0 -> TYPE_TOPVIEW
+            else -> TYPE_NORMAL
+        }
+    }
+
+    override fun getItemLayout(viewType: Int): Int {
+        return when (viewType) {
             TYPE_TOPVIEW -> {
                 R.layout.my_main_topview
             }
@@ -43,78 +105,21 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
             else -> {
                 R.layout.my_main_normal_item
             }
-        }, parent, false))
-
+        }
     }
 
-    override fun getItemCount(): Int {
-        return mList.size
+    private var mList: ArrayList<String> = arrayListOf("", "", "", "", "", "")
+
+    init {
+        setData(mList)
     }
+
+    private var TAG = "UserDetailsAdapter"
 
     private var bingSrc = ""
     fun loadImg(img: String) {
         bingSrc = img
         notifyItemChanged(0)
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            TYPE_TOPVIEW -> {
-                Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
-                with(holder.itemView) {
-                    if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
-                    if (bingSrc != "") {
-                        CustomUtils.loadImage(this.context, bingSrc, topview_back, 30, 50)
-                        CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
-                    } else {
-                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, topview_back, 30, 50)
-                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 50)
-                    }
-                    Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
-                }
-            }
-            TYPE_NORMAL -> {
-                with(holder.itemView) {
-                    val normal_item = find<TextView>(R.id.normal_item)
-                    val item_img = find<ImageView>(R.id.item_img)
-                    val recently_Size = find<TextView>(R.id.recently_Size)
-                    normal_item.text = when (position) {
-                        1 -> {
-                            item_img.setImageResource(R.mipmap.local_img)
-                            "本地漫画"
-                        }
-                        2 -> {
-                            item_img.setImageResource(R.mipmap.recently_read)
-                            recently_Size.text = "(${Comic.getRealm().where(ComicBookInfo_Recently::class.java).findAll().size})"
-                            click_recently_read_item(this)
-                            "最近浏览(本地)"
-                        }
-                        3 -> {
-                            item_img.setImageResource(R.mipmap.favorite)
-                            "我的收藏(本地)"
-                        }
-                        4 -> {
-                            item_img.setImageResource(R.drawable.ic_down)
-                            this.setOnClickListener {
-                                startActivity(this.context,
-                                        Intent(this.context,
-                                                DownloaderComic::class.java),
-                                        null)
-                            }
-                            "下载管理"
-                        }
-                        else -> {
-                            item_img.setImageResource(R.mipmap.other)
-                            "同上"
-                        }
-                    } + "  "
-                }
-            }
-            TYPE_EXPAND_LIST -> {
-                init_SpecItem(holder.itemView)
-            }
-        }
     }
 
     /**
@@ -166,17 +171,6 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
             rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
             rv_my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
             item_name.text = "我的收藏（本地有${arr.size}本）"
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        //return 1
-        return when (position) {
-            0 -> TYPE_TOPVIEW
-            5 -> {
-                TYPE_EXPAND_LIST
-            }
-            else -> TYPE_NORMAL
         }
     }
 

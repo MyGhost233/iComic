@@ -1,7 +1,7 @@
 package com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter
 
+import android.graphics.drawable.Drawable
 import android.view.View
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
@@ -80,8 +80,8 @@ class ComicImagePageAda(private val loadListenter: LoaderListener) : BaseRecycle
                             item.iv_img_page,
                             R.drawable.loading,
                             object : CustomUtils.ImageListener {
-                                override fun onRet(state: CustomUtils.GlideState, resource: GlideDrawable?, fromMemoryCache: Boolean, model: String?, target: Target<GlideDrawable>?): Boolean {
-                                    if (state == CustomUtils.GlideState.ON_EXCEPTION) {
+                                override fun onRet(state: CustomUtils.GlideState, resource: Drawable?, target: Target<Drawable>?): Boolean {
+                                    if (state == CustomUtils.GlideState.onLoadFailed) {
                                         mRetryLoad.visibility = View.VISIBLE
                                         mRetryLoad.isClickable = true
                                         mRetryLoad.text = "点击重试!"

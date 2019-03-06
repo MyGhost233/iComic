@@ -6,15 +6,19 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
 import com.qiuchenly.comicparse.Core.Comic
@@ -29,26 +33,24 @@ import java.security.NoSuchAlgorithmException
 object CustomUtils {
 
     enum class GlideState {
-        ON_EXCEPTION, ON_RESOURCE_READY
+        onLoadFailed, onResourceReady
     }
 
-    interface ImageListener : RequestListener<String, GlideDrawable> {
+    interface ImageListener : RequestListener<Drawable> {
+
+        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+            return onRet(CustomUtils.GlideState.onLoadFailed, null, target)
+        }
+
+        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            return onRet(CustomUtils.GlideState.onResourceReady, resource, target)
+        }
 
         fun onRet(
                 state: GlideState,
-                resource: GlideDrawable?,
-                fromMemoryCache: Boolean,
-                model: String?,
-                target: Target<GlideDrawable>?
+                resource: Drawable?,
+                target: Target<Drawable>?
         ): Boolean
-
-        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
-            return onRet(CustomUtils.GlideState.ON_EXCEPTION, null, false, model, target)
-        }
-
-        override fun onResourceReady(resource: GlideDrawable, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-            return onRet(CustomUtils.GlideState.ON_RESOURCE_READY, resource, isFromMemoryCache, model, target)
-        }
     }
 
     fun blurs(bitmap: Bitmap, radius: Int): Bitmap {
@@ -84,21 +86,22 @@ object CustomUtils {
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int, Simple: Int = 10) {
-        val mBuilder = Glide.with(ctx).load(imageSrc)
-        if (BlurRadius > 0) {
-            mBuilder.bitmapTransform(BlurTransformation(ctx, BlurRadius, Simple))
-        }
-        if (loadingImg > 0) {
-            mBuilder.placeholder(loadingImg)
-        }
-        if (lister != null) {
-            mBuilder.listener(lister)
-        }
-        mBuilder.diskCacheStrategy(DiskCacheStrategy.ALL)
-        mBuilder.into(mView)
-        mBuilder.crossFade(crossFade)
-        System.gc()
+        val builder = Glide.with(ctx)
+                .load(imageSrc)
+                .apply {
+                    if (BlurRadius > 0)
+                        apply(bitmapTransform(BlurTransformation(BlurRadius, Simple)))
+                    if (loadingImg > 0)
+                        placeholder(loadingImg)
+                    if (lister != null)
+                        listener(lister)
+                    //if (crossFade > 0)
+                        transition(DrawableTransitionOptions.withCrossFade(400))
+                }
+        builder.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mView)
     }
+
 
     /**
      * 快速排序算法

@@ -55,7 +55,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         with(item) {
             when (ViewType) {
                 ON_NORMAL -> {
-                    CustomUtils.loadImage(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, 500)
+                    CustomUtils.loadImage(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, 10)
                     bookName.text = data.title
                     bookAuthor.text = data.author
                     val categorys = data.categories?.joinToString(prefix = "", postfix = ",")

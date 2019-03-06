@@ -2,7 +2,6 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Frag
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
 import com.qiuchenly.comicparse.Core.Comic
@@ -17,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_my_details.*
 class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     override fun onSrcReady(img: String) {
         mUserDetailsAdapter?.loadImg(img)
+        mUserDetailsAdapter?.notifyItemRangeChanged(1, 5)
     }
 
     override fun getLocalListData(): RealmResults<HotComicStrut>? {
@@ -38,7 +38,6 @@ class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     }
 
     private fun initializationInfo() {
-        mUserDetailsAdapter?.notifyDataSetChanged()
         mViewModel.getBingSrc()
     }
 

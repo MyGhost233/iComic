@@ -32,9 +32,9 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
         if (str.indexOf(BaseURL.BASE_URL_BING) == -1)
             str = BaseURL.BASE_URL_BING + str
         if (str != CustomUtils.getCachedBingUrl()) {
-            mView?.onSrcReady(str)
             CustomUtils.setCachedBingUrl(str)
         }
+        mView?.onSrcReady(str)
     }
 
     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
