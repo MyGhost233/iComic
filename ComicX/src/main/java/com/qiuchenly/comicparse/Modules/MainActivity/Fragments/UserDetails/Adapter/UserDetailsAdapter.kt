@@ -13,7 +13,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.qiuchenly.comicparse.BaseImp.BaseVH
+import com.qiuchenly.comicparse.BaseImp.BaseViewHolder
 import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.BaseURL
@@ -27,13 +27,13 @@ import kotlinx.android.synthetic.main.my_main_topview.view.*
 import org.jetbrains.anko.find
 
 @Suppress("ClassName", "FunctionName")
-class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter<BaseVH>() {
+class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private var mList: List<String> = arrayListOf("", "", "", "", "", "")
 
     private var TAG = "UserDetailsAdapter"
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH {
-        return BaseVH(LayoutInflater.from(parent.context).inflate(when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        return BaseViewHolder(LayoutInflater.from(parent.context).inflate(when (viewType) {
             TYPE_TOPVIEW -> {
                 R.layout.my_main_topview
             }
@@ -58,17 +58,17 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: BaseVH, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_TOPVIEW -> {
                 Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
                 with(holder.itemView) {
                     if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
                     if (bingSrc != "") {
-                        CustomUtils.loadImage(this.context, bingSrc, topview_back, 10, 50)
+                        CustomUtils.loadImage(this.context, bingSrc, topview_back, 30, 50)
                         CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
                     } else {
-                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, topview_back, 10, 50)
+                        CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, topview_back, 30, 50)
                         CustomUtils.loadImage(this.context, BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 50)
                     }
                     Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
@@ -127,6 +127,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : RecyclerView.Adapt
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun init_SpecItem(view: View) {
         val rv_my_main_spec_list = view.find<RecyclerView>(R.id.my_main_spec_list)
         val rotateViews = view.find<ImageView>(R.id.rotateViews)

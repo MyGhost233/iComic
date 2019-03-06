@@ -2,7 +2,6 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.R
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper.getMainLooper
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
@@ -31,8 +30,6 @@ class Recommend : BaseFragment(), RecommentContract.View {
         startActivity(Intent(this.context, AuthBika::class.java))
     }
 
-
-
     override fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?) {
         mRecommendRecyclerViewAdapter.addBikaData(arrayList_categories!!)
         final()
@@ -41,7 +38,7 @@ class Recommend : BaseFragment(), RecommentContract.View {
     override fun OnNetFailed() {
         final()
         mRecommendRecyclerViewAdapter.setInitialization()//先清空mh1234的数据,然后加载bika的数据.毕竟加载失败了嘛
-        mViewModel?.getRandomBika()
+        mViewModel?.getBikaAllCategory()
         ShowErrorMsg("网络似乎有点问题")
     }
 
@@ -64,7 +61,7 @@ class Recommend : BaseFragment(), RecommentContract.View {
                 omhk,
                 dlhk,
                 a_Z)
-        mViewModel?.getRandomBika()
+        mViewModel?.getBikaAllCategory()
         final()
     }
 

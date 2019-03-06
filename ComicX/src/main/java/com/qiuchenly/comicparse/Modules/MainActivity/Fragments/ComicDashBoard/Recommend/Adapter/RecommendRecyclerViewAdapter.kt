@@ -14,7 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.qiuchenly.comicparse.BaseImp.AppManager
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
 import com.qiuchenly.comicparse.Http.BikaApi.Tools
@@ -32,8 +32,16 @@ import kotlinx.android.synthetic.main.item_recommend_normal.view.*
 import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
 import org.jetbrains.anko.find
 
-class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRVAdapter<RecommendItemType>() {
-    override fun getLayout(viewType: Int) = when (viewType) {
+class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyclerAdapter<RecommendItemType>() {
+    override fun canLoadMore(): Boolean {
+        return false
+    }
+
+    override fun getViewType(position: Int): Int {
+        return position
+    }
+
+    override fun getItemLayout(viewType: Int) = when (viewType) {
         RecommendItemType.TYPE.TYPE_TOP -> R.layout.item_recommend_topview
         RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
         RecommendItemType.TYPE.TYPE_GRID,
@@ -47,15 +55,15 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRVAda
         return getItemData(position).type
     }
 
-    override fun InitUI(item: View, data: RecommendItemType?, position: Int) {
+    override fun onViewShow(item: View, data: RecommendItemType, position: Int, ViewType: Int) {
         if (position == 0 && mTopViewComicBook != null) {
             if (willUpdate) {
-                mInitUI(item, position, data)
+                mInitUI(item, data)
                 willUpdate = false
             }
             return
         }
-        mInitUI(item, position, data)
+        mInitUI(item, data)
     }
 
     fun getSizeByItem(position: Int): Int {
@@ -217,7 +225,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRVAda
     }
 
     @SuppressLint("SetTextI18n")
-    private fun mInitUI(view: View, position: Int, data: RecommendItemType?) {
+    private fun mInitUI(view: View, data: RecommendItemType?) {
         when (data?.type) {
             RecommendItemType.TYPE.TYPE_A_Z -> {
                 with(view) {
@@ -269,10 +277,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRVAda
                                     Intent(view.context, EveryDayRecommend::class.java),
                                     null)
                         }
-
-
                     }
-
                 }
             }
             RecommendItemType.TYPE.TYPE_TITLE -> {
@@ -308,10 +313,12 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRVAda
                     foo_bookName.text = bikaInfo?.title
                     foo_bookName_upNews.visibility = View.GONE
                     setOnClickListener {
-                        startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            putExtra("title", bikaInfo?.title)
-                            putExtra("isBika", true)
-                        }, null)
+                        if (bikaInfo?.categoryId != "")
+                            startActivity(view.context, Intent(context, SearchResult::class.java).apply {
+                                putExtra("title", bikaInfo?.title)
+                                putExtra("categoryID", bikaInfo?.categoryId)
+                                putExtra("isBika", true)
+                            }, null)
                     }
                 }
             }

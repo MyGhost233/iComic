@@ -3,28 +3,32 @@ package com.qiuchenly.comicparse.Modules.ReadingActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.qiuchenly.comicparse.BaseImp.BaseApp
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_reader_page.*
 
 
-class ReadPage : BaseApp(), ReaderContract.View, BaseRVAdapter.onLoadMore {
+class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListener {
     private var lastPoint = 0
-    private var currentState = ComicImagePageAda.ON_SUCC
+    private var currentState = ON_LOAD_SUCCESS
 
     override fun showMsg(str: String) = ShowErrorMsg(str)
 
     override fun onLoadMore(isRetry: Boolean) {
         if (
-                currentState != ComicImagePageAda.ON_SUCC &&
-                currentState != ComicImagePageAda.ON_LOAD_FAILED
+                currentState != ON_LOAD_SUCCESS &&
+                currentState != ON_LOAD_FAILED
         ) return
         if (nextUrl.isNotEmpty()) {
-            currentState = ComicImagePageAda.ON_LOADING
+            currentState = ON_LOAD_ING
             mViewModel?.getParsePicList(nextUrl)
         } else {
-            currentState = ComicImagePageAda.ON_NOMORE
+            currentState = ON_LOAD_NO_MORE
             mComicImagePageAda?.onNoMore()
             //onFailed("没有更多信息了")
         }
@@ -37,15 +41,15 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRVAdapter.onLoadMore {
     }
 
     override fun onFailed(reasonStr: String) {
-        if (currentState != ComicImagePageAda.ON_LOAD_FAILED) {
+        if (currentState != ON_LOAD_FAILED) {
             ShowErrorMsg(reasonStr)
-            currentState = ComicImagePageAda.ON_LOAD_FAILED
+            currentState = ON_LOAD_FAILED
             mComicImagePageAda?.onLoadNextFailed()
         }
     }
 
     override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String, isOver: Boolean) {
-        currentState = ComicImagePageAda.ON_SUCC
+        currentState = ON_LOAD_SUCCESS
         nextUrl = next
         if (isOver) {
             onLoadMore(true)

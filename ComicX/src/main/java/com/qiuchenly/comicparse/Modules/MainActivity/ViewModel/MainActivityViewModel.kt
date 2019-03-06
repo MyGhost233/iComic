@@ -100,7 +100,7 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
             mDateStatus.text = errInfo
             mDateTemp.text = "?"
             mDatePM.text = errInfo
-            CustomUtils.loadImage(this, "https://p.ssl.qhimg.com/d/inn/b4c1bd75/mini/02.png.webp", mWeatherImg, 50, 500)
+            CustomUtils.loadImage(this, "https://p.ssl.qhimg.com/d/inn/b4c1bd75/mini/02.png.webp", mWeatherImg, 30, 500)
             mUpdateInfo.isRefreshing = false
         }
     }

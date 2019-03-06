@@ -1,6 +1,7 @@
 package com.qiuchenly.comicparse.MVP.OtherTemp
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
@@ -14,15 +15,60 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import com.qiuchenly.comicparse.BaseImp.AppManager
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import org.jetbrains.anko.find
 
-open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
-    override fun getLayout(viewType: Int): Int {
+open class HotComicAda : BaseRecyclerAdapter<HotComicStrut>() {
+    override fun canLoadMore(): Boolean {
+        return false
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onViewShow(item: View, data: HotComicStrut, position: Int, ViewType: Int) {
+        with(item) {
+            val nb_bookName = find<TextView>(R.id.nb_bookName)
+            val nb_bookLasted = find<TextView>(R.id.nb_bookLasted)
+            val nb_bookImage = find<ImageView>(R.id.nb_bookImage)
+            with(data) {
+                nb_bookName.text = this.BookName
+                nb_bookLasted.text = "更新到 " + this.LastedPage_name
+                val imgSrc = (if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc
+                CustomUtils.loadImage(item.context, imageSrc = imgSrc, mView = nb_bookImage)
+            }
+            setOnClickListener {
+                val i = getIntentEx(this.context, data)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(this.context, i, ActivityOptions.makeSceneTransitionAnimation
+                    (AppManager.appm.currentActivity(), this, "srdv")
+                            .toBundle())
+                } else {
+                    startActivity(AppManager.appm.currentActivity(), i, null)
+                }
+            }
+            setOnTouchListener { v, event ->
+                when (event!!.action) {
+                    MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                        pickUpAnimation(v)
+                    }
+
+                    MotionEvent.ACTION_DOWN -> {
+                        pickDownAnimation(v)
+                    }
+                }
+                false
+            }
+        }
+    }
+
+    override fun getViewType(position: Int): Int {
+        return position
+    }
+
+    override fun getItemLayout(viewType: Int): Int {
         return R.layout.nb_comic_details
     }
 
@@ -44,43 +90,5 @@ open class HotComicAda : BaseRVAdapter<HotComicStrut>() {
         return Intent(ctx, ComicDetails::class.java).putExtras(Bundle().apply {
             putString("data", data.toString())
         })
-    }
-
-    override fun InitUI(item: View, data: HotComicStrut?, position: Int) {
-        if (data != null) {
-            with(item) {
-                val nb_bookName = find<TextView>(R.id.nb_bookName)
-                val nb_bookLasted = find<TextView>(R.id.nb_bookLasted)
-                val nb_bookImage = find<ImageView>(R.id.nb_bookImage)
-                with(data) {
-                    nb_bookName.text = this.BookName
-                    nb_bookLasted.text = "更新到 " + this.LastedPage_name
-                    val imgSrc = (if (this.BookImgSrc!!.contains("www.mh1234.com", true)) "" else "https://www.mh1234.com") + this.BookImgSrc
-                    CustomUtils.loadImage(item.context, imageSrc = imgSrc, mView = nb_bookImage)
-                }
-                setOnClickListener {
-                    val i = getIntentEx(this.context, data)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        startActivity(this.context, i, ActivityOptions.makeSceneTransitionAnimation
-                        (AppManager.appm.currentActivity(), this, "srdv")
-                                .toBundle())
-                    } else {
-                        startActivity(AppManager.appm.currentActivity(), i, null)
-                    }
-                }
-                setOnTouchListener { v, event ->
-                    when (event!!.action) {
-                        MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                            pickUpAnimation(v)
-                        }
-
-                        MotionEvent.ACTION_DOWN -> {
-                            pickDownAnimation(v)
-                        }
-                    }
-                    false
-                }
-            }
-        }
     }
 }

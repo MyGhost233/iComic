@@ -93,7 +93,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
             indexUrl = mCall!!.getUrl()
             mCall!!.enqueue(this)
         } else if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
-            getRandomBika()
+            getBikaAllCategory()
         } else {
             mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
             if (PreferenceHelper.getIsFirst(Comic.getContext()))
@@ -112,7 +112,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     PreferenceHelper.setChannel(Comic.getContext(), 2)
                     if (PreferenceHelper.getToken(Comic.getContext()) != "") {
                         mView?.ShowErrorMsg("使用上次登录的Token.")
-                        getRandomBika()
+                        getBikaAllCategory()
                     } else {
                         getBikaIndex()
                     }
@@ -143,7 +143,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
             if (PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()) != "") {
                 arrayList_categories = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
                 mView?.onGetBikaCategorySucc(arrayList_categories)
-            } else getRandomBika()
+            } else getBikaAllCategory()
         }
     }
 
@@ -153,7 +153,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     var arrayList_tags: ArrayList<String>? = null
     private val CATEGORY_RANDOM = "CATEGORY_RANDOM"
     private val KEY_LOCAL_API_CATEGORY = "KEY_LOCAL_API_CATEGORY"
-    fun getRandomBika() {
+    fun getBikaAllCategory() {
         if (PreferenceHelper.getToken(Comic.getContext()) == "") {
             if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             } else
@@ -171,6 +171,11 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
                         override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {
                             arrayList_categories = response.body()?.data?.getCategories()
+                            if (arrayList_categories != null) {
+                                arrayList_categories?.add(0, CategoryObject("lastUpdate", "最近更新", "", arrayList_categories!![0].thumb))
+                                arrayList_categories?.add(0, CategoryObject("randomComic", "随机本子", "", arrayList_categories!![0].thumb))
+                                arrayList_categories?.add(0, CategoryObject("", "哔咔排行", "", arrayList_categories!![0].thumb))
+                            }
                             PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(arrayList_categories))
                             mView?.onGetBikaCategorySucc(arrayList_categories)
                         }

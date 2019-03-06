@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.AppManager
-import com.qiuchenly.comicparse.BaseImp.BaseRVAdapter
+import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.BaseComicInfo
 import com.qiuchenly.comicparse.Bean.ComicBookInfo
 import com.qiuchenly.comicparse.Core.Comic
@@ -16,19 +16,26 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 import org.jetbrains.anko.backgroundColor
 
-class ComicPageAda(private val mOnSaveCB: OnSaveCB?, private val mComicPoint: String?, val view: ComicDetailContract.View?) : BaseRVAdapter<BaseComicInfo>() {
+class ComicPageAda(private val mOnSaveCB: OnSaveCB?, private val mComicPoint: String?, val view: ComicDetailContract.View?) : BaseRecyclerAdapter<BaseComicInfo>() {
+    override fun canLoadMore(): Boolean {
+        return false
+    }
+
+    override fun getViewType(position: Int): Int {
+        return position
+    }
 
     interface OnSaveCB {
         fun pleaseSave2DB()
     }
 
-    override fun getLayout(viewType: Int): Int {
+    override fun getItemLayout(viewType: Int): Int {
         return R.layout.comic_page_item
     }
 
-    override fun InitUI(item: View, data: BaseComicInfo?, position: Int) {
+    override fun onViewShow(item: View, data: BaseComicInfo, position: Int, ViewType: Int) {
         item.backgroundColor = Comic.getContext()!!.resources.getColor(R.color.mDefaultDarkThemeColor)
-        if (data != null && data is ComicBookInfo) {
+        if (data is ComicBookInfo) {
             if (mComicPoint != null && data.title == mComicPoint) {
                 item.last_read.visibility = View.VISIBLE
 //                view.scrollWithPosition(position)
@@ -47,7 +54,7 @@ class ComicPageAda(private val mOnSaveCB: OnSaveCB?, private val mComicPoint: St
                 mOnSaveCB?.pleaseSave2DB()
                 startActivity(AppManager.appm.currentActivity(), bin, null)
             }
-        } else if (data != null && data is ComicEpisodeObject) {
+        } else if (data is ComicEpisodeObject) {
             item.tv_comicPageName.text = data.title
             item.last_read.visibility = View.GONE
             item.setOnClickListener {

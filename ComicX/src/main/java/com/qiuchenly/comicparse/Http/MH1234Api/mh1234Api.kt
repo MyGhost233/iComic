@@ -17,4 +17,7 @@ interface mh1234Api {
 
     @HTTP(method = "GET", path = "/qTcms_Inc/Ajax.asp?action=GetScore&id={bookid}", hasBody = false)
     fun getBookScore(@Path("bookid") bookID: String): Call<ResponseBody>
+
+    @HTTP(method = "GET", path = "{path}", hasBody = false)
+    fun getAllImages(@Path("path") url: String): Call<ResponseBody>
 }

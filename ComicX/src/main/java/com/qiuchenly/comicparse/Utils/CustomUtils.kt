@@ -83,10 +83,10 @@ object CustomUtils {
         loadImage(ctx, imageSrc, mView, 0, loadingImg, lister, 0)
     }
 
-    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
-        var mBuilder = Glide.with(ctx).load(imageSrc)
+    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int, Simple: Int = 10) {
+        val mBuilder = Glide.with(ctx).load(imageSrc)
         if (BlurRadius > 0) {
-            mBuilder.bitmapTransform(BlurTransformation(ctx, BlurRadius, 20))
+            mBuilder.bitmapTransform(BlurTransformation(ctx, BlurRadius, Simple))
         }
         if (loadingImg > 0) {
             mBuilder.placeholder(loadingImg)
@@ -97,7 +97,6 @@ object CustomUtils {
         mBuilder.diskCacheStrategy(DiskCacheStrategy.ALL)
         mBuilder.into(mView)
         mBuilder.crossFade(crossFade)
-        mBuilder = null
         System.gc()
     }
 
@@ -177,10 +176,10 @@ object CustomUtils {
             val instance: MessageDigest = MessageDigest.getInstance("MD5")
             //对字符串加密，返回字节数组
             val digest: ByteArray = instance.digest(text.toByteArray())
-            var sb: StringBuffer = StringBuffer()
+            val sb = StringBuffer()
             for (b in digest) {
                 //获取低八位有效值
-                var i: Int = b.toInt() and 0xff
+                val i: Int = b.toInt() and 0xff
                 //将整数转化为16进制
                 var hexString = Integer.toHexString(i)
                 if (hexString.length < 2) {

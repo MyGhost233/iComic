@@ -9,9 +9,9 @@ import com.qiuchenly.comicparse.Http.BikaApi.PreferenceHelper
 import com.qiuchenly.comicparse.Http.BikaApi.Tools
 import com.qiuchenly.comicparse.Http.BikaApi.responses.DataClass.ComicPageResponse.ComicPagesResponse
 import com.qiuchenly.comicparse.Http.BikaApi.responses.GeneralResponse
+import com.qiuchenly.comicparse.Http.MH1234Api.mh1234Api
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
-import com.qiuchenly.comicparse.Modules.ReadingActivity.Request.ReadingRequest
 import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -59,7 +59,7 @@ class ReadViewModel(private var mView: ReaderContract.View?) : BaseViewModel<Res
     fun getParsePicList(url: String) {
         lastUrl = url
         mCall = RetrofitManager.get()
-                .create(ReadingRequest::class.java)
+                .create(mh1234Api::class.java)
                 .getAllImages(url.replace("%2F", "/"))
         mCall?.enqueue(this)
     }
