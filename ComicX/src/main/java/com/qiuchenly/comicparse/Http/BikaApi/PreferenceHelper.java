@@ -70,9 +70,17 @@ public class PreferenceHelper {
     public static final String KEY_USER_LOGIN_PASSWORD = "KEY_USER_LOGIN_PASSWORD";
     public static final int PREFERENCE_MODE = 0;
     public static final String PREFERENCE_NAME = "PICACOMIC_FREGATA";
+    public static final String IS_FIRST = "IS_FIRST";
 
     public static String getUserLoginEmail(Context context) {
         return context.getSharedPreferences(PREFERENCE_NAME, 0).getString(KEY_USER_LOGIN_EMAIL, "");
+    }
+
+    public static boolean getIsFirst(Context context) {
+        boolean isFirst = context.getSharedPreferences(PREFERENCE_NAME, 0).getBoolean(IS_FIRST, true);
+        if (isFirst)
+            context.getSharedPreferences(PREFERENCE_NAME, 0).edit().putBoolean(IS_FIRST, false).apply();
+        return isFirst;
     }
 
     public static boolean setUserLoginEmail(Context context, String email) {

@@ -16,7 +16,6 @@ class PerferViewModel : BaseViewModel<ResponseBody>() {
         super.cancel()
     }
 
-
     fun setBikaMode(bool: Boolean) {
         PreferenceHelper.setNoLoginBika(Comic.getContext(), !bool)
     }

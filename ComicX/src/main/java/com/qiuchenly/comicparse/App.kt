@@ -1,8 +1,6 @@
 package com.qiuchenly.comicparse
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.RetrofitManager
 import java.io.PrintWriter
@@ -18,8 +16,6 @@ class App : Application() {
 
         Comic.initialization(this)
         RetrofitManager.biCaClient(this)
-
-        sp = this.getSharedPreferences("qcly", Context.MODE_PRIVATE)
         //记录崩溃信息
         val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
@@ -46,10 +42,8 @@ class App : Application() {
 
     companion object {
         private val TAG = "App"
-        internal var sp: SharedPreferences? = null
 
         fun closedApp() {
-            sp = null
             Comic.closed()
             System.exit(0)
         }

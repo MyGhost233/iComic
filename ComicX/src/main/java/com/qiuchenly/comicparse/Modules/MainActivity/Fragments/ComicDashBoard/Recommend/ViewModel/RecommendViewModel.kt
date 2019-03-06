@@ -92,8 +92,13 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     .getIndex()
             indexUrl = mCall!!.getUrl()
             mCall!!.enqueue(this)
-        } else {
+        } else if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getRandomBika()
+        } else {
+            mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
+            if (PreferenceHelper.getIsFirst(Comic.getContext()))
+                mView?.goSelectSource()
+            mView?.final()
         }
     }
 
@@ -155,19 +160,22 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 initBikaApi()
             return
         }
-        RetrofitManager.getBiCaApi()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
-                object : Callback<GeneralResponse<CategoryResponse>> {
-                    override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
-                        this.onFailure(call, t)
-                    }
+        if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
 
-                    override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {
-                        arrayList_categories = response.body()?.data?.getCategories()
-                        PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(arrayList_categories))
-                        mView?.onGetBikaCategorySucc(arrayList_categories)
+        } else
+            RetrofitManager.getBiCaApi()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
+                    object : Callback<GeneralResponse<CategoryResponse>> {
+                        override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
+                            this.onFailure(call, t)
+                        }
+
+                        override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {
+                            arrayList_categories = response.body()?.data?.getCategories()
+                            PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(arrayList_categories))
+                            mView?.onGetBikaCategorySucc(arrayList_categories)
+                        }
                     }
-                }
-        )
+            )
     }
 
     override fun cancel() {

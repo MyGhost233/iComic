@@ -13,10 +13,15 @@ import com.qiuchenly.comicparse.Modules.AuthBika.AuthBika
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Adapter.RecommendRecyclerViewAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.ViewModel.RecommendViewModel
+import com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel.PerferenceActivity
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class Recommend : BaseFragment(), RecommentContract.View {
+    override fun goSelectSource() {
+        startActivity(Intent(this.context, PerferenceActivity::class.java))
+    }
+
     override fun final() {
         if (MyDetails_Refresh.isRefreshing)
             MyDetails_Refresh.isRefreshing = false
@@ -25,6 +30,8 @@ class Recommend : BaseFragment(), RecommentContract.View {
     override fun goLoginBika() {
         startActivity(Intent(this.context, AuthBika::class.java))
     }
+
+
 
     override fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?) {
         mRecommendRecyclerViewAdapter.addBikaData(arrayList_categories!!)

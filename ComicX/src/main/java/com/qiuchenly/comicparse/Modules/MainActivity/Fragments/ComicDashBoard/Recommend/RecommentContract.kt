@@ -11,6 +11,7 @@ interface RecommentContract {
         fun OnNetFailed()
         fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?)
         fun goLoginBika()
+        fun goSelectSource()
         fun final()
     }
 }
