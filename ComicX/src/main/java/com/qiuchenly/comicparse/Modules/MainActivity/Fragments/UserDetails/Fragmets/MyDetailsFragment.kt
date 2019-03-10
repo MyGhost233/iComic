@@ -12,6 +12,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views
 import com.qiuchenly.comicparse.R
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_my_details.*
+import org.jetbrains.anko.support.v4.onRefresh
 
 class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
     override fun onSrcReady(img: String) {
@@ -49,10 +50,9 @@ class MyDetailsFragment : BaseFragment(), MyDetailsContract.View {
         mUserDetailsAdapter = UserDetailsAdapter(this)
         RV_Details_My.layoutManager = LinearLayoutManager(this.context)
         RV_Details_My.adapter = mUserDetailsAdapter
-        MyDetails_Refresh.setOnRefreshListener {
+        MyDetails_Refresh.onRefresh {
             initializationInfo()
             MyDetails_Refresh.isRefreshing = false
         }
-        initializationInfo()
     }
 }
