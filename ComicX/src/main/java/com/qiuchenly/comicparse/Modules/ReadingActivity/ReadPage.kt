@@ -2,12 +2,16 @@ package com.qiuchenly.comicparse.Modules.ReadingActivity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicImagePageAda
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_reader_page.*
@@ -26,7 +30,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         ) return
         if (nextUrl.isNotEmpty()) {
             currentState = ON_LOAD_ING
-            mViewModel?.getParsePicList(nextUrl)
+            //TODO 此处加载下一页
         } else {
             currentState = ON_LOAD_NO_MORE
             mComicImagePageAda?.onNoMore()
@@ -77,23 +81,19 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     var bookID = ""
     var order = 1
 
-    var isBika = false
+    lateinit var mComicInfo: ComicEpisodeObject
     private var mViewModel: ReadViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
-        isBika = intent.getBooleanExtra("isBika", false)
+        val mStr = intent.getStringExtra("comic")
+        val ComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
+        mComicInfo = Gson().fromJson(ComicInfo.mComicString, ComicEpisodeObject::class.java)
         mComicImagePageAda = ComicImagePageAda(this)
-        if (isBika) {
-            bookID = intent.getStringExtra("bookID")
-            order = intent.getIntExtra("order", 1)
+        if (ComicInfo.mComicType == ComicSourcceType.BIKA) {
+            bookID = ComicInfo.mComicID
             mComicImagePageAda?.setBikaMode()
-            mViewModel?.getBikaImage(bookID, order)
-        } else {
-            curr = intent.extras.getInt("curr")
-            val url = intent.extras.getString("link")
-            currUrl = url
-            mViewModel?.getParsePicList(url)
+            mViewModel?.getBikaImage(bookID, 1)
         }
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda

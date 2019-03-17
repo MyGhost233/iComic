@@ -4,31 +4,31 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
-import com.qiuchenly.comicparse.Http.BikaApi.DefaultCategoryObject
-import com.qiuchenly.comicparse.Http.BikaApi.PreferenceHelper
-import com.qiuchenly.comicparse.Http.BikaApi.RestWakaClient
-import com.qiuchenly.comicparse.Http.BikaApi.responses.CategoryResponse
-import com.qiuchenly.comicparse.Http.BikaApi.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.BikaApi.responses.WakaInitResponse
-import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
+import com.qiuchenly.comicparse.Http.Bika.CategoryObject
+import com.qiuchenly.comicparse.Http.Bika.DefaultCategoryObject
+import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.Http.Bika.RestWakaClient
+import com.qiuchenly.comicparse.Http.Bika.responses.CategoryResponse
+import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.Http.Bika.responses.InitialResponse
+import com.qiuchenly.comicparse.Http.Bika.responses.WakaInitResponse
+import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Request.Requests
-import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.getComicInfoByAuto
-import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseA_Z
-import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseByNewUpdate
-import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseOMMH
-import com.qiuchenly.comicparse.Utils.parseComicInfoUtils.parseRHMH
 import okhttp3.ResponseBody
-import org.jsoup.Jsoup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.nio.charset.Charset
 
 
 class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<ResponseBody>() {
+    override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+
+
+    }
+
+    override fun loadFailure(t: Throwable) {
+
+    }
 
     private var mView = Views
 
@@ -36,49 +36,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         mView = null
     }
 
-    override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-        if (call.getUrl() == indexUrl) {
-            val node = Jsoup.parse(String(response.body()?.bytes()!!, Charset.forName("gb2312")))
-            val nodeTop = node.getElementById("hotUpdateList")
-            val mTopViewComicBook = getComicInfoByAuto(nodeTop)
-
-            val nodeUpdate = node.getElementsByClass("newUpdate")
-            val newUpdate = parseByNewUpdate(nodeUpdate[0])
-
-
-            var ComicSort = node.getElementsByAttributeValue("class", "fl topList")
-            //日韩
-            val rhmh = parseRHMH(ComicSort[0])
-
-            //欧美
-            val ommh = parseRHMH(ComicSort[1])
-
-            //大陆
-            val dlmh = parseRHMH(ComicSort[2])
-
-            //日韩好看
-            val rhhk = parseRHMH(node.getElementsByAttributeValue("class", "fr outline h450")[0], true)
-
-            val arr = node.getElementsByAttributeValue("class", "fr outline h450 w812")
-            //欧美好看
-            val omhk = parseOMMH(arr[0])
-
-            //大陆好看
-            val dlhk = parseOMMH(arr[1])
-
-            ComicSort = node.getElementsByClass("ichr_list")
-
-            val A_Z = ArrayList<HotComicStrut>()
-            for (sort in ComicSort) {
-                A_Z.addAll(parseA_Z(sort))
-            }
-            mView?.GetIndexPageSucc(mTopViewComicBook, newUpdate, rhmh, ommh,
-                    dlmh, rhhk, omhk, dlhk, A_Z)
-        }
-    }
-
     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-        super.onFailure(call, t)
         mView?.OnNetFailed()
     }
 
@@ -86,13 +44,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
     private var indexUrl = ""
     fun getIndex() {
-        if (PreferenceHelper.getUseMH1234(Comic.getContext())) {
-            mCall = RetrofitManager.get()
-                    .create(Requests::class.java)
-                    .getIndex()
-            indexUrl = mCall!!.getUrl()
-            mCall!!.enqueue(this)
-        } else if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
+        if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getBikaAllCategory()
         } else {
             mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
@@ -100,6 +52,37 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 mView?.goSelectSource()
             mView?.final()
         }
+    }
+
+    fun getInit() {
+        if (PreferenceHelper.getToken(Comic.getContext()) == "") {
+            getBikaIndex()
+            return
+        }
+        val callInit = BikaApi.getAPI()!!.getInit(PreferenceHelper.getToken(Comic.getContext()))
+        callInit.enqueue(object : Callback<GeneralResponse<InitialResponse>> {
+            override fun onResponse(call: Call<GeneralResponse<InitialResponse>>, response: Response<GeneralResponse<InitialResponse>>) {
+                if (response.code() == 200) {
+                    val imageServer = ((response.body() as GeneralResponse<*>).data as InitialResponse).imageServer
+                    if (imageServer != null && imageServer.isNotEmpty()) {
+                        PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
+
+                        mView?.ShowErrorMsg("使用上次登录的Token.")
+                        getBikaAllCategory()
+
+                    }
+                } else {
+                    mView?.OnNetFailed()
+                    mView?.ShowErrorMsg("bika 图片提供服务器炸了.")
+                }
+            }
+
+            override fun onFailure(call: Call<GeneralResponse<InitialResponse>>, t: Throwable) {
+                t.printStackTrace()
+                mView?.OnNetFailed()
+                mView?.ShowErrorMsg("网络有点问题.")
+            }
+        })
     }
 
     fun initBikaApi() {
@@ -110,14 +93,9 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     mView?.ShowErrorMsg("初始化bika CDN缓存成功.")
                     PreferenceHelper.setGirl(Comic.getContext(), true)
                     PreferenceHelper.setChannel(Comic.getContext(), 2)
-                    if (PreferenceHelper.getToken(Comic.getContext()) != "") {
-                        mView?.ShowErrorMsg("使用上次登录的Token.")
-                        getBikaAllCategory()
-                    } else {
-                        getBikaIndex()
-                    }
-
+                    getInit()
                 } else {
+                    mView?.OnNetFailed()
                     mView?.ShowErrorMsg("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
                 }
                 mView?.final()
@@ -125,7 +103,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
             override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
                 t.printStackTrace()
-                this.onFailure(call, t)
+                mView?.OnNetFailed()
                 mView?.ShowErrorMsg("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载.")
             }
         })
@@ -151,8 +129,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     var arrayList_defaultCategories: ArrayList<DefaultCategoryObject>? = null
     var arrayList_keywords: ArrayList<String>? = null
     var arrayList_tags: ArrayList<String>? = null
-    private val CATEGORY_RANDOM = "CATEGORY_RANDOM"
-    private val KEY_LOCAL_API_CATEGORY = "KEY_LOCAL_API_CATEGORY"
     fun getBikaAllCategory() {
         if (PreferenceHelper.getToken(Comic.getContext()) == "") {
             if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
@@ -163,10 +139,11 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
 
         } else
-            RetrofitManager.getBiCaApi()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
+            BikaApi.getAPI()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
                     object : Callback<GeneralResponse<CategoryResponse>> {
                         override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
-                            this.onFailure(call, t)
+                            //this.onFailure(call, t)
+                            mView?.OnNetFailed()
                         }
 
                         override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {

@@ -5,10 +5,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
+import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek.RecentlyByWeekFragment
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_recently_read.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*

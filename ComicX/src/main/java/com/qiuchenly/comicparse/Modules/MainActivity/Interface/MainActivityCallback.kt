@@ -2,7 +2,6 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Interface
 
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
-import android.telecom.Call
 import android.view.View
 
 class MainActivityCallback(mCallback: Callbacks) : ViewPager.OnPageChangeListener, DrawerLayout.DrawerListener {

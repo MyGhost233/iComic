@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".Modules.ComicDetailsActivity.ComicDetails"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -62,7 +63,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.PerferenceActivity.ViewModel.PerferenceActivity"
+            android:name=".Modules.PerferenceActivity.PerferenceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>

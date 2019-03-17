@@ -3,9 +3,9 @@ package com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.qiuchenly.comicparse.BaseImp.BaseFragment
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.MyRecentlyBookListAdapter
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseFragment
 import kotlinx.android.synthetic.main.recently_week.*
 
 class RecentlyByWeekFragment : BaseFragment(), WeekContract.View {

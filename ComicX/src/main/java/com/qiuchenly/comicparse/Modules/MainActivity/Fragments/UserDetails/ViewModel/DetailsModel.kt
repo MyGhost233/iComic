@@ -1,32 +1,33 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel
 
-import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Http.RetrofitManager
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Http.BaseURL
+import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import io.realm.Realm
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
 class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<ResponseBody>() {
-
-    fun getBingSrc() {
-        mCall = RetrofitManager.getCusUrl(BaseUrl = BaseURL.BASE_URL_BING)
-                .create(Requests::class.java)
-                .getImageSrc()
-        mCall!!.enqueue(this)
+    override fun loadFailure(t: Throwable) {
 
     }
 
-    override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+    fun getBingSrc() {
+        mCall = BikaApi.getCusUrl(BaseUrl = BaseURL.BASE_URL_BING)
+                .create(Requests::class.java)
+                .getImageSrc()
+        mCall!!.enqueue(this)
+    }
+
+    override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
         var str = response.body()?.string()
         if (str != null) {
-            str = CustomUtils.subStr(str, "rel=\"preload\" href=\"", "\" as=\"image\"")
+            //fix imageSrc link error
+            str = CustomUtils.subStr(str, "rel=\"preload\" href=\"", "&amp;")
         }
         if (str == null) str = ""
         if (str.indexOf(BaseURL.BASE_URL_BING) == -1)
@@ -45,7 +46,4 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
 
     private var mCall: Call<ResponseBody>? = null
 
-    fun getLocalBookByDB(): ArrayList<HotComicStrut>? {
-        return ArrayList(Comic.getRealm().where(HotComicStrut::class.java).findAll())
-    }
 }

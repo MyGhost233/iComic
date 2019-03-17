@@ -13,6 +13,16 @@ public class GenerateSignature {
     String signature;
     String url;
 
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[(bytes.length * 2)];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 255;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[(j * 2) + 1] = hexArray[v & 15];
+        }
+        return new String(hexChars);
+    }
+
     public synchronized String getSignature(String raw, String hashKey) {
         byte[] key = new byte[0];
         String hkey = "F94612C9E58AA1B4BFF6DE29D77E6";
@@ -37,15 +47,5 @@ public class GenerateSignature {
             e.printStackTrace();
             return result;
         }
-    }
-
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[(bytes.length * 2)];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 255;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[(j * 2) + 1] = hexArray[v & 15];
-        }
-        return new String(hexChars);
     }
 }

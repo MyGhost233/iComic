@@ -3,9 +3,9 @@ package com.qiuchenly.comicparse.Modules.SplashActivity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.BaseImp.BaseApp
 
 class SplashActivity : BaseApp() {
 

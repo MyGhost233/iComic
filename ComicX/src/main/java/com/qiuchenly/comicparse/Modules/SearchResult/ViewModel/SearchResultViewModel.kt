@@ -2,11 +2,11 @@ package com.qiuchenly.comicparse.Modules.SearchResult.ViewModel
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BikaApi.PreferenceHelper
-import com.qiuchenly.comicparse.Http.BikaApi.responses.ComicRandomListResponse
-import com.qiuchenly.comicparse.Http.BikaApi.responses.DataClass.ComicListResponse.ComicListResponse
-import com.qiuchenly.comicparse.Http.BikaApi.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.RetrofitManager
+import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.Http.Bika.responses.ComicRandomListResponse
+import com.qiuchenly.comicparse.Http.Bika.responses.DataClass.ComicListResponse.ComicListResponse
+import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Modules.SearchResult.View.ResultViews
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,6 +14,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SearchResultViewModel(view: ResultViews) : BaseViewModel<ResponseBody>() {
+    override fun loadFailure(t: Throwable) {
+
+    }
 
     var mView: ResultViews? = view
 
@@ -22,16 +25,12 @@ class SearchResultViewModel(view: ResultViews) : BaseViewModel<ResponseBody>() {
         mView = null
     }
 
-    override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+    override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
-    }
-
-    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-        super.onFailure(call, t)
     }
 
     fun getCategoryComic(categoryName: String?, page: Int) {
-        RetrofitManager.getBiCaApi()?.getComicList(PreferenceHelper.getToken(Comic.getContext()), page, categoryName, null, null, null, "ua", null, null)?.enqueue(object : Callback<GeneralResponse<ComicListResponse>> {
+        BikaApi.getAPI()?.getComicList(PreferenceHelper.getToken(Comic.getContext()), page, categoryName, null, null, null, "ua", null, null)?.enqueue(object : Callback<GeneralResponse<ComicListResponse>> {
             override fun onFailure(call: Call<GeneralResponse<ComicListResponse>>, t: Throwable) {
                 mView?.ShowErrorMsg("加载漫画信息时出错!")
                 mView?.getComicList_Bika(null)
@@ -44,7 +43,7 @@ class SearchResultViewModel(view: ResultViews) : BaseViewModel<ResponseBody>() {
     }
 
     fun getRandomComic() {
-        RetrofitManager.getBiCaApi()?.getRandomComicList(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(object : Callback<GeneralResponse<ComicRandomListResponse>> {
+        BikaApi.getAPI()?.getRandomComicList(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(object : Callback<GeneralResponse<ComicRandomListResponse>> {
             override fun onFailure(call: Call<GeneralResponse<ComicRandomListResponse>>, t: Throwable) {
                 mView?.ShowErrorMsg("加载漫画信息时出错!")
                 mView?.getRandomComicList_Bika(null)

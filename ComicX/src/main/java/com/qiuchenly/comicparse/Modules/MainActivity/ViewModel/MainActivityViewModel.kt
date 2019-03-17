@@ -8,7 +8,7 @@ import android.widget.ImageView
 import com.qiuchenly.comicparse.App
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Http.RetrofitManager
+import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.MVP.OtherTemp.BaseFragmentPagerStatement
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.Modules.MainActivity.Adapter.FunctionAdapter
@@ -30,9 +30,23 @@ import retrofit2.Response
 import kotlin.concurrent.thread
 
 class MainActivityViewModel(private var mContentView: MainActivityUI) : Callbacks, BaseViewModel<ResponseBody>() {
-    override fun GetSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+
+    override fun loadFailure(t: Throwable) {
+        mContentView.ShowErrorMsg("天气信息加载失败!")
+        val errInfo = "网络异常."
+        with(mContentView) {
+            mDateInfo.text = "请下拉刷新"
+            mDateStatus.text = errInfo
+            mDateTemp.text = "?"
+            mDatePM.text = errInfo
+            CustomUtils.loadImage(this, "https://p.ssl.qhimg.com/d/inn/b4c1bd75/mini/02.png.webp", mWeatherImg, 30, 500)
+            mUpdateInfo.isRefreshing = false
+        }
+    }
+
+    override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
         val retStr = response.body()?.string()
-        if (retStr == null || retStr.indexOf("mh-date-wraper") == -1) onFailure(call, Throwable("服务器返回数据异常!"))
+        if (retStr == null || retStr.indexOf("mh-date-wraper") == -1) loadFailure(Throwable("服务器返回数据异常!"))
         else thread {
             val js = Jsoup.parse(retStr)
             val mNode = js.getElementsByClass("mh-date-wraper")
@@ -91,19 +105,6 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
     }
 
     private var TAG = "MainActivityViewModel"
-    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-        super.onFailure(call, t)
-        mContentView.ShowErrorMsg("天气信息加载失败!")
-        val errInfo = "网络异常."
-        with(mContentView) {
-            mDateInfo.text = "请下拉刷新"
-            mDateStatus.text = errInfo
-            mDateTemp.text = "?"
-            mDatePM.text = errInfo
-            CustomUtils.loadImage(this, "https://p.ssl.qhimg.com/d/inn/b4c1bd75/mini/02.png.webp", mWeatherImg, 30, 500)
-            mUpdateInfo.isRefreshing = false
-        }
-    }
 
     private var mSwitchList = ArrayList<ImageView>()
     /**
@@ -151,7 +152,7 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
                     supportFragmentManager,
                     mFragments)
             vp_main_pages.adapter = statement
-            vp_main_pages.offscreenPageLimit = 4
+            vp_main_pages.offscreenPageLimit = 1
             vp_main_pages.addOnPageChangeListener(mCallback)
 
             closedApp.setOnClickListener {
@@ -161,23 +162,17 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
                 dl_navigation_main.openDrawer(Gravity.START)
                 isOpenDrawable = true
             }
+            switch_my_website_more.tag = 0
+            switch_my_list.setOnClickListener(this)
+            switch_my_website_more.tag = 1
+            switch_my_website_more.setOnClickListener(this)
+            switch_my_website_more.tag = 2
+            switch_my_website_addition.setOnClickListener(this)
 
-            switch_my_list.setOnClickListener {
-                vp_main_pages.currentItem = 0
-            }
-
-            switch_my_website_more.setOnClickListener {
-                vp_main_pages.currentItem = 1
-            }
-
-            switch_my_website_addition.setOnClickListener {
-                vp_main_pages.currentItem = 2
-            }
             mFuncAdapter = FunctionAdapter()
             mFuncAdapter?.setData(getFunctionList())
             mFunMenu.layoutManager = LinearLayoutManager(this)
             mFunMenu.adapter = mFuncAdapter
-
         }
     }
 
@@ -188,7 +183,7 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
             functionType = FunctionType.Types.MAIN
         })
         arrs.add(FunctionType().apply {
-            title = "应用设置"
+            title = "软件设置"
             functionType = FunctionType.Types.SETTING
         })
         return arrs
@@ -248,7 +243,7 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
     }
 
     fun getWeathers() {
-        mCall = RetrofitManager
+        mCall = BikaApi
                 .getCusUrl(BaseUrl = BaseURL.BASE_WEATHER)
                 .create(WeatherRequest::class.java)
                 .getWeatherInfo()

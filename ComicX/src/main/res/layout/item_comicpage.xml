@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/loading"
-        android:adjustViewBounds="true"
         android:scaleType="fitXY" />
 
     <Button

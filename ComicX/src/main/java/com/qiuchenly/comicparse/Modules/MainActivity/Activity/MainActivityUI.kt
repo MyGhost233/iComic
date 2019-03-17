@@ -2,13 +2,22 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Activity
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Modules.MainActivity.ViewModel.MainActivityViewModel
 import com.qiuchenly.comicparse.R
+import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*
 
 
-class MainActivityUI : BaseApp() {
+class MainActivityUI : BaseApp(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        if (v != null) {
+            if (v.id == R.id.switch_my_list || v.id == R.id.switch_my_website_more || v.id == R.id.switch_my_website_addition)
+                vp_main_pages.currentItem = v.tag as Int
+        }
+    }
+
     override fun getLayoutID(): Int {
         return R.layout.activity_switch_main
     }
@@ -24,6 +33,7 @@ class MainActivityUI : BaseApp() {
         mViewModel?.getWeathers()
         //TODO 此处启动后台下载服务暂时不写
         //startService(Intent(this, DownloadService::class.java))
+
     }
 
     override fun onDestroy() {

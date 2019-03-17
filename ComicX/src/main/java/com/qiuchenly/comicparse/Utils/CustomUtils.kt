@@ -22,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
 import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.R
 import jp.wasabeef.glide.transformations.BlurTransformation
 import net.qiujuer.genius.blur.StackBlur
@@ -66,7 +67,7 @@ object CustomUtils {
     }
 
     fun loadImage(ctx: Context, imageSrc: String?, mView: ImageView) {
-        loadImage(ctx, imageSrc!!, mView, 0)
+        loadImage(ctx, imageSrc!!, mView, -1)
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int) {
@@ -78,11 +79,21 @@ object CustomUtils {
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?, crossFade: Int) {
-        loadImage(ctx, imageSrc, mView, 0, loadingImg, lister, crossFade)
+        loadImage(ctx, imageSrc, mView, -1, loadingImg, lister, crossFade)
     }
 
-    fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?) {
-        loadImage(ctx, imageSrc, mView, 0, loadingImg, lister, 0)
+    fun loadImageEx(ctx: Context, imageSrc: String, mView: ImageView, loadingImg: Int, lister: ImageListener?) {
+        val builder = Glide.with(ctx)
+                .load(imageSrc)
+                .apply {
+                    if (loadingImg > 0)
+                        placeholder(loadingImg)
+                    if (lister != null)
+                        listener(lister)
+                    transition(DrawableTransitionOptions.withCrossFade(400))
+                }
+        builder.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(mView)
     }
 
     fun loadImage(ctx: Context, imageSrc: String, mView: ImageView, BlurRadius: Int, loadingImg: Int, lister: ImageListener?, crossFade: Int, Simple: Int = 10) {
@@ -96,7 +107,7 @@ object CustomUtils {
                     if (lister != null)
                         listener(lister)
                     //if (crossFade > 0)
-                        transition(DrawableTransitionOptions.withCrossFade(400))
+                    transition(DrawableTransitionOptions.withCrossFade(400))
                 }
         builder.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mView)
@@ -233,7 +244,7 @@ object CustomUtils {
 
     fun getCachedBingUrl(): String {
         val single = Comic.getRealm().where(ApplicationSetting::class.java).findFirst()
-        return if (single?.mBingCachedUrl != null) single.mBingCachedUrl!! else ""
+        return if (single?.mBingCachedUrl != null) single.mBingCachedUrl!! else BaseURL.BASE_IMAGE_DEFAULT
     }
 
 }

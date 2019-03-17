@@ -1,28 +1,25 @@
 package com.qiuchenly.comicparse.BaseImp
 
-import android.util.Log
-import retrofit2.Callback
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 abstract class BaseViewModel<T> : Callback<T> {
 
     private var TAG = "BaseViewModel"
     override fun onFailure(call: Call<T>, t: Throwable) {
-        whenFailure(t)
+        loadFailure(t)
     }
 
-    fun whenFailure(t: Throwable) {
-        Log.d(TAG, "whenFailure:" + t.message)
-    }
+    abstract fun loadFailure(t: Throwable)
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
         if (!cancel)
-            GetSuccess(call, response)
+            loadSuccess(call, response)
     }
 
     private var cancel = false
-    abstract fun GetSuccess(call: Call<T>, response: Response<T>)
+    abstract fun loadSuccess(call: Call<T>, response: Response<T>)
     open fun cancel() {
         cancel = true
     }

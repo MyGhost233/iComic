@@ -7,10 +7,15 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
-import com.qiuchenly.comicparse.Http.BikaApi.ComicListObject
-import com.qiuchenly.comicparse.Http.BikaApi.responses.DataClass.ComicListResponse.ComicListData
+import com.qiuchenly.comicparse.Bean.ComicCategoryBean
+import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Http.Bika.CategoryObject
+import com.qiuchenly.comicparse.Http.Bika.ComicListObject
+import com.qiuchenly.comicparse.Http.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.Modules.SearchResult.Adapter.SearchResultAdapter
 import com.qiuchenly.comicparse.Modules.SearchResult.View.ResultViews
 import com.qiuchenly.comicparse.Modules.SearchResult.ViewModel.SearchResultViewModel
@@ -32,8 +37,8 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
 
     override fun onLoadMore(isRetry: Boolean) {
         activityName_secondTitle.text = "搜索结果 (正在加载下一页...)"
-        if (titleBika == "随机本子") mViewModel?.getRandomComic()
-        else mViewModel?.getCategoryComic(titleBika, nextPage)
+        if (mCategory.mCategoryName == "随机本子") mViewModel?.getRandomComic()
+        else mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
     }
 
     override fun showMsg(str: String) {
@@ -45,7 +50,7 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         if (data != null) {
             //修复数据显示问题
             val page = if (data.page > data.pages) data.pages else data.page
-            activityName.text = if (titleBika == null) titleBika_Base else titleBika
+            activityName.text = if (mCategory.mCategoryName == null) titleBika_Base else mCategory.mCategoryName
             activityName_secondTitle.visibility = View.VISIBLE
             activityName_secondTitle.text = "搜索结果 (共找到${data.total}部,当前第$page/${data.pages}页)"
             if (nextPage > data.pages) {
@@ -67,27 +72,30 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
     }
 
     var mViewModel: SearchResultViewModel? = SearchResultViewModel(this)
-    var titleBika: String? = ""
     var mAdapter: SearchResultAdapter? = null
     var nextPage = 1
-    var categoryID = ""
+    lateinit var mCategoryObj: CategoryObject
+    lateinit var mCategory: ComicCategoryBean
     private var titleBika_Base = ""
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val str = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        mCategory = Gson().fromJson(str, ComicCategoryBean::class.java)
+        mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
+
         mAdapter = SearchResultAdapter(this)
         magic_indicator.visibility = View.GONE
-        titleBika = intent.getStringExtra("title")
-        categoryID = intent.getStringExtra("categoryID")
-        if (categoryID == "lastUpdate") {
-            titleBika_Base = "最近更新"
-            titleBika = null
-        }
-        val isBika = intent.getBooleanExtra("isBika", false)
-        if (isBika) {
-            if (titleBika == "随机本子") mViewModel?.getRandomComic()
-            else mViewModel?.getCategoryComic(titleBika, nextPage)
-            activityName.text = titleBika
+        if (mCategory.mComicType == ComicSourcceType.BIKA) {
+            if (mCategoryObj.categoryId == "lastUpdate") {
+                titleBika_Base = "最近更新"
+            }
+            if (mCategory.mCategoryName == "随机本子") {
+                mViewModel?.getRandomComic()
+            } else {
+                mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+            }
+            activityName.text = mCategory.mCategoryName
         }
         back_up.setOnClickListener {
             finish()

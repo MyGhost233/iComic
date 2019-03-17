@@ -21,6 +21,9 @@ public class CurrDownItemFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    // TODO: Customize parameter initialization
+    @SuppressWarnings("unused")
+    private static CurrDownItemFragment mCurrDownItemFragment = null;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListTaskInfo mListener;
@@ -31,10 +34,6 @@ public class CurrDownItemFragment extends Fragment {
      */
     public CurrDownItemFragment() {
     }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    private static CurrDownItemFragment mCurrDownItemFragment = null;
 
     public static CurrDownItemFragment newInstance(int columnCount) {
         if (mCurrDownItemFragment == null) {
@@ -80,7 +79,7 @@ public class CurrDownItemFragment extends Fragment {
             mListener = (OnListTaskInfo) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " 必须实现这个接口: "+OnListTaskInfo.class.getName());
+                    + " 必须实现这个接口: " + OnListTaskInfo.class.getName());
         }
     }
 

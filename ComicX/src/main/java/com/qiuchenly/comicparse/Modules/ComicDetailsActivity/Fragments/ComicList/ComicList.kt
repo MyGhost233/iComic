@@ -5,34 +5,30 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
-import com.qiuchenly.comicparse.Bean.BaseComicInfo
-import com.qiuchenly.comicparse.Bean.ComicBookInfo
-import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BikaApi.ComicEpisodeObject
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicListViewModel
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.R
 import org.jetbrains.anko.find
 
 class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
     override fun SetBikaPages(docs: java.util.ArrayList<ComicEpisodeObject>?, id: String) {
         comicPageAdas?.setBaseID(id)
-        comicPageAdas?.setData(docs as ArrayList<BaseComicInfo>)
+        comicPageAdas?.setData(docs as ArrayList<ComicEpisodeObject>)
         comicPageAdas?.sort(1)
     }
 
     companion object {
         private var mComicList: ComicList? = null
-        fun getInstance(hotComicStrut: HotComicStrut,
-                        mView: ComicDetailContract.View,
-                        mCallback: ComicPageAda.OnSaveCB): ComicList {
+        fun getInstance(mComicInfoBean: ComicInfoBean,
+                        mView: ComicDetailContract.View): ComicList {
             if (mComicList == null) mComicList = ComicList().apply {
-                this.mComicInfo = hotComicStrut
+                this.mComicInfo = mComicInfoBean
                 this.mView = mView
-                this.mCallback = mCallback
             }
             return mComicList!!
         }
@@ -44,19 +40,11 @@ class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
 
     var mViewModel: ComicListViewModel? = null
     private var comicPageAdas: ComicPageAda? = null
-    private var mComicInfo: HotComicStrut? = null
+    private var mComicInfo: ComicInfoBean? = null
     private var mView: ComicDetailContract.View? = null
-    private var mCallback: ComicPageAda.OnSaveCB? = null
     private lateinit var rv_comicPage: RecyclerView
     override fun getLayoutID() = R.layout.fragment_comic_list
 
-    fun initializationData(retPageList: ArrayList<ComicBookInfo>) {
-//        retPageList.reverse()
-        comicPageAdas?.setData(retPageList as ArrayList<BaseComicInfo>)
-        comicPageAdas?.sort(1)
-    }
-
-    val realm = Comic.getRealm()
     fun scrollWithPosition(position: Int) {
         rv_comicPage.scrollToPosition(position)
         val manager = rv_comicPage.layoutManager as LinearLayoutManager
@@ -66,18 +54,19 @@ class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel = ComicListViewModel(this)
-        val point = if (mComicInfo?.isBika == true) mComicInfo?.BookLink else realm.where(ComicBookInfo_Recently::class.java)
-                .equalTo("BookName", mComicInfo?.BookName)
-                .findFirst()
-                ?.BookName_read_point
-        comicPageAdas = ComicPageAda(mCallback, point, mView)
+        comicPageAdas = ComicPageAda(mView)
         rv_comicPage = view.find(R.id.rv_comicPage)
         rv_comicPage.layoutManager = LinearLayoutManager(context)
         rv_comicPage.adapter = comicPageAdas
-        if (mComicInfo?.isBika == true) {
-            mViewModel?.getComicList(point!!)
-        }
 
+        when (mComicInfo?.mComicType) {
+            ComicSourcceType.BIKA -> {
+                mViewModel?.getComicList(mComicInfo!!.mComicID)
+            }
+            else -> {
+
+            }
+        }
     }
 
     override fun onDestroyView() {

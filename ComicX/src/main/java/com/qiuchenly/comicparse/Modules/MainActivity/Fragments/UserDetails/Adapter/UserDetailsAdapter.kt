@@ -11,11 +11,13 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
-import com.qiuchenly.comicparse.MVP.OtherTemp.MyDetailsLocalBookListAdapter
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Views.MyDetailsContract
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.my_main_topview.view.*
 import org.jetbrains.anko.find
 
@@ -27,24 +29,23 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
 
     @SuppressLint("SetTextI18n")
     override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
-        when (getItemViewType(position)) {
-            TYPE_TOPVIEW -> {
-                Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
-
-                with(item) {
-                    if (bingSrc == "") bingSrc = com.qiuchenly.comicparse.Utils.CustomUtils.getCachedBingUrl()
-                    if (bingSrc != "") {
-                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
-                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, bingSrc, topview_back, 30, 50)
-                    } else {
-                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, com.qiuchenly.comicparse.Http.BaseURL.BASE_IMAGE_DEFAULT, top_userImg, 0, 50)
-                        com.qiuchenly.comicparse.Utils.CustomUtils.loadImage(this.context, com.qiuchenly.comicparse.Http.BaseURL.BASE_IMAGE_DEFAULT, topview_back, 30, 50)
-                    }
-                    android.util.Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
+        with(item) {
+            when (getItemViewType(position)) {
+                TYPE_TOPVIEW -> {
+                    Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
+                    if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
+                    Glide.with(item.context)
+                            .load(bingSrc)
+                            .preload()
+                    CustomUtils.loadImage(this.context, bingSrc, top_userImg, 0, 50)
+                    CustomUtils.loadImage(this.context, bingSrc, topview_back, 30, 50)
+                    Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
                 }
-            }
-            TYPE_NORMAL -> {
-                with(item) {
+                TYPE_EXPAND_LIST -> {
+                    init_SpecItem(item)
+                }
+                else -> {
+                    //else select TYPE_NORMAL to resolve
                     val normal_item = find<TextView>(com.qiuchenly.comicparse.R.id.normal_item)
                     val item_img = find<ImageView>(com.qiuchenly.comicparse.R.id.item_img)
                     val recently_Size = find<TextView>(com.qiuchenly.comicparse.R.id.recently_Size)
@@ -55,7 +56,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                         }
                         2 -> {
                             item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.recently_read)
-                            recently_Size.text = "(${com.qiuchenly.comicparse.Core.Comic.getRealm().where(com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently::class.java).findAll().size})"
+//                            recently_Size.text = "(${com.qiuchenly.comicparse.Core.Comic.getRealm().where(com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently::class.java).findAll().size})"
                             click_recently_read_item(this)
                             "最近浏览(本地)"
                         }
@@ -66,10 +67,10 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                         4 -> {
                             item_img.setImageResource(com.qiuchenly.comicparse.R.drawable.ic_down)
                             this.setOnClickListener {
-                                android.support.v4.content.ContextCompat.startActivity(this.context,
-                                        android.content.Intent(this.context,
-                                                com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic::class.java),
-                                        null)
+                                /* android.support.v4.content.ContextCompat.startActivity(this.context,
+                                         android.content.Intent(this.context,
+                                                 com.qiuchenly.comicparse.MVP.OtherTemp.DownloaderComic::class.java),
+                                         null)*/
                             }
                             "下载管理"
                         }
@@ -79,9 +80,6 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                         }
                     } + "  "
                 }
-            }
-            TYPE_EXPAND_LIST -> {
-                init_SpecItem(item)
             }
         }
     }
@@ -138,7 +136,6 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
         val rotateViews = view.find<ImageView>(R.id.rotateViews)
         val item_name = view.find<TextView>(R.id.item_name)
 
-        val mMyDetailsLocalBookList = MyDetailsLocalBookListAdapter()
         with(view) {
             setOnClickListener {
                 var form = 0f
@@ -154,7 +151,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                 })
             }
 
-            val arr = ArrayList(mview.getLocalListData())
+            val arr = ArrayList<ComicInfoBean>()
             if (arr.size > 0) {
                 if (rv_my_main_spec_list.visibility == View.GONE) {
                     rv_my_main_spec_list.visibility = View.VISIBLE
@@ -165,10 +162,8 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
             } else {
                 rv_my_main_spec_list.visibility = View.GONE
             }
-            mMyDetailsLocalBookList.setData(arr)
-            mMyDetailsLocalBookList.sort(1)
             rv_my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
-            rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
+            //rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
             rv_my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
             item_name.text = "我的收藏（本地有${arr.size}本）"
         }

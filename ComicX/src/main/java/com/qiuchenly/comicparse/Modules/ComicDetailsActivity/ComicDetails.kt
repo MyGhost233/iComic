@@ -1,8 +1,10 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity
 
-import android.annotation.SuppressLint
 import android.app.Service
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ComponentName
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.support.design.widget.CoordinatorLayout
@@ -12,31 +14,26 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
-import com.qiuchenly.comicparse.Bean.ComicBookInfo
-import com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently
-import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.BasicInfo
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList.ComicList
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDetailsViewModel
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
-import com.qiuchenly.comicparse.Utils.CustomUtils
-import com.qiuchenly.comicparse.Utils.CustomUtils.subStr
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 import org.jetbrains.anko.find
 
 class ComicDetails :
         BaseApp(),
-        ComicDetailContract.View,
-        ComicPageAda.OnSaveCB {
+        ComicDetailContract.View {
     override fun getLayoutID(): Int? {
         return R.layout.activity_comicdetails
     }
@@ -59,7 +56,7 @@ class ComicDetails :
     override fun onLoadFailed() {
         onFailed.isClickable = true
         onFailed.setOnClickListener {
-            mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
+
         }
         onFailed.visibility = View.VISIBLE
         onSuccess.visibility = View.INVISIBLE
@@ -67,7 +64,6 @@ class ComicDetails :
     }
 
     //==============================   变量声明   ===================================================
-    private var comicInfo = HotComicStrut()
     private lateinit var mBookAuthor: TextView
     private lateinit var mBookCategory: TextView
     private lateinit var mRealImageNoBlur: ImageView
@@ -79,6 +75,8 @@ class ComicDetails :
     private lateinit var onFailed: TextView
     private lateinit var onLoading: ProgressBar
 
+    private lateinit var mComicInfo: ComicListObject
+
     //==============================   代码整理 界面预设  =============================================
 
     override fun getUISet(mSet: BaseApp.UISet): UISet {
@@ -88,50 +86,6 @@ class ComicDetails :
     }
 
     //==============================   网络数据回调  =================================================
-    override fun pleaseSave2DB() {
-        mViewModel.Save2DB(ComicBookInfo_Recently().apply {
-            this.BookName = comicInfo.BookName
-            this.BookImgSrc = comicInfo.BookImgSrc
-            this.BookLink = comicInfo.BookLink
-            this.Author = comicInfo.Author
-        })
-    }
-
-    override fun getScoreSucc(rate: String) {
-        //tv_bookScore.text = "网友评分：$rate"
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun GetInfoSucc(author: String,
-                             updateTime: String,
-                             hits: String,
-                             category: String,
-                             introduction: String,
-                             retPageList: ArrayList<ComicBookInfo>) {
-        comicInfo.Author = author
-        mBookAuthor.text = author
-        mBookCategory.text = category
-        tv_bookname_title_small.text = author
-        //tv_bookUpdateTime.text = "最后更新：$updateTime"
-        //tv_bookIntroduction.text = "简介：" + introduction.trim()
-        tv_bookname_title.text = comicInfo.BookName
-        tv_bookname.text = comicInfo.BookName
-        val point = Comic.getRealm().where(ComicBookInfo_Recently::class.java)
-                .equalTo("BookName", comicInfo.BookName)
-                .findFirst()
-                ?.BookName_read_point
-        if (point != null) {
-            retPageList.forEachIndexed { index, comicBookInfo ->
-                if (comicBookInfo.title == point)
-                    scrollWithPosition(retPageList.size - index - 1)
-            }
-        }
-
-        ComicList.getInstance().initializationData(retPageList)
-        BasicInfo.getInstance().setDefaultIndexUrl(retPageList[retPageList.size - 1].link!!)
-        CustomUtils.loadImage(this, comicInfo.BookImgSrc!!, mRealImageNoBlur, 0, null, 500)
-        CustomUtils.loadImage(this, comicInfo.BookImgSrc!!, comicDetails_img, 30, 500)
-    }
 
     override fun onProgressChanged() {
 
@@ -144,7 +98,6 @@ class ComicDetails :
     //==============================   常规系统初始化方法  ============================================
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ComicDetailsPresenter(this)
 
         mViewModel = ComicDetailsViewModel(this)
         mBookAuthor = find(R.id.tv_bookAuthor)
@@ -167,39 +120,26 @@ class ComicDetails :
 
         mBookDownload.setOnClickListener {
             //this will call with download service
-            if (mBinder != null) {
+            /*if (mBinder != null) {
                 if (mBinder!!.hasBookInList(comicInfo)) {
                     ShowErrorMsg("已在下载列表中")
                 } else {
                     mBinder?.download(comicInfo, this)
                 }
-            }
+            }*/
         }
 
-        bindService(
+        /*bindService(
                 Intent(this, DownloadService::class.java),
                 mServerConnect,
-                Context.BIND_AUTO_CREATE)
+                Context.BIND_AUTO_CREATE)*/
 
-        val isBika = intent.getBooleanExtra("isBika", false)
-        if (isBika) {
-            comicInfo = HotComicStrut().apply {
-                this.BookLink = intent.getStringExtra("comicID")
-                this.isBika = true
-            }
-        } else {
-            val string = (intent.extras["data"] as String).split("|")
-            comicInfo = HotComicStrut().apply {
-                BookName = string[0]
-                BookImgSrc = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[1]
-                LastedPage_name = string[2]
-                LastedPage_src = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[3]
-                BookLink = (if (string[1].indexOf(BaseURL.BASE_URL) == -1) BaseURL.BASE_URL else "") + string[4]
-            }
-        }
+        val mComicStr = intent.getStringExtra("comic")
+        val baseInfo = Gson().fromJson(mComicStr, ComicInfoBean::class.java)
+        mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
         val mFragmentsList = arrayListOf(
-                RecentlyPagerAdapter.Struct("漫画信息", BasicInfo.getInstance(this, comicInfo)),
-                RecentlyPagerAdapter.Struct("漫画章节", ComicList.getInstance(comicInfo, this, this))
+                RecentlyPagerAdapter.Struct("漫画信息", BasicInfo.getInstance(this, baseInfo)),
+                RecentlyPagerAdapter.Struct("漫画章节", ComicList.getInstance(baseInfo, this))
         )
         /* if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
              add_local_list_iv.setImageResource(R.drawable.ic_remove_black_24dp)
@@ -218,7 +158,7 @@ class ComicDetails :
         back_up.setOnClickListener { finish() }
         mShareButton.setOnClickListener {
             val mClipboardManager = getSystemService(Service.CLIPBOARD_SERVICE) as ClipboardManager
-            mClipboardManager.primaryClip = ClipData.newPlainText("text", comicInfo.BookLink)
+            mClipboardManager.primaryClip = ClipData.newPlainText("text", "漫画信息")
             ShowErrorMsg("已复制漫画网站网页地址!")
         }
 
@@ -245,10 +185,10 @@ class ComicDetails :
                 }
             }
         })
-        if (!isBika)
-            mViewModel.getBookDetails(subStr(comicInfo.BookLink!!, "comic/", ".html"))
-        else{
-            onLoadSuccess()
+        when (baseInfo.mComicType) {
+            ComicSourcceType.BIKA -> {
+                onLoadSuccess()
+            }
         }
     }
 
@@ -256,7 +196,7 @@ class ComicDetails :
 
     override fun onDestroy() {
         super.onDestroy()
-        unbindService(mServerConnect)
+//        unbindService(mServerConnect)
         mBinder = null
         mViewModel.cancel()
     }

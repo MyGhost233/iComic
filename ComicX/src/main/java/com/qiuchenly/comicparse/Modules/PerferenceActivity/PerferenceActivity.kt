@@ -1,7 +1,8 @@
-package com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel
+package com.qiuchenly.comicparse.Modules.PerferenceActivity
 
 import android.os.Bundle
 import com.qiuchenly.comicparse.BaseImp.BaseApp
+import com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel.PerferViewModel
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_prefer.*
 
@@ -26,17 +27,11 @@ class PerferenceActivity : BaseApp() {
         useBikaSource.setOnClickListener {
             mViewModel?.setBikaMode(useBikaSource.isChecked)
         }
-
-        useMH1234.setOnClickListener {
-            mViewModel?.setMH1234(useMH1234.isChecked)
-        }
         back_up.setOnClickListener { finish() }
         initAllSetting()
     }
 
     fun initAllSetting() {
         useBikaSource.isChecked = !mViewModel?.getBikaMode()!!
-        useMH1234.isChecked = mViewModel?.getMH1234()!!
     }
-
 }

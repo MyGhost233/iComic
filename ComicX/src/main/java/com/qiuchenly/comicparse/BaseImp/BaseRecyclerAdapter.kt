@@ -56,7 +56,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
     }
 
 
-
     fun setState(mState: Int) {
         this.mState = mState
         //if (this.mState != RecyclerState.ON_LOAD_ING && this.mState != RecyclerState.ON_LOAD_SUCCESS)

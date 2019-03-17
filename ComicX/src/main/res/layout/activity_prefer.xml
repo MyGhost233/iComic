@@ -79,16 +79,8 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/mDefaultListTextColor"
                 android:text="使用Bika数据源"
+                android:checked="true"
                 android:textColor="@color/mDefaultListTextColor" />
-
-            <CheckBox
-                android:id="@+id/useMH1234"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/mDefaultListTextColor"
-                android:text="使用[mh1234]数据源"
-                android:textColor="@color/mDefaultListTextColor" />
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

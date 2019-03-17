@@ -12,6 +12,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.qiuchenly.comicparse.R;
 
 import java.util.Arrays;
@@ -77,6 +78,7 @@ public class WaveSideBarView extends View {
     public WaveSideBarView(Context context) {
         this(context, null);
     }
+
     public WaveSideBarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }

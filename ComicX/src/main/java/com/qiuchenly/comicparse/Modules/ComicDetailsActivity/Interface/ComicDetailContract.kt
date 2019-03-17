@@ -2,14 +2,11 @@ package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface
 
 import com.qiuchenly.comicparse.BaseImp.BaseLoadingView
 import com.qiuchenly.comicparse.BaseImp.BaseView
-import com.qiuchenly.comicparse.Bean.ComicBookInfo
-import com.qiuchenly.comicparse.Http.BikaApi.ComicDetailObject
-import com.qiuchenly.comicparse.Http.BikaApi.ComicEpisodeObject
+import com.qiuchenly.comicparse.Http.Bika.ComicDetailObject
+import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
 
 interface ComicDetailContract {
     interface View : BaseView, BaseLoadingView {
-        fun GetInfoSucc(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
-        fun getScoreSucc(rate: String)
         fun scrollWithPosition(position: Int)
         fun onProgressChanged()
     }
@@ -24,7 +21,7 @@ interface ComicDetailContract {
     }
 
     interface GetPageInfo : BaseGetCallBack {
-        fun onSuccessGetInfo(author: String, updateTime: String, hits: String, category: String, introduction: String, retPageList: ArrayList<ComicBookInfo>)
+
     }
 
     interface Comiclist {

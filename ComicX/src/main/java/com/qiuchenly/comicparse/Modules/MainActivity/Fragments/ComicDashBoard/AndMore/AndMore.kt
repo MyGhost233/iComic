@@ -2,8 +2,8 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.A
 
 import android.os.Bundle
 import android.view.View
-import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.R
 
 class AndMore : BaseFragment() {
     override fun getLayoutID(): Int {

@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface Requests {
     @GET("/")
-    fun getImageSrc():Call<ResponseBody>
+    fun getImageSrc(): Call<ResponseBody>
 }

@@ -7,12 +7,11 @@ import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseFragment
 import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
 import com.qiuchenly.comicparse.Bean.RecommendItemType
-import com.qiuchenly.comicparse.Http.BikaApi.CategoryObject
+import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Modules.AuthBika.AuthBika
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Adapter.RecommendRecyclerViewAdapter
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Beans.HotComicStrut
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.ViewModel.RecommendViewModel
-import com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel.PerferenceActivity
+import com.qiuchenly.comicparse.Modules.PerferenceActivity.PerferenceActivity
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
@@ -37,32 +36,8 @@ class Recommend : BaseFragment(), RecommentContract.View {
 
     override fun OnNetFailed() {
         final()
-        mRecommendRecyclerViewAdapter.setInitialization()//先清空mh1234的数据,然后加载bika的数据.毕竟加载失败了嘛
-        mViewModel?.getBikaAllCategory()
+        mViewModel?.initBikaApi()
         ShowErrorMsg("网络似乎有点问题")
-    }
-
-    override fun GetIndexPageSucc(
-            mTopViewComicBook: ArrayList<HotComicStrut>?,
-            newUpdate: ArrayList<HotComicStrut>?,
-            rhmh: ArrayList<HotComicStrut>?,
-            ommh: ArrayList<HotComicStrut>?,
-            dlmh: ArrayList<HotComicStrut>?,
-            rhhk: ArrayList<HotComicStrut>?,
-            omhk: ArrayList<HotComicStrut>?,
-            dlhk: ArrayList<HotComicStrut>?,
-            a_Z: ArrayList<HotComicStrut>?) {
-        mRecommendRecyclerViewAdapter.setMH1234(mTopViewComicBook,
-                newUpdate,
-                rhmh,
-                ommh,
-                dlmh,
-                rhhk,
-                omhk,
-                dlhk,
-                a_Z)
-        mViewModel?.getBikaAllCategory()
-        final()
     }
 
     override fun getLayoutID(): Int {
@@ -91,7 +66,6 @@ class Recommend : BaseFragment(), RecommentContract.View {
         RV_Details_My.addItemDecoration(object : GridSpacingItemDecoration() {
             override fun needFixed(position: Int): Boolean {
                 return when (mRecommendRecyclerViewAdapter.getItemViewType(position)) {
-                    RecommendItemType.TYPE.TYPE_GRID,
                     RecommendItemType.TYPE.TYPE_BIKA -> true
                     else -> false
                 }
@@ -103,6 +77,5 @@ class Recommend : BaseFragment(), RecommentContract.View {
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel?.destory()
-        mRecommendRecyclerViewAdapter.StopHandle()
     }
 }

@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.Modules.SearchResult.Adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
+import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
@@ -10,8 +11,10 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
-import com.qiuchenly.comicparse.Http.BikaApi.ComicListObject
-import com.qiuchenly.comicparse.Http.BikaApi.Tools
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Http.Bika.ComicListObject
+import com.qiuchenly.comicparse.Http.Bika.Tools
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
@@ -19,8 +22,6 @@ import kotlinx.android.synthetic.main.comic_local_list.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerAdapter<ComicListObject>() {
-
-
     override fun getViewType(position: Int): Int {
         return when (position) {
             getRealSize() -> {
@@ -55,7 +56,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         with(item) {
             when (ViewType) {
                 ON_NORMAL -> {
-                    CustomUtils.loadImage(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, 10)
+                    CustomUtils.loadImage(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, null, 10)
                     bookName.text = data.title
                     bookAuthor.text = data.author
                     val categorys = data.categories?.joinToString(prefix = "", postfix = ",")
@@ -63,8 +64,12 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                     updateTo.visibility = View.INVISIBLE
                     setOnClickListener {
                         context.startActivity(Intent(context, ComicDetails::class.java).apply {
-                            putExtra("comicID", data.comicId)
-                            putExtra("isBika", true)
+                            //TODO 需要优化此处
+                            putExtra("comic", Gson().toJson(ComicInfoBean().apply {
+                                this.mComicType = ComicSourcceType.BIKA
+                                mComicID = data.comicId
+                                this.mComicString = Gson().toJson(data)
+                            }))
                         })
                     }
                 }

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Modules.MainActivity.ViewModel.MainActivityViewModel
-import com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel.PerferenceActivity
+import com.qiuchenly.comicparse.Modules.PerferenceActivity.PerferenceActivity
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.item_function.view.*
 

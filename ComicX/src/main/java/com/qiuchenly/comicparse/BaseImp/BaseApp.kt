@@ -1,17 +1,17 @@
 package com.qiuchenly.comicparse.BaseImp
 
 import android.app.Activity
+import android.content.ComponentCallbacks2
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import com.qiuchenly.comicparse.App
+import com.bumptech.glide.Glide
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
-import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -77,6 +77,20 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
         super.onDestroy()
 //        AppManager.appm.finishActivity(this)
         EventBus.getDefault().unregister(this)//订阅者事件绑定
+    }
+
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            Glide.get(this).clearMemory()
+        }
+        Glide.get(this).trimMemory(level)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        Glide.get(this).clearMemory()
     }
 
     override fun ShowErrorMsg(msg: String) {

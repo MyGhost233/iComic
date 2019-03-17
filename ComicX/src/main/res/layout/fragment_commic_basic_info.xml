@@ -14,25 +14,17 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/addFav"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/addFav"
             android:layout_weight="1"
             android:text="加入收藏" />
 
         <Button
+            android:id="@+id/startRead"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/startRead"
             android:layout_weight="1"
             android:text="开始阅读" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:id="@+id/test"
-            android:layout_weight="1"
-            android:visibility="gone"
-            android:text="deleteAll"
-            android:layout_height="match_parent" />
     </LinearLayout>
 </RelativeLayout>

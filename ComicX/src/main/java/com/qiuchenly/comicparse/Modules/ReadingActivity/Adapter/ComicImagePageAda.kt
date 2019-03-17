@@ -74,7 +74,7 @@ class ComicImagePageAda(private val loadListenter: LoaderListener) : BaseRecycle
                         mRetryLoad.text = "加载中..."
                         mRetryLoad.isClickable = false
                     }
-                    CustomUtils.loadImage(
+                    CustomUtils.loadImageEx(
                             item.context,
                             data,
                             item.iv_img_page,
