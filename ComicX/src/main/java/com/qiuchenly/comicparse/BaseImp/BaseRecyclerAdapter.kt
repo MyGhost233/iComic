@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 
 abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
@@ -15,6 +16,29 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         const val ON_LOAD_NO_MORE = 0x04
         const val ON_LOAD_MORE = 0x05
         const val ON_NORMAL = 0x06
+    }
+
+    override fun onViewRecycled(holder: BaseViewHolder) {
+        super.onViewRecycled(holder)
+        if (mFixMem) {
+            Glide.with(holder.itemView)
+                    .clear(holder.itemView)
+            System.gc()
+        }
+    }
+
+    private var mFixMem = false
+    fun setFixMemory() {
+        mFixMem = true
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (mFixMem) {
+            Glide.with(holder.itemView)
+                    .clear(holder.itemView)
+            System.gc()
+        }
     }
 
     /**

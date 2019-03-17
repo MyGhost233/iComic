@@ -90,10 +90,16 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
             if (mCategoryObj.categoryId == "lastUpdate") {
                 titleBika_Base = "最近更新"
             }
-            if (mCategory.mCategoryName == "随机本子") {
-                mViewModel?.getRandomComic()
-            } else {
-                mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+            when (mCategory.mCategoryName) {
+                "随机本子" -> {
+                    mViewModel?.getRandomComic()
+                }
+                "最近更新" -> {
+                    mViewModel?.getCategoryComic(null, nextPage)
+                }
+                else -> {
+                    mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+                }
             }
             activityName.text = mCategory.mCategoryName
         }

@@ -22,6 +22,10 @@ import kotlinx.android.synthetic.main.comic_local_list.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerAdapter<ComicListObject>() {
+    init {
+        setFixMemory()
+    }
+
     override fun getViewType(position: Int): Int {
         return when (position) {
             getRealSize() -> {
@@ -56,7 +60,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         with(item) {
             when (ViewType) {
                 ON_NORMAL -> {
-                    CustomUtils.loadImage(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, null, 10)
+                    CustomUtils.loadImageEx(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, null)
                     bookName.text = data.title
                     bookAuthor.text = data.author
                     val categorys = data.categories?.joinToString(prefix = "", postfix = ",")

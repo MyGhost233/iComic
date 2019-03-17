@@ -92,7 +92,8 @@ object CustomUtils {
                         listener(lister)
                     transition(DrawableTransitionOptions.withCrossFade(400))
                 }
-        builder.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+        builder.skipMemoryCache(true)
+        builder.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mView)
     }
 

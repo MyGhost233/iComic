@@ -12,7 +12,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
-import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicImagePageAda
+import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicReadingAdapter
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_reader_page.*
 
@@ -75,7 +75,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     }
 
     private var currUrl = ""
-    private var mComicImagePageAda: ComicImagePageAda? = null
+    private var mComicImagePageAda: ComicReadingAdapter? = null
     private var curr = -1
 
     var bookID = ""
@@ -89,7 +89,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         val mStr = intent.getStringExtra("comic")
         val ComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
         mComicInfo = Gson().fromJson(ComicInfo.mComicString, ComicEpisodeObject::class.java)
-        mComicImagePageAda = ComicImagePageAda(this)
+        mComicImagePageAda = ComicReadingAdapter(this)
         if (ComicInfo.mComicType == ComicSourcceType.BIKA) {
             bookID = ComicInfo.mComicID
             mComicImagePageAda?.setBikaMode()

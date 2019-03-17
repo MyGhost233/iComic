@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 
-class ComicImagePageAda(private val loadListenter: LoaderListener) : BaseRecyclerAdapter<String>() {
+class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyclerAdapter<String>() {
     override fun getViewType(position: Int): Int {
         return if (position == getRealSize()) ON_LOAD_MORE else ON_NORMAL
     }
@@ -30,12 +30,16 @@ class ComicImagePageAda(private val loadListenter: LoaderListener) : BaseRecycle
     }
 
     enum class DataSourceType {
-        BIKA, MH1234
+        BIKA
     }
 
-    var currentSource = DataSourceType.MH1234
+    var currentSource = DataSourceType.BIKA
     fun setBikaMode() {
         currentSource = DataSourceType.BIKA
+    }
+
+    init {
+        setFixMemory()
     }
 
     override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
