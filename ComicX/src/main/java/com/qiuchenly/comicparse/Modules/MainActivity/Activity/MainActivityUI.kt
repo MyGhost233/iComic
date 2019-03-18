@@ -13,7 +13,11 @@ import kotlinx.android.synthetic.main.navigation_main.*
 class MainActivityUI : BaseApp(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v != null) {
-            if (v.id == R.id.switch_my_list || v.id == R.id.switch_my_website_more || v.id == R.id.switch_my_website_addition)
+            if (v.id == R.id.switch_my_list
+                    || v.id == R.id.switch_my_website_more
+                    || v.id == R.id.switch_my_website_addition
+                    && v.tag != null
+            )
                 vp_main_pages.currentItem = v.tag as Int
         }
     }

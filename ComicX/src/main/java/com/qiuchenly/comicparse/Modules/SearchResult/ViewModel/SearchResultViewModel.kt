@@ -42,6 +42,19 @@ class SearchResultViewModel(view: ResultViews) : BaseViewModel<ResponseBody>() {
         })
     }
 
+    fun searchComic(key: String?, page: Int) {
+        BikaApi.getAPI()?.getComicListWithSearchKey(PreferenceHelper.getToken(Comic.getContext()), page, key)?.enqueue(object : Callback<GeneralResponse<ComicListResponse>> {
+            override fun onFailure(call: Call<GeneralResponse<ComicListResponse>>, t: Throwable) {
+                mView?.ShowErrorMsg("搜索漫画信息时出错!")
+                mView?.getComicList_Bika(null)
+            }
+
+            override fun onResponse(call: Call<GeneralResponse<ComicListResponse>>, response: Response<GeneralResponse<ComicListResponse>>) {
+                mView?.getComicList_Bika(response.body()?.data?.comics)
+            }
+        })
+    }
+
     fun getRandomComic() {
         BikaApi.getAPI()?.getRandomComicList(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(object : Callback<GeneralResponse<ComicRandomListResponse>> {
             override fun onFailure(call: Call<GeneralResponse<ComicRandomListResponse>>, t: Throwable) {

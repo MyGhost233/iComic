@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.ViewModel
 
+import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
@@ -18,6 +19,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Interface.Callbacks
 import com.qiuchenly.comicparse.Modules.MainActivity.Interface.MainActivityCallback
 import com.qiuchenly.comicparse.Modules.MainActivity.Model.TempInfo
 import com.qiuchenly.comicparse.Modules.MainActivity.Request.WeatherRequest
+import com.qiuchenly.comicparse.Modules.SearchActivity.SearchActivity
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*
@@ -161,17 +163,21 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
                 dl_navigation_main.openDrawer(Gravity.START)
                 isOpenDrawable = true
             }
-            switch_my_website_more.tag = 0
+            switch_my_list.tag = 0
             switch_my_list.setOnClickListener(this)
             switch_my_website_more.tag = 1
             switch_my_website_more.setOnClickListener(this)
-            switch_my_website_more.tag = 2
+            switch_my_website_addition.tag = 2
             switch_my_website_addition.setOnClickListener(this)
 
             mFuncAdapter = FunctionAdapter()
             mFuncAdapter?.setData(getFunctionList())
             mFunMenu.layoutManager = LinearLayoutManager(this)
             mFunMenu.adapter = mFuncAdapter
+
+            btn_menu_search.setOnClickListener {
+                startActivity(Intent(this, SearchActivity::class.java))
+            }
         }
     }
 

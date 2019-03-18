@@ -49,7 +49,7 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         if (data != null) {
             //修复数据显示问题
             val page = if (data.page > data.pages) data.pages else data.page
-            activityName.text = mCategory.mCategoryName
+            activityName.text = mCategory.mCategoryName + if (mCategory.mCategoryName == "搜索关键词") " - " + mCategory.mData else ""
             activityName_secondTitle.visibility = View.VISIBLE
             activityName_secondTitle.text = "搜索结果 (共找到${data.total}部,当前第$page/${data.pages}页)"
             if (nextPage > data.pages) {
@@ -78,6 +78,9 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
             "最近更新" -> {
                 mViewModel?.getCategoryComic(null, nextPage)
             }
+            "搜索关键词" -> {
+                mViewModel?.searchComic(mCategory.mData, nextPage)
+            }
             else -> {
                 mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
             }
@@ -94,7 +97,8 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         super.onCreate(savedInstanceState)
         val str = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
         mCategory = Gson().fromJson(str, ComicCategoryBean::class.java)
-        mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
+        if (mCategory.mCategoryName != "搜索关键词")
+            mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
 
         mAdapter = SearchResultAdapter(this)
         magic_indicator.visibility = View.GONE

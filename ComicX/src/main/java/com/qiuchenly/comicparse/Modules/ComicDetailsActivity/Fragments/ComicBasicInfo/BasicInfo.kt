@@ -1,9 +1,6 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo
 
-import android.content.Intent
-import android.support.v4.content.ContextCompat
 import android.view.View
-import com.qiuchenly.comicparse.BaseImp.AppManager
 import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.Comic
@@ -11,8 +8,6 @@ import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicDetailObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicInfoViewModel
-import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
-import com.qiuchenly.comicparse.Modules.ReadingActivity.ReadPage
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_commic_basic_info.*
 import kotlinx.android.synthetic.main.item_comic_infomation.*
@@ -27,6 +22,7 @@ class BasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
 
             }
         }
+        /*
         addFav.setOnClickListener {
             val book = null
 //                    realm.where(HotComicStrut::class.java)
@@ -40,9 +36,9 @@ class BasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
                 ShowErrorMsg("已加入本地图书列表！")
                 addFav.text = "取消收藏"
             } else {
-                /*realm.executeTransaction {
+                *//*realm.executeTransaction {
                     book.deleteFromRealm()
-                }*/
+                }*//*
                 ShowErrorMsg("移除成功！")
                 addFav.text = "加入收藏"
             }
@@ -54,6 +50,7 @@ class BasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
             var link = lastReadPageUrl
             ContextCompat.startActivity(AppManager.appm.currentActivity(), bin, null)
         }
+        */
 
         //TODO 此处需要修复以供开始阅读按钮使用
         val book = null
