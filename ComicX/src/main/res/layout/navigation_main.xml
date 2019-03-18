@@ -117,8 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_above="@id/mAppMenu"
-                    android:layout_below="@id/mInfoBar"
-                    tools:listitem="@android:layout/simple_list_item_activated_1">
+                    android:layout_below="@id/mInfoBar">
 
                 </android.support.v7.widget.RecyclerView>
 

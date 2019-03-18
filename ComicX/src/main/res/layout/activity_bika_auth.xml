@@ -30,7 +30,6 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-
                         <FrameLayout
                             android:id="@+id/back_up"
                             android:layout_width="?attr/actionBarSize"
@@ -105,8 +104,8 @@
 
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:visibility="invisible" />
 </RelativeLayout>

@@ -1,8 +1,7 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard
 
-import android.os.Bundle
 import android.view.View
-import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.FriendShip.FriendShip
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Recommend
@@ -11,7 +10,7 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_comic_board_view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
-class ComicBoardFragment : BaseFragment() {
+class ComicBoardFragment : BaseLazyFragment() {
 
     override fun getLayoutID(): Int {
         return R.layout.fragment_comic_board_view
@@ -19,8 +18,7 @@ class ComicBoardFragment : BaseFragment() {
 
     private var mAdapter: RecentlyPagerAdapter? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewFirstSelect(mPagerView: View) {
         val list = arrayListOf(
                 RecentlyPagerAdapter.Struct("推荐", Recommend()),
                 RecentlyPagerAdapter.Struct("更多", FriendShip())

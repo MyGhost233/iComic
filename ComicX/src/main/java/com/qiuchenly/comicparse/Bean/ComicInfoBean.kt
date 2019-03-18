@@ -6,5 +6,7 @@ class ComicInfoBean {
     var mComicType: ComicSourcceType = ComicSourcceType.BIKA
     var mComicName = "漫画名称"
     var mComicID = "1234567890"
+    var mComicImg = ""
     var mComicString = ""
+    var mComicTAG = ""
 }

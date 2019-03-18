@@ -1,7 +1,9 @@
 package com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
@@ -16,6 +18,8 @@ import kotlinx.android.synthetic.main.loadmore_view.view.*
 
 
 class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyclerAdapter<String>() {
+
+    private var TAG = "ComicReadingAdapter"
     override fun getViewType(position: Int): Int {
         return if (position == getRealSize()) ON_LOAD_MORE else ON_NORMAL
     }
@@ -103,6 +107,12 @@ class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyc
                                     return false
                                 }
                             })
+                    if (position + 1 < getRealSize()) {
+                        Log.d(TAG, "onViewShow: Size = " + getRealSize() + ", position = " + (position + 1))
+                        Glide.with(this.context)
+                                .load(getIndexData(position + 1))
+                                .preload()
+                    }
                 }
             }
         }

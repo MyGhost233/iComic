@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
 import kotlinx.android.synthetic.main.item_rankview.view.*
 import kotlinx.android.synthetic.main.item_recommend_normal.view.*
 import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
-import org.jetbrains.anko.find
 
 class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyclerAdapter<RecommendItemType>() {
     override fun canLoadMore(): Boolean {
@@ -72,7 +71,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
     private fun mInitUI(view: View, data: RecommendItemType?) {
         when (data?.type) {
             RecommendItemType.TYPE.TYPE_TOP -> {
-                TopViewVP = view.find(R.id.pager_container)
+                TopViewVP = view.findViewById(R.id.pager_container)
                 TopViewVP!!.pageMargin = 15
                 TopViewBanner = mTopViewBanner(view)
                 TopViewVP!!.adapter = TopViewBanner

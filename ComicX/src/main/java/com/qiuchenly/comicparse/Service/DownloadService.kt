@@ -4,16 +4,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.Environment
-import android.util.Log
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DownloadBookInfo
 import com.qiuchenly.comicparse.Bean.PageInfo
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import com.qiuchenly.comicparse.Utils.CustomUtils.MD5
 import io.realm.RealmResults
-import org.jetbrains.anko.runOnUiThread
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -81,17 +78,17 @@ class DownloadService : Service(), ServiceNotification {
     }
 
     override fun onSaveBookPage(mBookName: String, mPageInfo: PageInfo) {
-        runOnUiThread {
-            val mBook = mRealm.where(DownloadBookInfo::class.java)
-                    .equalTo("BookName", mBookName).findFirst()
-            if (mBook != null) {
-                mRealm.beginTransaction()
-                mBook.PageList.add(mPageInfo.apply {
-                    DownOver = true
-                })
-                mRealm.commitTransaction()
-            }
-        }
+        /* {
+             val mBook = mRealm.where(DownloadBookInfo::class.java)
+                     .equalTo("BookName", mBookName).findFirst()
+             if (mBook != null) {
+                 mRealm.beginTransaction()
+                 mBook.PageList.add(mPageInfo.apply {
+                     DownOver = true
+                 })
+                 mRealm.commitTransaction()
+             }
+         }*/
 
     }
 

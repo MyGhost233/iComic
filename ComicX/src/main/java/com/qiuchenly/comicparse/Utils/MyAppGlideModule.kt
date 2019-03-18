@@ -7,13 +7,14 @@ import com.bumptech.glide.Registry
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.cache.MemoryCache
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.qiuchenly.comicparse.Http.Bika.HttpDns
 import okhttp3.OkHttpClient
 import java.io.InputStream
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLSession
 
 @GlideModule
 class MyAppGlideModule : AppGlideModule() {
@@ -27,7 +28,6 @@ class MyAppGlideModule : AppGlideModule() {
     }
 
     private var httpClient: OkHttpClient? = null
-
     /**
      * 利用哔咔服务器DNS地址解析图片
      * 注册自定义组件
@@ -35,6 +35,11 @@ class MyAppGlideModule : AppGlideModule() {
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         if (httpClient == null) {
             httpClient = OkHttpClient.Builder()
+                   /* .hostnameVerifier(object : HostnameVerifier {
+                        override fun verify(hostname: String?, session: SSLSession?): Boolean {
+                            return true
+                        }
+                    })*/
                     .dns(HttpDns())
                     .build()
         }

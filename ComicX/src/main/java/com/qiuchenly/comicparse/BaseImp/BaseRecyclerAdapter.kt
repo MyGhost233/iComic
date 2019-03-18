@@ -29,7 +29,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
     private var mFixMem = false
     fun setFixMemory() {
-        mFixMem = true
+        //mFixMem = true
     }
 
     override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
@@ -162,6 +162,10 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
     fun sort() {
         map?.reverse()
         notifyDataSetChanged()
+    }
+
+    fun getIndexData(index: Int): T {
+        return map!![index]
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {

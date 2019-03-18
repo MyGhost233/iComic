@@ -58,7 +58,6 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
     //renderscript
     implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
@@ -68,20 +67,9 @@ dependencies {
     kapt "io.realm:realm-annotations:5.9.1"
     kapt "io.realm:realm-annotations-processor:5.9.1"
     implementation 'com.android.support:support-v13:27.1.1'
-    implementation "org.jetbrains.anko:anko:$anko_version"
-
-    // Anko Commons
-    implementation "org.jetbrains.anko:anko-commons:$anko_version"
-
-    // sdk15, sdk19, sdk21, sdk23 are also available
-    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-
-    // Support-v4 (only Anko Commons)
-    implementation "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
     // Retrofit库
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    implementation 'jp.wasabeef:glide-transformations:2.0.1'
     implementation 'com.r0adkll:slidableactivity:2.0.6'
 
     //CallAdapterFactory的Rx依赖包---导这个包才能配合rxAndroid使用
@@ -106,4 +94,9 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation "com.github.bumptech.glide:okhttp3-integration:4.6.1"
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 }

@@ -47,12 +47,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="75dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/top_userImg"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/backs" />
+                    android:src="#123123" />
 
                 <TextView
                     android:id="@+id/top_userName"

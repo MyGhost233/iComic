@@ -10,6 +10,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicReadingAdapter
@@ -86,14 +87,14 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
-        val mStr = intent.getStringExtra("comic")
-        val ComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
-        mComicInfo = Gson().fromJson(ComicInfo.mComicString, ComicEpisodeObject::class.java)
+        val mStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        val mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
+        mComicInfo = Gson().fromJson(mTempComicInfo.mComicString, ComicEpisodeObject::class.java)
         mComicImagePageAda = ComicReadingAdapter(this)
-        if (ComicInfo.mComicType == ComicSourcceType.BIKA) {
-            bookID = ComicInfo.mComicID
+        if (mTempComicInfo.mComicType == ComicSourcceType.BIKA) {
+            bookID = mTempComicInfo.mComicID
             mComicImagePageAda?.setBikaMode()
-            mViewModel?.getBikaImage(bookID, 1)
+            mViewModel?.getBikaImage(bookID, mComicInfo.order)
         }
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda

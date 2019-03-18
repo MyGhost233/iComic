@@ -12,6 +12,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Http.Bika.Tools
@@ -60,18 +61,25 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         with(item) {
             when (ViewType) {
                 ON_NORMAL -> {
-                    CustomUtils.loadImageEx(context, Tools.getThumbnailImagePath(data.thumb), bookNameImg, 0, null)
+                    val image = Tools.getThumbnailImagePath(data.thumb)
+                    CustomUtils.loadImageEx(context, image, bookNameImg, 0, null)
                     bookName.text = data.title
                     bookAuthor.text = data.author
-                    val categorys = data.categories?.joinToString(prefix = "", postfix = ",")
-                    curr_read.text = "分类:" + categorys?.substring(0, categorys.length - 1)
+                    var categorys = data.categories?.joinToString(prefix = "", postfix = ",")
+                    categorys = if (categorys.isNullOrEmpty()) ""
+                    else
+                        categorys.substring(0, categorys.length - 1)
+                    curr_read.text = "分类:$categorys"
                     updateTo.visibility = View.INVISIBLE
                     setOnClickListener {
                         context.startActivity(Intent(context, ComicDetails::class.java).apply {
                             //TODO 需要优化此处
-                            putExtra("comic", Gson().toJson(ComicInfoBean().apply {
+                            putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                                 this.mComicType = ComicSourcceType.BIKA
                                 mComicID = data.comicId
+                                mComicImg = image
+                                mComicName = data.title
+                                mComicTAG = categorys
                                 this.mComicString = Gson().toJson(data)
                             }))
                         })

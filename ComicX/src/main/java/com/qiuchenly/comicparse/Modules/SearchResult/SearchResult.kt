@@ -37,8 +37,7 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
 
     override fun onLoadMore(isRetry: Boolean) {
         activityName_secondTitle.text = "搜索结果 (正在加载下一页...)"
-        if (mCategory.mCategoryName == "随机本子") mViewModel?.getRandomComic()
-        else mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+        selectLoad()
     }
 
     override fun showMsg(str: String) {
@@ -50,7 +49,7 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         if (data != null) {
             //修复数据显示问题
             val page = if (data.page > data.pages) data.pages else data.page
-            activityName.text = if (mCategory.mCategoryName == null) titleBika_Base else mCategory.mCategoryName
+            activityName.text = mCategory.mCategoryName
             activityName_secondTitle.visibility = View.VISIBLE
             activityName_secondTitle.text = "搜索结果 (共找到${data.total}部,当前第$page/${data.pages}页)"
             if (nextPage > data.pages) {
@@ -71,12 +70,25 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         }
     }
 
+    fun selectLoad() {
+        when (mCategory.mCategoryName) {
+            "随机本子" -> {
+                mViewModel?.getRandomComic()
+            }
+            "最近更新" -> {
+                mViewModel?.getCategoryComic(null, nextPage)
+            }
+            else -> {
+                mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+            }
+        }
+    }
+
     var mViewModel: SearchResultViewModel? = SearchResultViewModel(this)
     var mAdapter: SearchResultAdapter? = null
     var nextPage = 1
     lateinit var mCategoryObj: CategoryObject
     lateinit var mCategory: ComicCategoryBean
-    private var titleBika_Base = ""
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,20 +99,7 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         mAdapter = SearchResultAdapter(this)
         magic_indicator.visibility = View.GONE
         if (mCategory.mComicType == ComicSourcceType.BIKA) {
-            if (mCategoryObj.categoryId == "lastUpdate") {
-                titleBika_Base = "最近更新"
-            }
-            when (mCategory.mCategoryName) {
-                "随机本子" -> {
-                    mViewModel?.getRandomComic()
-                }
-                "最近更新" -> {
-                    mViewModel?.getCategoryComic(null, nextPage)
-                }
-                else -> {
-                    mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
-                }
-            }
+            selectLoad()
             activityName.text = mCategory.mCategoryName
         }
         back_up.setOnClickListener {

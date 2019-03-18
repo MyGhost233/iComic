@@ -75,7 +75,7 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
 
     override fun onDestroy() {
         super.onDestroy()
-//        AppManager.appm.finishActivity(this)
+        AppManager.appm.removeActivity(this)
         EventBus.getDefault().unregister(this)//订阅者事件绑定
     }
 

@@ -1,21 +1,18 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList
 
-import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.qiuchenly.comicparse.BaseImp.BaseFragment
+import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
-import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicListViewModel
 import com.qiuchenly.comicparse.R
-import org.jetbrains.anko.find
 
-class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
+class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View {
     override fun SetBikaPages(docs: java.util.ArrayList<ComicEpisodeObject>?, id: String) {
         comicPageAdas?.setBaseID(id)
         comicPageAdas?.setData(docs as ArrayList<ComicEpisodeObject>)
@@ -51,11 +48,10 @@ class ComicList : BaseFragment(), ComicDetailContract.Comiclist.View {
         manager.scrollToPositionWithOffset(position, 0)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewFirstSelect(mPagerView: View) {
         mViewModel = ComicListViewModel(this)
         comicPageAdas = ComicPageAda(mView)
-        rv_comicPage = view.find(R.id.rv_comicPage)
+        rv_comicPage = mPagerView.findViewById(R.id.rv_comicPage)
         rv_comicPage.layoutManager = LinearLayoutManager(context)
         rv_comicPage.adapter = comicPageAdas
 

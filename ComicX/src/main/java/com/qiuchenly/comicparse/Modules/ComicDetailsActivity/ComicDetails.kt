@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -18,6 +19,7 @@ import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.BasicInfo
@@ -27,9 +29,10 @@ import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDeta
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_comicdetails.*
+import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
-import org.jetbrains.anko.find
 
 class ComicDetails :
         BaseApp(),
@@ -95,18 +98,26 @@ class ComicDetails :
         ComicList.getInstance().scrollWithPosition(position)
     }
 
+    private var mComicTag = "SimpleName|SimpleCode"
+
     //==============================   常规系统初始化方法  ============================================
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mViewModel = ComicDetailsViewModel(this)
-        mBookAuthor = find(R.id.tv_bookAuthor)
-        mBookCategory = find(R.id.tv_bookCategory)
-        mRealImageNoBlur = find(R.id.comicDetails_img_real)
+        mBookAuthor = tv_bookAuthor
+        mBookCategory = tv_bookCategory
+        mRealImageNoBlur = comicDetails_img_real
 
-        onLoading = find(R.id.load_ing)
-        onFailed = find(R.id.load_failed)
-        onSuccess = find(R.id.mCoordinatorLayout)
+        onLoading = load_ing
+        onFailed = load_failed
+        onSuccess = mCoordinatorLayout
+
+        //对Intent传来的数据做处理
+        val mComicStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        if (mComicStr.isNullOrEmpty()) finish()
+        val baseInfo = Gson().fromJson(mComicStr, ComicInfoBean::class.java)
 
         mServerConnect = object : ServiceConnection {
             override fun onServiceDisconnected(name: ComponentName?) {
@@ -133,13 +144,17 @@ class ComicDetails :
                 Intent(this, DownloadService::class.java),
                 mServerConnect,
                 Context.BIND_AUTO_CREATE)*/
-
-        val mComicStr = intent.getStringExtra("comic")
-        val baseInfo = Gson().fromJson(mComicStr, ComicInfoBean::class.java)
+        mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
         mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
+
+        tv_bookname.text = mComicInfo.title
+        tv_bookAuthor.text = "来源:" + mComicInfo.author
+        tv_bookname_title_small.text = tv_bookAuthor.text
+        tv_bookCategory.text = "类别:" + baseInfo.mComicTAG
+
         val mFragmentsList = arrayListOf(
-                RecentlyPagerAdapter.Struct("漫画信息", BasicInfo.getInstance(this, baseInfo)),
-                RecentlyPagerAdapter.Struct("漫画章节", ComicList.getInstance(baseInfo, this))
+                RecentlyPagerAdapter.Struct("简介", BasicInfo.getInstance(this, baseInfo)),
+                RecentlyPagerAdapter.Struct("章节", ComicList.getInstance(baseInfo, this))
         )
         /* if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
              add_local_list_iv.setImageResource(R.drawable.ic_remove_black_24dp)
@@ -158,8 +173,8 @@ class ComicDetails :
         back_up.setOnClickListener { finish() }
         mShareButton.setOnClickListener {
             val mClipboardManager = getSystemService(Service.CLIPBOARD_SERVICE) as ClipboardManager
-            mClipboardManager.primaryClip = ClipData.newPlainText("text", "漫画信息")
-            ShowErrorMsg("已复制漫画网站网页地址!")
+            mClipboardManager.primaryClip = ClipData.newPlainText("text", mComicTag)
+            ShowErrorMsg("已复制漫画相关信息")
         }
 
         mAdapter = RecentlyPagerAdapter(supportFragmentManager, mFragmentsList)
@@ -182,14 +197,21 @@ class ComicDetails :
             override fun onPageSelected(position: Int) {
                 if (position == 0) {
                     appBarLayout.setExpanded(true, true)
+                } else {
+                    appBarLayout.setExpanded(false, true)
                 }
             }
         })
+        var mComicSourceName = "预设来源"
         when (baseInfo.mComicType) {
             ComicSourcceType.BIKA -> {
+                mComicSourceName = "哔咔漫画源"
+                CustomUtils.loadImageEx(this, baseInfo.mComicImg, comicDetails_img_real, 0, null)
+                CustomUtils.loadImage(this, baseInfo.mComicImg, comicDetails_img, 10, 20)
                 onLoadSuccess()
             }
         }
+        tv_bookname_title.text = mComicSourceName
     }
 
     private var mAdapter: PagerAdapter? = null

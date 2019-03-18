@@ -33,7 +33,6 @@ class MainActivityUI : BaseApp(), View.OnClickListener {
         mViewModel?.getWeathers()
         //TODO 此处启动后台下载服务暂时不写
         //startService(Intent(this, DownloadService::class.java))
-
     }
 
     override fun onDestroy() {

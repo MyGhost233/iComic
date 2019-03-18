@@ -5,6 +5,7 @@ import android.view.View
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
@@ -31,7 +32,7 @@ class ComicPageAda(val view: ComicDetailContract.View?) : BaseRecyclerAdapter<Co
             item.last_read.visibility = View.GONE
             item.setOnClickListener {
                 item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
-                    putExtra("comic", Gson().toJson(ComicInfoBean().apply {
+                    putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                         mComicType = ComicSourcceType.BIKA
                         mComicID = BaseBikaID
                         mComicString = Gson().toJson(data)

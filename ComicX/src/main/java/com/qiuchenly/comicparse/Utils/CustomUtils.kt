@@ -16,8 +16,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
@@ -91,8 +93,21 @@ object CustomUtils {
                     if (lister != null)
                         listener(lister)
                     transition(DrawableTransitionOptions.withCrossFade(400))
+
                 }
-        builder.skipMemoryCache(true)
+        builder.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mView)
+    }
+
+    fun loadImageCircle(ctx: Context, imageSrc: String, mView: ImageView) {
+        val builder = Glide.with(ctx)
+                .load(imageSrc)
+                .apply {
+                    //圆角：RequestOptions.bitmapTransform(new RoundedCorners( 5))
+                    //圆形：RequestOptions.bitmapTransform(new CircleCrop())
+                    apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    transition(DrawableTransitionOptions.withCrossFade(400))
+                }
         builder.diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mView)
     }

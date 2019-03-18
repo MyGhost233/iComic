@@ -19,6 +19,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.NoActionBar.LauncherImg">
         <!--<item name="android:windowBackground">@mipmap/backs</item>-->
     </style>

@@ -22,7 +22,6 @@ import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*
 import okhttp3.ResponseBody
-import org.jetbrains.anko.collections.forEachWithIndex
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import retrofit2.Call
@@ -51,7 +50,7 @@ class MainActivityViewModel(private var mContentView: MainActivityUI) : Callback
             val js = Jsoup.parse(retStr)
             val mNode = js.getElementsByClass("mh-date-wraper")
             val mTempInfo = ArrayList<TempInfo>()
-            mNode[0].getElementsByClass("t-cont").forEachWithIndex { i, element ->
+            mNode[0].getElementsByClass("t-cont").forEachIndexed { i, element ->
                 var mElement = element.childNode(0)
                 val time = mElement.childNode(0)
                 val mRealTime = (time as Element).text()
