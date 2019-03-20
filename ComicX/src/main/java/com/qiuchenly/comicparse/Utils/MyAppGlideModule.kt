@@ -11,10 +11,10 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.qiuchenly.comicparse.Http.Bika.HttpDns
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import java.io.InputStream
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSession
 
 @GlideModule
 class MyAppGlideModule : AppGlideModule() {
@@ -34,12 +34,21 @@ class MyAppGlideModule : AppGlideModule() {
      */
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         if (httpClient == null) {
-            httpClient = OkHttpClient.Builder()
-                   /* .hostnameVerifier(object : HostnameVerifier {
-                        override fun verify(hostname: String?, session: SSLSession?): Boolean {
-                            return true
-                        }
-                    })*/
+            httpClient = OkHttpClient.Builder().addInterceptor(object : Interceptor {
+                override fun intercept(chain: Interceptor.Chain): Response {
+                    val original = chain.request()
+                    val s = original.url().url()
+                    return chain.proceed(
+                            //解决动漫之家APP后台的来源检查bug(之家后台建议辞退)
+                            original.newBuilder()
+                                    .header("Referer",
+                                            if (s.host.contains("images.dmzj.com"))
+                                                "http://images.dmzj.com/" else "")
+                                    .method(original.method(), original.body())
+                                    .build()
+                    )
+                }
+            })
                     .dns(HttpDns())
                     .build()
         }

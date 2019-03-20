@@ -14,7 +14,7 @@ import com.qiuchenly.comicparse.MVP.UI.Fragments.dummy.DummyContent;
 import com.qiuchenly.comicparse.R;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing getApi list of Items.
  * <p/>
  * Activities containing this fragment MUST implement the {@link com.qiuchenly.comicparse.MVP.UI.Fragments.CurrDownItemFragment.OnListTaskInfo}
  * interface.

@@ -78,8 +78,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/mDefaultListTextColor"
-                android:text="使用Bika数据源"
                 android:checked="true"
+                android:text="使用Bika数据源"
+                android:textColor="@color/mDefaultListTextColor" />
+
+            <CheckBox
+                android:id="@+id/useDMZJSource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/mDefaultListTextColor"
+                android:checked="true"
+                android:text="使用动漫之家数据源"
+                android:textColor="@color/mDefaultListTextColor" />
+
+            <CheckBox
+                android:id="@+id/useDMZJNovel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/mDefaultListTextColor"
+                android:checked="true"
+                android:text="使用动漫之家小说数据源"
+                android:textColor="@color/mDefaultListTextColor" />
+
+            <CheckBox
+                android:id="@+id/useZhuiShuShenQi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/mDefaultListTextColor"
+                android:checked="true"
+                android:text="使用追书神器小说数据源"
                 android:textColor="@color/mDefaultListTextColor" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

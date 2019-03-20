@@ -1,342 +1,306 @@
 package com.qiuchenly.comicparse.Http.Dmzj;
 
-import android.support.v4.view.MotionEventCompat;
 import android.text.TextUtils;
 
-public class ComicApi {
-    public static String a(int mType, String... strArr) {
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.GET;
+
+public interface ComicApi {
+
+    @GET("/v3/recommend.json?channel=Android&version=2.7.009")
+    Call<ResponseBody> getRecommend();
+
+    //https://images.dmzj.com/img/webpic/19/1003821191536309628.jpg
+    @GET("/img/webpic/19/1003821191536309628.jpg")
+    Call<ResponseBody> getImage();
+
+    String BASE_API_USER = "https://user.dmzj.com";
+    String BASE_API_V3API = "https://v3api.dmzj.com";
+
+    public static String getApi(int mType, String... strArr) {
         String str = "";
         switch (mType) {
             case 1:
-                return "https://user.dmzj.com/register/verify";
+                return "/register/verify";
             case 2:
-                return "https://user.dmzj.com/register/m_submit_v2";
+                return "/register/m_submit_v2";
             case 3:
-                return "https://user.dmzj.com/register/send_tel_code" + b(strArr);
+                return "/register/send_tel_code";
             case 4:
-                return "https://v3api.dmzj.com/account/sendtelcode" + b(strArr);
+                return "/account/sendtelcode";
             case 5:
-                return "https://v3api.dmzj.com/account/sendemailcode" + b(strArr);
+                return "/account/sendemailcode";
             case 6:
-                return "https://v3api.dmzj.com/account/isbindtelpwd?" + a(strArr);
+                return "/account/isbindtelpwd?";
             case 7:
-                return "https://v3api.dmzj.com/account/regainedpwdbytel";
+                return "/account/regainedpwdbytel";
             case 8:
-                return "https://v3api.dmzj.com/account/bindtel";
+                return "/account/bindtel";
             case 9:
-                return "https://v3api.dmzj.com/account/bindemailbypwd";
+                return "/account/bindemailbypwd";
             case 10:
-                return "https://v3api.dmzj.com/account/setpwdbytel";
+                return "/account/setpwdbytel";
             case 11:
-                return "https://v3api.dmzj.com/account/setpwdbyemail";
+                return "/account/setpwdbyemail";
             case 12:
-                return "https://v3api.dmzj.com/account/setpwdbyoldpwd";
+                return "/account/setpwdbyoldpwd";
             case 13:
-                return "https://v3api.dmzj.com/account/bindthirdparty";
+                return "/account/bindthirdparty";
             case 14:
-                return "https://v3api.dmzj.com/account/bindemail";
+                return "/account/bindemail";
             case 15:
-                return "https://v3api.dmzj.com/account/verifyemail";
+                return "/account/verifyemail";
             case 16:
-                return "https://v3api.dmzj.com/account/verifybindtel?" + a(strArr);
+                return "/account/verifybindtel?";
             case 17:
-                return "https://v3api.dmzj.com/account/verifybindemail?" + a(strArr);
+                return "/account/verifybindemail?";
             case 18:
-                return "https://v3api.dmzj.com/account/regainedpwdbyemail";
+                return "/account/regainedpwdbyemail";
             case 19:
                 return "https://api.weixin.qq.com/sns/oauth2/access_token";
             case 20:
-                return "https://user.dmzj.com/loginV2/m_confirm";
-            case MotionEventCompat.AXIS_WHEEL /*21*/:
-                return "https://user.dmzj.com/loginV2/three_confirm";
+                return "/loginV2/m_confirm";
+            case 21 /*21*/:
+                return "/loginV2/three_confirm";
             case 22:
-                return "https://user.dmzj.com/login/again_register";
-            case MotionEventCompat.AXIS_BRAKE /*23*/:
-                return "https://v3api.dmzj.com/v3/recommend.json";
-            case MotionEventCompat.AXIS_DISTANCE /*24*/:
-                return "https://v3api.dmzj.com/latest/" + b(strArr) + ".json";
-            case MotionEventCompat.AXIS_TILT /*25*/:
-                return "https://v3api.dmzj.com/0/category.json";
+                return "/login/again_register";
+            case 23 /*23*/:
+                return "";
+            case 24 /*24*/:
+                return "/latest/" + ".json";
+            case 25 /*25*/:
+                return "/0/category.json";
             case 26:
-                return "https://v3api.dmzj.com/subject/" + b(strArr) + ".json";
+                return "/subject/" + ".json";
             case 27:
-                return "https://v3api.dmzj.com/comic/" + b(strArr) + ".json";
+                return "/comic/" + ".json";
             case 28:
-                return "https://v3api.dmzj.com/recommend/batchUpdate";
+                return "/recommend/batchUpdate";
             case 29:
-                return "https://v3api.dmzj.com/classify/filter.json";
+                return "/classify/filter.json";
             case 30 /*30*/:
-                return "https://v3api.dmzj.com/classify/" + b(strArr) + ".json";
+                return "/classify/" + ".json";
             case 31:
-                return "https://v3api.dmzj.com/rank/type_filter.json";
+                return "/rank/type_filter.json";
             case 32:
-                return "https://v3api.dmzj.com/rank/" + b(strArr) + ".json";
+                return "/rank/" + ".json";
             case 33:
-                return "https://v3api.dmzj.com/subject/category.json";
+                return "/subject/category.json";
             case 34:
-                return "https://v3api.dmzj.com/subject/" + b(strArr) + ".json";
+                return "/subject/" + ".json";
             case 35:
-                return "https://v3api.dmzj.com/comment/" + b(strArr) + ".json";
+                return "/comment/" + ".json";
             case 36:
-                return "https://v3api.dmzj.com/common/report";
+                return "/common/report";
             case 37 /*37*/:
-                return "https://v3api.dmzj.com/comment/add";
+                return "/comment/add";
             case 38/*38*/:
-                return "https://v3api.dmzj.com/comment/agree";
+                return "/comment/agree";
             case 39 /*39*/:
-                return "https://v3api.dmzj.com/comment/total/" + b(strArr) + ".json";
+                return "/comment/total/" + ".json";
             case 40/*40*/:
-                return "https://v3api.dmzj.com/comment/owner/" + b(strArr) + ".json";
+                return "/comment/owner/" + ".json";
             case 41/*41*/:
-                return "https://v3api.dmzj.com/comment/detail/" + b(strArr) + ".json";
+                return "/comment/detail/" + ".json";
             case 42 /*42*/:
-                return "https://imgzip.dmzj.com/" + b(strArr) + ".zip";
+                return "https://imgzip.dmzj.com/" + ".zip";
             case 43 /*43*/:
-                return "https://v3api.dmzj.com/article/category.json";
+                return "/article/category.json";
             case 443 /*44*/:
-                return "https://v3api.dmzj.com/v3/article/recommend/header.json";
+                return "/v3/article/recommend/header.json";
             case 45 /*45*/:
-                return "https://v3api.dmzj.com/v3/article/list/" + b(strArr) + ".json";
+                return "/v3/article/list/" + ".json";
             case 46 /*46*/:
-                return "https://v3api.dmzj.com/article/mood/" + b(strArr);
+                return "/article/mood/";
             case 47 /*47*/:
-                return "https://interface.dmzj.com/api/news/subscribe/add" + b(strArr);
+                return "https://interface.dmzj.com/api/news/subscribe/add";
             case 48 /*48*/:
-                return "https://interface.dmzj.com/api/news/subscribe/check" + b(strArr);
+                return "https://interface.dmzj.com/api/news/subscribe/check";
             case 49:
-                return "https://v3api.dmzj.com/v3/article/total/" + b(strArr) + ".json";
+                return "/v3/article/total/" + ".json";
             case 50:
-                return "https://interface.dmzj.com/api/news/subscribe/del" + b(strArr);
+                return "https://interface.dmzj.com/api/news/subscribe/del";
             case 51:
-                return "https://interface.dmzj.com/api/news/getSubscribe" + b(strArr);
+                return "https://interface.dmzj.com/api/news/getSubscribe";
             case 52:
-                return "https://v3api.dmzj.com/message/list/" + b(strArr) + ".json";
+                return "/message/list/" + ".json";
             case 53:
-                return "https://v3api.dmzj.com/viewPoint/" + b(strArr) + ".json";
+                return "/viewPoint/" + ".json";
             case 54:
-                return "https://v3api.dmzj.com/viewPoint/addv2";
+                return "/viewPoint/addv2";
             case 55:
-                return "https://v3api.dmzj.com/viewPoint/praise";
+                return "/viewPoint/praise";
             case 56:
-                return "https://v3api.dmzj.com/hotView/" + b(strArr) + ".json";
+                return "/hotView/" + ".json";
             case 57:
-                return "https://v3api.dmzj.com/novel/recentUpdate/" + b(strArr) + ".json";
+                return "/novel/recentUpdate/" + ".json";
             case 58:
-                return "https://v3api.dmzj.com/novel/recommend.json";
+                return "/novel/recommend.json";
             case 59:
-                return "https://v3api.dmzj.com/1/category.json";
+                return "/1/category.json";
             case 60 /*60*/:
-                return "https://v3api.dmzj.com/novel/filter.json";
+                return "/novel/filter.json";
             case 61:
-                return "https://v3api.dmzj.com/novel/" + b(strArr) + ".json";
+                return "/novel/" + ".json";
             case 62:
-                return "https://v3api.dmzj.com/novel/" + b(strArr) + ".json";
+                return "/novel/" + ".json";
             case 63:
-                return "https://sacg.dmzj.com/lnovelsum/hit.php?" + a(strArr);
+                return "https://sacg.dmzj.com/lnovelsum/hit.php?";
             case 64:
-                return "https://v3api.dmzj.com/novel/chapter/" + b(strArr) + ".json";
+                return "/novel/chapter/" + ".json";
             case 65:
-                return "https://v3api.dmzj.com/novel/tag.json";
+                return "/novel/tag.json";
             case 66:
-                return "https://v3api.dmzj.com/novel/rank/" + b(strArr) + ".json";
+                return "/novel/rank/" + ".json";
             case 67:
-                return "https://v3api.dmzj.com/novel/download/" + b(strArr) + ".txt";
+                return "/novel/download/" + ".txt";
             case 68:
-                return "https://v3api.dmzj.com/novel/collection/" + b(strArr) + ".json";
+                return "/novel/collection/" + ".json";
             case 69:
-                return "https://v3api.dmzj.com/novel/collection/" + b(strArr) + ".json";
+                return "/novel/collection/" + ".json";
             case 70:
                 return "https://api.dmzj.com/dynamic/comicversion/android";
             case 71:
-                return "https://v3api.dmzj.com/bookList/" + b(strArr) + ".json";
+                return "/bookList/" + ".json";
             case 72:
-                return "https://v3api.dmzj.com/bookList/collection/" + b(strArr) + ".json";
+                return "/bookList/collection/" + ".json";
             case 73:
-                return "https://v3api.dmzj.com/v3/subscribe/" + b(strArr) + ".json";
+                return "/v3/subscribe/" + ".json";
             case 74:
-                return "https://v3api.dmzj.com/UCenter/comics/" + b(strArr);
+                return "/UCenter/comics/";
             case 75:
-                return "https://v3api.dmzj.com/UCenter/comicsv2/" + b(strArr);
+                return "/UCenter/comicsv2/";
             case 76:
-                return "https://v3api.dmzj.com/UCenter/author/" + b(strArr) + ".json";
+                return "/UCenter/author/" + ".json";
             case 77:
-                return "https://v3api.dmzj.com/UCenter/subscribe";
+                return "/UCenter/subscribe";
             case 78:
-                return "https://v3api.dmzj.com/bookList/collection/" + b(strArr) + ".json";
+                return "/bookList/collection/" + ".json";
             case 79:
-                return "https://v3api.dmzj.com/subscribe/add";
+                return "/subscribe/add";
             case 80:
-                return "https://v3api.dmzj.com/subscribe/cancel";
+                return "/subscribe/cancel";
             case 81:
-                return "https://v3api.dmzj.com/subscribe/" + b(strArr);
+                return "/subscribe/";
             case 82:
-                return "https://v3api.dmzj.com/subscribe/read";
+                return "/subscribe/read";
             case 83:
-                str = b(strArr);
-                String str2 = "https://v3api.dmzj.com/v3/comic/related/" + str + ".json";
+                String str2 = "/v3/comic/related/" + str + ".json";
                 if ("".equals(str)) {
-                   // b.c().a((m) new m("URLPathMaker.getUrlWithInnerParam").a("url", str2));
+                    //b.c().getApi((m) new m("URLPathMaker.getUrlWithInnerParam").getApi("url", str2));
                 }
                 return str2;
             case 84:
-                return "https://v3api.dmzj.com/chapter/" + b(strArr) + ".json";
+                return "/chapter/" + ".json";
             case 85:
-                return "https://v3api.dmzj.com/v3/2/category.json";
+                return "/v3/2/category.json";
             case 86:
-                return "https://v3api.dmzj.com/search/fuzzy/" + b(strArr) + ".json";
+                return "/search/fuzzy/" + ".json";
             case 87:
-                return "https://v3api.dmzj.com/search/show/" + b(strArr) + ".json";
+                return "/search/show/" + ".json";
             case 88:
-                return "https://v3api.dmzj.com/search/hot/" + b(strArr) + ".json";
+                return "/search/hot/" + ".json";
             case 89:
-                return "https://v3api.dmzj.com/old/comment/" + b(strArr) + ".json";
+                return "/old/comment/" + ".json";
             case 90:
-                return "https://v3api.dmzj.com/old/comment/detail/" + b(strArr) + ".json";
+                return "/old/comment/detail/" + ".json";
             case 91:
-                return "https://v3api.dmzj.com/old/comment/total/" + b(strArr) + ".json";
+                return "/old/comment/total/" + ".json";
             case 92:
-                return "https://v3api.dmzj.com/old/comment/add";
+                return "/old/comment/add";
             case 93:
-                return "https://v3api.dmzj.com/old/comment/agree";
+                return "/old/comment/agree";
             case 94:
-                return "https://v3comment.dmzj.com/v1/" + b(strArr);
+                return "https://v3comment.dmzj.com/v1/";
             case 95:
-                return "https://v3api.dmzj.com/device/add";
+                return "/device/add";
             case 96:
-                return "https://v3api.dmzj.com/device/building";
+                return "/device/building";
             case 97:
-                return "https://v3api.dmzj.com/device/cancel";
+                return "/device/cancel";
             case 98:
-                return "https://v3api.dmzj.com/account/cookie";
+                return "/account/cookie";
             case 99:
-                return "https://v3api.dmzj.com/v3/old/comment/owner/" + b(strArr) + ".json";
+                return "/v3/old/comment/owner/" + ".json";
             case 100:
                 return "https://api.dmzj.com/dynamic/comichitsv2";
             case 101 /*101*/:
-                return "https://v3api.dmzj.com/device/push";
+                return "/device/push";
             case 102 /*102*/:
                 return "https://api.dmzj.com/dynamic/activity";
             case 103 /*103*/:
-                return "https://v3api.dmzj.com/account/update";
+                return "/account/update";
             case 104 /*104*/:
-                return "https://v3api.dmzj.com/account/modifyname";
+                return "/account/modifyname";
             case 105 /*105*/:
                 return "https://interface.dmzj.com/api/record/getRe";
             case 106 /*106*/:
-                return "https://interface.dmzj.com/api/getReInfo/" + b(strArr);
+                return "https://interface.dmzj.com/api/getReInfo/";
             case 107 /*107*/:
                 return "https://interface.dmzj.com/api/record/delRecords";
             case 108 /*108*/:
-                return "https://v3comment.dmzj.com/v1/" + b(strArr);
+                return "https://v3comment.dmzj.com/v1/";
             case 109 /*109*/:
-                return "https://v3api.dmzj.com/msg/works/";
+                return "/msg/works/";
             case 110 /*110*/:
-                return "https://v3api.dmzj.com/msg/worksComment/";
+                return "/msg/worksComment/";
             case 111 /*111*/:
-                return "https://v3api.dmzj.com/comment2/" + b(strArr) + ".json";
+                return "/comment2/" + ".json";
             case 112 /*112*/:
-                return "https://v3comment.dmzj.com/v1/" + b(strArr);
+                return "https://v3comment.dmzj.com/v1/";
             case 113 /*113*/:
-                return "https://v3api.dmzj.com/comment2/getTopComment/" + b(strArr) + ".json";
+                return "/comment2/getTopComment/" + ".json";
             case 114:
-                return "https://v3api.dmzj.com/msg/replyMe/" + b(strArr);
+                return "/msg/replyMe/";
             case 115:
-                return "https://v3api.dmzj.com/msg/msgList/" + b(strArr);
+                return "/msg/msgList/";
             case 116:
-                return "https://v3api.dmzj.com/msg/chat/" + b(strArr);
+                return "/msg/chat/";
             case 117:
-                return "https://v3api.dmzj.com/msg/sendMessage/";
+                return "/msg/sendMessage/";
             case 118:
-                return "https://v3api.dmzj.com/msg/delMessage/";
+                return "/msg/delMessage/";
             case 119:
-                return "https://v3api.dmzj.com/msg/msgStatuChange/";
+                return "/msg/msgStatuChange/";
             case 120/*120*/:
-                return "https://v3api.dmzj.com/msg/changeReply/";
+                return "/msg/changeReply/";
             case 121:
-                return "https://v3api.dmzj.com/msg/unread/";
+                return "/msg/unread/";
             case 122:
-                return "https://v3api.dmzj.com/msg/msgShield/";
+                return "/msg/msgShield/";
             case 123:
-                return "https://v3api.dmzj.com/msg/delShield/";
+                return "/msg/delShield/";
             case 124:
-                return "https://v3api.dmzj.com/comment2/commentReport";
+                return "/comment2/commentReport";
             case 125:
-                return "https://v3api.dmzj.com/msg/shieldList/" + b(strArr);
+                return "/msg/shieldList/";
             case 126:
-                return "https://v3api.dmzj.com/comment2/gagcheckv2/" + b(strArr) + ".json";
+                return "/comment2/gagcheckv2/" + ".json";
             case 127 /*127*/:
-                return "https://v3api.dmzj.com/game_c/game/" + b(strArr) + ".json";
+                return "/game_c/game/" + ".json";
             case 128:
-                return "https://v3api.dmzj.com/game_c.json";
+                return "/game_c.json";
             case 129:
-                return "https://v3api.dmzj.com/game_c/game/detail/" + b(strArr) + ".json";
+                return "/game_c/game/detail/" + ".json";
             case 130 /*130*/:
-                return "https://v3api.dmzj.com/game_c/gift/" + b(strArr) + ".json";
+                return "/game_c/gift/" + ".json";
             case 131:
-                return "https://v3api.dmzj.com/game_c/gift/hasgift/" + b(strArr) + ".json";
+                return "/game_c/gift/hasgift/" + ".json";
             case 132:
-                return "https://v3api.dmzj.com/game_c/gift/detail/" + b(strArr) + ".json";
+                return "/game_c/gift/detail/" + ".json";
             case 133:
-                return "https://v3api.dmzj.com/game_c/gift/hascode/" + b(strArr) + ".json";
+                return "/game_c/gift/hascode/" + ".json";
             case 134:
-                return "https://v3api.dmzj.com/game_c/gift/getcode/";
+                return "/game_c/gift/getcode/";
             case 135:
-                return "https://v3api.dmzj.com/game_c/game/downcount";
+                return "/game_c/game/downcount";
             default:
                 return str;
         }
     }
 
-
-    private static String a(String... strArr) {
-        String str = "";
-        if (strArr == null || strArr.length == 0) {
-            return str;
-        }
-        String str2;
-        int i = 0;
-        while (true) {
-            try {
-                int i2 = i;
-                str2 = str;
-                if (i2 >= strArr.length) {
-                    break;
-                }
-                str = i2 != 0 ? str2 + "&" + strArr[i2].trim() : str2 + strArr[i2].trim();
-                i = i2 + 1;
-            } catch (Exception e) {
-                e.printStackTrace();
-                //b.c().a((m) new m("URLPathMaker.getUrlWithInnerParam").a("paramsStr", str2));
-            }
-        }
-        return str2;
-    }
-
-    public static boolean a(String str) {
+    public static boolean getApi(String str) {
         return TextUtils.isEmpty(str) || str.contains("https://v3api.dmzj.com/comment2/gagcheckv2/") || str.contains("https://v3api.dmzj.com/comment2/getTopComment/") || str.contains("https://v3api.dmzj.com/comment2/") || str.contains("https://v3api.dmzj.com/comment/owner/") || str.contains("https://v3api.dmzj.com/comment/detail/") || str.contains("https://v3api.dmzj.com/v3/old/comment/owner/") || str.contains("https://v3api.dmzj.com/msg/worksComment/") || str.contains("https://v3comment.dmzj.com/v1/0/latest/") || str.contains("https://v3comment.dmzj.com/v1/1/latest/") || str.contains("https://v3comment.dmzj.com/v1/2/latest/") || str.contains("https://v3comment.dmzj.com/v1/3/latest/") || str.contains("https://v3comment.dmzj.com/v1/4/latest/") || str.contains("https://v3comment.dmzj.com/v1/5/latest/") || str.contains("https://v3comment.dmzj.com/v1/6/latest/") || str.contains("https://v3comment.dmzj.com/v1/7/latest/") || str.contains("https://v3comment.dmzj.com/v1/8/latest/") || str.contains("https://v3comment.dmzj.com/v1/9/latest/") || str.contains("https://v3comment.dmzj.com/v1/10/latest/");
-    }
-
-    private static String b(String... strArr) {
-        String str = "";
-        if (strArr == null || strArr.length == 0) {
-            return str;
-        }
-        String str2;
-        int i = 0;
-        while (true) {
-            try {
-                int i2 = i;
-                str2 = str;
-                if (i2 >= strArr.length) {
-                    break;
-                }
-                str = i2 != 0 ? str2 + "/" + strArr[i2].trim() : str2 + strArr[i2].trim();
-                i = i2 + 1;
-            } catch (Exception e) {
-                e.printStackTrace();
-                //b.c().a((m) new m("URLPathMaker.getUrlWithInnerParam").a("paramsStr", str2));
-            }
-        }
-        return str2;
     }
 }

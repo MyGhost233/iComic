@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
+import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Modules.AuthBika.AuthBika
@@ -15,6 +16,9 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class Recommend : BaseLazyFragment(), RecommentContract.View {
+    override fun onGetDMZRecommendSuch(mComicList: ComicHome_RecomendList) {
+        mRecommendRecyclerViewAdapter.addDMZJData(mComicList)
+    }
 
     override fun goSelectSource() {
         startActivity(Intent(this.context, PerferenceActivity::class.java))
@@ -47,8 +51,8 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
     private var mViewModel: RecommendViewModel? = null
     private val mRecommendRecyclerViewAdapter = RecommendRecyclerViewAdapter(this)
     override fun onViewFirstSelect(mPagerView: View) {
-        mViewModel = RecommendViewModel(this)
 
+        mViewModel = RecommendViewModel(this)
         MyDetails_Refresh.setOnRefreshListener {
             mViewModel?.getIndex()
         }
@@ -64,7 +68,9 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
         mRecView.addItemDecoration(object : GridSpacingItemDecoration() {
             override fun needFixed(position: Int): Boolean {
                 return when (mRecommendRecyclerViewAdapter.getItemViewType(position)) {
-                    RecommendItemType.TYPE.TYPE_BIKA -> true
+                    RecommendItemType.TYPE.TYPE_BIKA,
+                    RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
+                    RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> true
                     else -> false
                 }
             }

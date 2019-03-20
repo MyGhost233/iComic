@@ -14,7 +14,7 @@ import android.view.View
 import com.qiuchenly.comicparse.R
 
 /**
- * A custom view for presenting a dynamically blurred version of another view's content.
+ * A custom view for presenting getApi dynamically blurred version of another view's content.
  *
  *
  * Use [.setBlurredView] to set up the reference to the view to be blurred.
@@ -63,9 +63,9 @@ class BlurringView @JvmOverloads constructor(context: Context, attrs: AttributeS
         super.onDraw(canvas)
         if (mBlurredView != null) {
             if (prepare()) {
-                // If the background of the blurred view is a color drawable, we use it to clear
+                // If the background of the blurred view is getApi color drawable, we use it to clear
                 // the blurring canvas, which ensures that edges of the child views are blurred
-                // as well; otherwise we clear the blurring canvas with a transparent color.
+                // as well; otherwise we clear the blurring canvas with getApi transparent color.
                 if (mBlurredView!!.background != null && mBlurredView!!.background is ColorDrawable) {
                     mBitmapToBlur!!.eraseColor((mBlurredView!!.background as ColorDrawable).color)
                 } else {

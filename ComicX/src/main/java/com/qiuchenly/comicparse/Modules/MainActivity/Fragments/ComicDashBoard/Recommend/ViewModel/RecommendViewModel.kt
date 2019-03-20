@@ -3,6 +3,10 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
+import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
+import com.qiuchenly.comicparse.Bean.DataItem
+import com.qiuchenly.comicparse.Bean.DataItem_lastNewer
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.DefaultCategoryObject
@@ -13,8 +17,10 @@ import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
 import com.qiuchenly.comicparse.Http.Bika.responses.InitialResponse
 import com.qiuchenly.comicparse.Http.Bika.responses.WakaInitResponse
 import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.Http.DongManZhiJia
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,11 +29,10 @@ import retrofit2.Response
 class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<ResponseBody>() {
     override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
-
     }
 
     override fun loadFailure(t: Throwable) {
-
+        mView?.OnNetFailed()
     }
 
     private var mView = Views
@@ -36,13 +41,8 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         mView = null
     }
 
-    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-        mView?.OnNetFailed()
-    }
-
     private var mCall: Call<ResponseBody>? = null
 
-    private var indexUrl = ""
     fun getIndex() {
         if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getBikaAllCategory()
@@ -52,6 +52,31 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 mView?.goSelectSource()
             mView?.final()
         }
+        getDMZJRecomend()
+    }
+
+    fun getDMZJRecomend() {
+        val mCall = DongManZhiJia.getV3API().recommend
+        mCall.enqueue(object : Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                loadFailure(Throwable("加载动漫之家的推荐数据失败!"))
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val ret = response.body()?.string() ?: return
+                val cls = JSONArray(ret)
+                var size = 0
+                val mArrs = ArrayList<ComicHome_Recommend>()
+                while (size < cls.length() - 1) {
+                    mArrs.add(Gson().fromJson(cls.getJSONObject(size).toString(), ComicHome_Recommend()::class.java))
+                    size++
+                }
+                val mComicList = ComicHome_RecomendList()
+                mComicList.lastNewer = Gson().fromJson(cls.getJSONObject(8).toString(), ComicHome_Recommend()::class.java)
+                mComicList.normalType = mArrs
+                mView?.onGetDMZRecommendSuch(mComicList)
+            }
+        })
     }
 
     fun getInit() {
@@ -111,7 +136,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
     var userName = ""
     var pass = ""
-    fun getBikaIndex() {
+    private fun getBikaIndex() {
         userName = PreferenceHelper.getUserLoginEmail(Comic.getContext())
         pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
         if (userName == "" || pass == "") {

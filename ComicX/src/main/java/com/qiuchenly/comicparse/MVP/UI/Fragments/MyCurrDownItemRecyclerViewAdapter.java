@@ -13,7 +13,7 @@ import com.qiuchenly.comicparse.R;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display getApi {@link DummyItem} and makes getApi call to the
  * specified {@link OnListTaskInfo}.
  * TODO: Replace the implementation with code for your data type.
  */

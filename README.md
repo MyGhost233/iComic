@@ -13,11 +13,17 @@ QiuChenly(秋城落叶)
 | 3 | 适配更多网站API | 正在适配 |
 | 4 | 记住阅读的进度 | √ |
 | 5 | 自动保存看过的漫画 | √ |
-and more
 
 ### 开发日志
-暂无
+2019-3-20:<r>
+'''
+1.修改了MainActivity为SingleTask.
+2.集成Fabric分析App崩溃日志.
+3.删掉了App多余的一个图像高斯模糊处理库.
+4.预集成动漫之家(dmzj.com)API.
+5.加入DNS解析,分别判断各个类型的DNS解析.
+'''
+### 致谢第三方API(其实就是反编译逆向你们家产品出来的API,你咬我啊?)
+1.dmzj.com(APP协议,暂无算法加密,只有一个SSL认证,官方使用Async-Http库.)
 
-### 第三方API
-1.mh1234.com
-2.哔咔漫画
+2.哔咔漫画(APP协议,RSA Sign算法加密+SO层算法逆向,官方使用OkHttp3 双向SSL认证.)
