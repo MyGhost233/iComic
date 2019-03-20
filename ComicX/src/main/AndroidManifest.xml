@@ -18,22 +18,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="88b3f784c717edcc991c951c3f375c11e12649cb" />
 
         <activity
             android:name=".Modules.ComicDetailsActivity.ComicDetails"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Modules.ReadingActivity.ReadPage"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Modules.MainActivity.Activity.MainActivityUI"
-            android:launchMode="singleInstance"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -64,7 +65,6 @@
 
         <activity
             android:name=".Modules.SearchResult.SearchResult"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

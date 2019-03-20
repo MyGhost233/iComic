@@ -27,7 +27,6 @@ import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.R
 import jp.wasabeef.glide.transformations.BlurTransformation
-import net.qiujuer.genius.blur.StackBlur
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -55,10 +54,11 @@ object CustomUtils {
                 target: Target<Drawable>?
         ): Boolean
     }
-
+/*
     fun blurs(bitmap: Bitmap, radius: Int): Bitmap {
         return StackBlur.blurNatively(bitmap, radius, false)
     }
+    */
 
     fun catchBitmap(view: View, bitmap: Bitmap): Bitmap {
         val bit1 = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)

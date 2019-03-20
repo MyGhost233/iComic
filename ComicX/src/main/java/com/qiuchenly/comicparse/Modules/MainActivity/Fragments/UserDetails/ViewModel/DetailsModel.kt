@@ -1,7 +1,6 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.ViewModel
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
-import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.BaseURL
 import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.UserDetails.Request.Requests

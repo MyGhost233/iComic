@@ -16,7 +16,13 @@ public class HttpDns implements Dns {
     private static ArrayList<InetAddress> mResult = null;
     private String[] addresses = null;
 
+
+    private boolean isBika(String host) {
+        return host.equals("picaapi.picacomic.com");
+    }
+
     public List<InetAddress> lookup(@NotNull String hostname) throws UnknownHostException {
+        if (!isBika(hostname)) return new ArrayList<>();
         if (addresses == null)
             addresses = PreferenceHelper.getDnsIp(Objects.requireNonNull(Comic.INSTANCE.getContext()));
         //fix reload DNS Address,once load,everywhere can load.

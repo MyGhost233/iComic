@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'//解决报错apply plugin: 'kotlin-kapt'
 
 apply plugin: 'realm-android'
 
+apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -60,7 +62,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     //renderscript
-    implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
+    //implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
     // kotlin使用realm的注解处理依赖库
@@ -101,4 +103,8 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 
     implementation 'com.hyman:flowlayout-lib:1.1.2'
+
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true
+    }
 }
