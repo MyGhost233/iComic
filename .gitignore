@@ -1,6 +1,6 @@
 ### Android template
 # Built application files
-*.apk
+#*.apk
 *.ap_
 
 *.DS_Store

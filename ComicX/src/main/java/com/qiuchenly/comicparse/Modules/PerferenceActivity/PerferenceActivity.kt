@@ -27,11 +27,15 @@ class PerferenceActivity : BaseApp() {
         useBikaSource.setOnClickListener {
             mViewModel?.setBikaMode(useBikaSource.isChecked)
         }
+        useZuiChou.setOnClickListener {
+            mViewModel?.setZuiChou(useZuiChou.isChecked)
+        }
         back_up.setOnClickListener { finish() }
         initAllSetting()
     }
 
     fun initAllSetting() {
         useBikaSource.isChecked = !mViewModel?.getBikaMode()!!
+        useZuiChou.isChecked = mViewModel?.getZuiChou()!!
     }
 }

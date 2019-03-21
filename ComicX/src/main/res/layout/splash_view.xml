@@ -5,6 +5,7 @@
     android:background="@color/mDefaultDarkThemeColor">
 
     <TextView
+        android:id="@+id/mTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -12,6 +13,27 @@
         android:textColor="@color/mDefaultListTextColor"
         android:textSize="28sp" />
 
+    <TextView
+        android:id="@+id/mLang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/mLangAuthor"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:text="WSM NMD"
+        android:textColor="@color/mDefaultListTextColor" />
+
+    <TextView
+        android:id="@+id/mLangAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mAuthorName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="55dp"
+        android:text="--- WSM NMD"
+        android:textColor="@color/mDefaultListTextColor"
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/mAuthorName"

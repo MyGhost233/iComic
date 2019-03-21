@@ -71,6 +71,7 @@ public class PreferenceHelper {
     public static final int PREFERENCE_MODE = 0;
     public static final String PREFERENCE_NAME = "PICACOMIC_FREGATA";
     public static final String IS_FIRST = "IS_FIRST";
+    public static final String KEY_ZUICHOU = "zuichou_nmsl";
 
     public static String getUserLoginEmail(Context context) {
         return context.getSharedPreferences(PREFERENCE_NAME, 0).getString(KEY_USER_LOGIN_EMAIL, "");
@@ -160,6 +161,14 @@ public class PreferenceHelper {
 
     public static boolean getNoLoginBika(Context context) {
         return context.getSharedPreferences(PREFERENCE_NAME, 0).getBoolean("NO_LOGIN_BIKA", true);
+    }
+
+    public static boolean setZuiChou(Context context, boolean value) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).edit().putBoolean(KEY_ZUICHOU, value).commit();
+    }
+
+    public static boolean getZuiChou(Context context) {
+        return context.getSharedPreferences(PREFERENCE_NAME, 0).getBoolean(KEY_ZUICHOU, false);
     }
 
     public static boolean setLocalApiDataCategoryList(Context context, String apiString) {

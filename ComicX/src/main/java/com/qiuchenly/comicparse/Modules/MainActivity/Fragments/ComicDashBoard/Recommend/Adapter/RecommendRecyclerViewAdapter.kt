@@ -127,12 +127,12 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     else foo_bookName_upNews.visibility = View.VISIBLE
                     setOnClickListener {
                         startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
-                                /* this.mCategoryName = bikaInfo?.title!!
+                            /*putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
+                                *//* this.mCategoryName = bikaInfo?.title!!
                                  this.mComicType = ComicSourcceType.BIKA
-                                 this.mData = Gson().toJson(bikaInfo)*/
+                                 this.mData = Gson().toJson(bikaInfo)*//*
                             }
-                            ))
+                            ))*/
                         }, null)
                     }
                 }
@@ -146,10 +146,10 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     foo_bookName_upNews.text = mItemData.authors
                     setOnClickListener {
                         startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
+                            /*putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
 
                             }
-                            ))
+                            ))*/
                         }, null)
                     }
                 }
