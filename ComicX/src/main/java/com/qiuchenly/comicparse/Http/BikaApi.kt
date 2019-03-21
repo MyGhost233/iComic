@@ -3,10 +3,7 @@ package com.qiuchenly.comicparse.Http
 import android.content.Context
 import android.util.Log
 import com.qiuchenly.comicparse.EncryptUtils.BiKaJni
-import com.qiuchenly.comicparse.Http.Bika.ApiService
-import com.qiuchenly.comicparse.Http.Bika.ChatroomActionInterface
-import com.qiuchenly.comicparse.Http.Bika.HttpDns
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.Http.Bika.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -14,6 +11,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSession
 
 object BikaApi : BaseRetrofitManager<ApiService>() {
 
@@ -25,14 +25,16 @@ object BikaApi : BaseRetrofitManager<ApiService>() {
     private var buildVersion: String = "39"
     private var uuid: String = "ca7ad142-bb59-388d-aafd-d6bc5a6c6b48"
     private var version: String = "2.1.0.5"
-    var channel: Int = 1
+    private var channel: Int = 1
 
     fun setBiCaClient(context: Context) {
         val httpClient = OkHttpClient.Builder()
+        //httpClient.hostnameVerifier(getHostnameVerifier())
         HttpLoggingInterceptor().level = HttpLoggingInterceptor.Level.BODY
         if (PreferenceHelper.isGirl(context)) {
             httpClient.dns(HttpDns())
         }
+        this.channel = PreferenceHelper.getChannel(context)
         httpClient.addInterceptor(object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 val original = chain.request()

@@ -16,8 +16,9 @@ public class HttpDns implements Dns {
     private static ArrayList<InetAddress> mResult = null;
     private String[] addresses = null;
 
+    //修正bika登录bug
     private boolean isBika(String host) {
-        return host.equals("picacomic.com");
+        return host.contains("picacomic.com");
     }
 
     public List<InetAddress> lookup(@NotNull String hostname) throws UnknownHostException {

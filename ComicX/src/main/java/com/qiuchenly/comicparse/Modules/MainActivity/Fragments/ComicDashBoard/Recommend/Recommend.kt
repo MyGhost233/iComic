@@ -76,7 +76,8 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
                 }
             }
         })
-        mViewModel?.initBikaApi()
+        //mViewModel?.initBikaApi()
+        mViewModel?.getInit()
         mViewModel?.getIndex()
     }
 

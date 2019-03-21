@@ -8,9 +8,11 @@ import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.NMSLBean
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.Http.Bika.RestWakaClient
+import com.qiuchenly.comicparse.Http.Bika.responses.WakaInitResponse
+import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Http.NMSL.NMSLClient
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
-import com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel.PerferViewModel
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.splash_view.*
 import retrofit2.Call
@@ -55,8 +57,30 @@ class SplashActivity : BaseApp(), Callback<NMSLBean> {
         }
     }
 
+    fun initBikaApi() {
+        RestWakaClient().apiService.wakaInit.enqueue(object : Callback<WakaInitResponse> {
+            override fun onResponse(call: Call<WakaInitResponse>, response: Response<WakaInitResponse>?) {
+                if ((response!!.body() as WakaInitResponse).addresses != null && (response.body() as WakaInitResponse).addresses.size > 0) {
+                    PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((response.body() as WakaInitResponse).addresses))
+                    ShowErrorMsg("初始化bika CDN缓存成功.")
+                    PreferenceHelper.setGirl(Comic.getContext(), true)
+                    PreferenceHelper.setChannel(Comic.getContext(), 2)
+                    BikaApi.setBiCaClient(Comic.getContext()!!)//fix that app can't login & request data for the first time
+                } else {
+                    ShowErrorMsg("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
+                }
+            }
+
+            override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
+                t.printStackTrace()
+                ShowErrorMsg("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载.")
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initBikaApi()
         isZuiChou = PreferenceHelper.getZuiChou(Comic.getContext())
         if (isZuiChou) {
             NMSLClient.generateAPI()

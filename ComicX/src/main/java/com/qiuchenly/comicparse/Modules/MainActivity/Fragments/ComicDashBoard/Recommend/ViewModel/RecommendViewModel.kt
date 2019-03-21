@@ -104,28 +104,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         })
     }
 
-    fun initBikaApi() {
-        RestWakaClient().apiService.wakaInit.enqueue(object : Callback<WakaInitResponse> {
-            override fun onResponse(call: Call<WakaInitResponse>, response: Response<WakaInitResponse>?) {
-                if ((response!!.body() as WakaInitResponse).addresses != null && (response.body() as WakaInitResponse).addresses.size > 0) {
-                    PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((response.body() as WakaInitResponse).addresses))
-                    mView?.ShowErrorMsg("初始化bika CDN缓存成功.")
-                    PreferenceHelper.setGirl(Comic.getContext(), true)
-                    PreferenceHelper.setChannel(Comic.getContext(), 2)
-                    getInit()
-                } else {
-                    mView?.OnNetFailed("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
-                }
-                mView?.final()
-            }
-
-            override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
-                t.printStackTrace()
-                loadFailure(Throwable("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载."))
-            }
-        })
-    }
-
     var userName = ""
     var pass = ""
     private fun getBikaIndex() {
@@ -150,7 +128,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         if (PreferenceHelper.getToken(Comic.getContext()) == "") {
             if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             } else
-                initBikaApi()
+            //initBikaApi()
             return
         }
         if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {

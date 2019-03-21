@@ -36,8 +36,6 @@ object Comic {
         Realm.setDefaultConfiguration(config)
         realm = Realm.getDefaultInstance()
 
-        BikaApi.setBiCaClient(ctx)
-
         //记录崩溃信息
         val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->

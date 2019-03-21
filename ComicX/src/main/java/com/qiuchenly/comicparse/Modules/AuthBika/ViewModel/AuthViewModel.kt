@@ -22,7 +22,7 @@ class AuthViewModel(private var mView: AuthBikaViewContract.View?) : BaseViewMod
             PreferenceHelper.setUserLoginEmail(Comic.getContext(), mUserName)
             PreferenceHelper.setUserLoginPassword(Comic.getContext(), mUserPass)
             PreferenceHelper.setToken(Comic.getContext(), response.body()?.data?.token)
-            mView?.ShowErrorMsg("登录Bika成功!")
+            mView?.ShowErrorMsg("登录Bika成功!请手动下拉刷新数据")
             mView?.LoginSucc()
         } else {
             mView?.ShowErrorMsg("登录Bika失败!检查账号密码!")

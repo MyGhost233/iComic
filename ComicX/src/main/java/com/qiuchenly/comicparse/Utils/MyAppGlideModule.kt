@@ -11,10 +11,15 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import com.qiuchenly.comicparse.Http.Bika.HttpDns
+import com.qiuchenly.comicparse.Http.Bika.TLSSocketFactory
+import com.qiuchenly.comicparse.Http.BikaApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.InputStream
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLSession
 
 @GlideModule
 class MyAppGlideModule : AppGlideModule() {
@@ -34,7 +39,7 @@ class MyAppGlideModule : AppGlideModule() {
      */
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         if (httpClient == null) {
-            httpClient = OkHttpClient.Builder().addInterceptor(object : Interceptor {
+            val mTemp = OkHttpClient.Builder().addInterceptor(object : Interceptor {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     val original = chain.request()
                     val s = original.url().url()
@@ -49,8 +54,11 @@ class MyAppGlideModule : AppGlideModule() {
                     )
                 }
             })
-                    .dns(HttpDns())
-                    .build()
+            mTemp.dns(HttpDns())
+            //val tlsSocketFactory = TLSSocketFactory()
+            //mTemp.sslSocketFactory(tlsSocketFactory, tlsSocketFactory.systemDefaultTrustManager())
+            //mTemp.hostnameVerifier(getHostnameVerifier())
+            httpClient = mTemp.build()
         }
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(httpClient!!))
     }
