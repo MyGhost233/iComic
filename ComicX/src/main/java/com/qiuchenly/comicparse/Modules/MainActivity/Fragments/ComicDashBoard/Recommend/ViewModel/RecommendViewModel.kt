@@ -5,8 +5,6 @@ import com.google.gson.reflect.TypeToken
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
-import com.qiuchenly.comicparse.Bean.DataItem
-import com.qiuchenly.comicparse.Bean.DataItem_lastNewer
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.DefaultCategoryObject
@@ -32,7 +30,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     }
 
     override fun loadFailure(t: Throwable) {
-        mView?.OnNetFailed()
+        mView?.OnNetFailed(t.message)
     }
 
     private var mView = Views
@@ -44,6 +42,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     private var mCall: Call<ResponseBody>? = null
 
     fun getIndex() {
+        getDMZJRecomend()
         if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getBikaAllCategory()
         } else {
@@ -52,7 +51,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 mView?.goSelectSource()
             mView?.final()
         }
-        getDMZJRecomend()
     }
 
     fun getDMZJRecomend() {
@@ -91,21 +89,16 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     val imageServer = ((response.body() as GeneralResponse<*>).data as InitialResponse).imageServer
                     if (imageServer != null && imageServer.isNotEmpty()) {
                         PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
-
                         mView?.ShowErrorMsg("使用上次登录的Token.")
-                        getBikaAllCategory()
-
                     }
                 } else {
-                    mView?.OnNetFailed()
-                    mView?.ShowErrorMsg("bika 图片提供服务器炸了.")
+                    loadFailure(Throwable("完啦,bika图片服务器炸了."))
                 }
             }
 
             override fun onFailure(call: Call<GeneralResponse<InitialResponse>>, t: Throwable) {
                 t.printStackTrace()
-                mView?.OnNetFailed()
-                mView?.ShowErrorMsg("网络有点问题.")
+                loadFailure(Throwable("网络有点问题."))
             }
         })
     }
@@ -120,16 +113,14 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     PreferenceHelper.setChannel(Comic.getContext(), 2)
                     getInit()
                 } else {
-                    mView?.OnNetFailed()
-                    mView?.ShowErrorMsg("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
+                    mView?.OnNetFailed("无法获取到Bika服务器的CDN地址!请使用VPN后重新加载.")
                 }
                 mView?.final()
             }
 
             override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
                 t.printStackTrace()
-                mView?.OnNetFailed()
-                mView?.ShowErrorMsg("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载.")
+                loadFailure(Throwable("试图初始化Bika服务器的CDN地址失败!请使用VPN后重新加载."))
             }
         })
     }
@@ -168,7 +159,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     object : Callback<GeneralResponse<CategoryResponse>> {
                         override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
                             //this.onFailure(call, t)
-                            mView?.OnNetFailed()
+                            mView?.OnNetFailed(t.message)
                         }
 
                         override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {

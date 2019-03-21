@@ -6,7 +6,7 @@ import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 
 interface RecommentContract {
     interface View : BaseView {
-        fun OnNetFailed()
+        fun OnNetFailed(message: String?)
         fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?)
 
         /**

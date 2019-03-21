@@ -17,6 +17,7 @@ class RecommendItemType {
             val TYPE_BIKA = 0x16
             val TYPE_DMZJ_NORMAL = 0x17
             val TYPE_DMZJ_LASTUPDATE = 0x18
+            val TYPE_DMZJ_SPEC_2 = 0x19
         }
     }
 }

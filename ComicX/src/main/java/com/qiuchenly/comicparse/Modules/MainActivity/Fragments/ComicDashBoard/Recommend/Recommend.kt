@@ -38,10 +38,9 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
         final()
     }
 
-    override fun OnNetFailed() {
+    override fun OnNetFailed(message: String?) {
         final()
-        mViewModel?.initBikaApi()
-        ShowErrorMsg("网络似乎有点问题")
+        ShowErrorMsg(message!!)
     }
 
     override fun getLayoutID(): Int {
@@ -51,9 +50,10 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
     private var mViewModel: RecommendViewModel? = null
     private val mRecommendRecyclerViewAdapter = RecommendRecyclerViewAdapter(this)
     override fun onViewFirstSelect(mPagerView: View) {
-
         mViewModel = RecommendViewModel(this)
+
         MyDetails_Refresh.setOnRefreshListener {
+            mRecommendRecyclerViewAdapter.resetData()
             mViewModel?.getIndex()
         }
         mRecView.layoutManager = GridLayoutManager(activity, 6).apply {
@@ -70,11 +70,13 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
                 return when (mRecommendRecyclerViewAdapter.getItemViewType(position)) {
                     RecommendItemType.TYPE.TYPE_BIKA,
                     RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
+                    RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2,
                     RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> true
                     else -> false
                 }
             }
         })
+        mViewModel?.initBikaApi()
         mViewModel?.getIndex()
     }
 

@@ -17,11 +17,11 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.*
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_LASTUPDATE
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_NORMAL
+import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_SPEC_2
 import com.qiuchenly.comicparse.Core.ActivityKey.KEY_BIKA_CATEGORY_JUMP
 import com.qiuchenly.comicparse.Enum.ComicSourcceType
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.Tools
-import com.qiuchenly.comicparse.Http.DongManZhiJia
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import com.qiuchenly.comicparse.Modules.SearchResult.SearchResult
@@ -31,9 +31,8 @@ import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
 import kotlinx.android.synthetic.main.item_rankview.view.*
 import kotlinx.android.synthetic.main.item_recommend_normal.view.*
 import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
-import kotlin.concurrent.thread
 
-class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyclerAdapter<RecommendItemType>() {
+class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : BaseRecyclerAdapter<RecommendItemType>() {
     override fun canLoadMore(): Boolean {
         return false
     }
@@ -48,6 +47,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
         RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
         RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE,
         RecommendItemType.TYPE.TYPE_BIKA -> R.layout.item_foosize_newupdate
+        RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
         RecommendItemType.TYPE.TYPE_TITLE -> R.layout.item_recommend_normal
         else -> R.layout.item_recommend_normal
     }
@@ -65,6 +65,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
             RecommendItemType.TYPE.TYPE_BIKA -> 2
             TYPE_DMZJ_NORMAL,
             TYPE_DMZJ_LASTUPDATE -> 2
+            TYPE_DMZJ_SPEC_2 -> 3
             else -> 6
         }
     }
@@ -80,7 +81,7 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
             RecommendItemType.TYPE.TYPE_TOP -> {
                 TopViewVP = view.findViewById(R.id.pager_container)
                 TopViewVP!!.pageMargin = 15
-                TopViewBanner = mTopViewBanner(view)
+                TopViewBanner = mTopViewBanner(view, mTopAdViewData!!)
                 TopViewVP!!.adapter = TopViewBanner
                 TopViewVP!!.offscreenPageLimit = 3
                 TopViewVP!!.clipChildren = false
@@ -112,14 +113,18 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
                     }
                 }
             }
-            RecommendItemType.TYPE.TYPE_DMZJ_NORMAL -> {
+            RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
+            RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2 -> {
                 val mItemData = Gson().fromJson(data.mItemData, DataItem::class.java)
-
                 with(view) {
                     val img = mItemData.cover
                     CustomUtils.loadImage(view.context, img, foo_bookImg, 0, 500)
                     foo_bookName.text = mItemData.title
-                    foo_bookName_upNews.text = mItemData.sub_title
+                    foo_bookName_upNews.text = if (mItemData.sub_title == "")
+                        mItemData.status
+                    else mItemData.sub_title
+                    if (mItemData.type == "8") foo_bookName_upNews.visibility = View.INVISIBLE
+                    else foo_bookName_upNews.visibility = View.VISIBLE
                     setOnClickListener {
                         startActivity(view.context, Intent(context, SearchResult::class.java).apply {
                             putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
@@ -176,6 +181,14 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
         setData(ArrayList())
     }
 
+    fun resetData() {
+        setData(ArrayList())
+        notifyDataSetChanged()
+    }
+
+    /**
+     * 加入哔咔数据
+     */
     fun addBikaData(arrayList_categories: ArrayList<CategoryObject>) {
         addData(RecommendItemType().apply {
             this.title = "Bika - 我TM社保?!"
@@ -189,28 +202,43 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
         }
     }
 
+
+    //=====================  动漫之家数据处理  =====================
+    private var mTopAdViewData: ComicHome_Recommend? = null
     private var mComicList: ComicHome_RecomendList? = null
     fun addDMZJData(mComicList: ComicHome_RecomendList) {
         this.mComicList = mComicList
         for (item in mComicList.normalType!!) {
             addData(RecommendItemType().apply {
                 this.title = item.title
-                type = RecommendItemType.TYPE.TYPE_TITLE
+                type = when (item.category_id) {
+                    "46" ->
+                        RecommendItemType.TYPE.TYPE_TOP
+                    else -> RecommendItemType.TYPE.TYPE_TITLE
+                }
+
             })
-            for (mItem in item.data!!) {
-                addData(RecommendItemType().apply {
-                    this.title = mItem["title"]
-                    this.mItemData = Gson().toJson(DataItem().apply {
-                        cover = mItem["cover"]!!
-                        title = mItem["title"]!!
-                        sub_title = mItem["sub_title"]!!
-                        type = mItem["type"]!!
-                        url = mItem["url"]!!
-                        obj_id = mItem["obj_id"]!!
-                        status = mItem["status"]!!
+            if (item.category_id == "46") {//对动漫之家的数据做解析,后续做优化.
+                mTopAdViewData = item
+            } else {
+                for (mItem in item.data!!) {
+                    addData(RecommendItemType().apply {
+                        this.title = mItem["title"]
+                        this.mItemData = Gson().toJson(DataItem().apply {
+                            cover = mItem["cover"]!!
+                            title = mItem["title"]!!
+                            sub_title = mItem["sub_title"]!!
+                            type = mItem["type"]!!
+                            url = mItem["url"]!!
+                            obj_id = mItem["obj_id"]!!
+                            status = mItem["status"]!!
+                        })
+                        type = when (item.category_id) {
+                            "48", "53", "55" -> RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2
+                            else -> RecommendItemType.TYPE.TYPE_DMZJ_NORMAL
+                        }
                     })
-                    type = RecommendItemType.TYPE.TYPE_DMZJ_NORMAL
-                })
+                }
             }
         }
         addData(RecommendItemType().apply {
@@ -232,23 +260,42 @@ class RecommendRecyclerViewAdapter(var view: RecommentContract.View) : BaseRecyc
         }
     }
 
+
     /**
      * 顶部Banner栏
      */
-    private inner class mTopViewBanner(val mView: View) : PagerAdapter() {
+    private inner class mTopViewBanner(val mView: View, mData: ComicHome_Recommend) : PagerAdapter() {
+
+        private var mArr = ArrayList<DataItem>()
+
+        init {
+            for (mItem in mData.data!!) {
+                mArr.add(DataItem().apply {
+                    cover = mItem["cover"]!!
+                    title = mItem["title"]!!
+                    sub_title = mItem["sub_title"]!!
+                    type = mItem["type"]!!
+                    url = mItem["url"]!!
+                    obj_id = mItem["obj_id"]!!
+                    status = mItem["status"]!!
+                })
+            }
+        }
+
         override fun getCount(): Int {
-            return 0
+            return mArr.size
         }
 
         @SuppressLint("SetTextI18n")
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val view = LayoutInflater.from(mView.context)
                     .inflate(R.layout.vpitem_top_ad, null, false)
+            val itemData = mArr[position]
             with(view) {
-                CustomUtils.loadImage(mView.context, "漫画URL", vp_item_topad_cv, 55, 500)
-
-                tv_bookName.text = "漫画名称"
-                tv_bookAuthor.text = "漫画作者"
+                CustomUtils.loadImage(mView.context, itemData.cover, vp_item_topad_cv, 100, 100)
+                CustomUtils.loadImage(mView.context, itemData.cover, img_book, 0, 100)
+                tv_bookName.text = itemData.title
+                tv_bookAuthor.text = itemData.sub_title
                 setOnClickListener {
                     val i = android.content.Intent(this.context, ComicDetails::class.java)
                     i.putExtras(android.os.Bundle().apply {

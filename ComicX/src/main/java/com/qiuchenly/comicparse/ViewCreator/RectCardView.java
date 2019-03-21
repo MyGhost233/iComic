@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.BaseImp;
+package com.qiuchenly.comicparse.ViewCreator;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

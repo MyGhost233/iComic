@@ -12,8 +12,6 @@ public interface ComicApi {
     Call<ResponseBody> getRecommend();
 
     //https://images.dmzj.com/img/webpic/19/1003821191536309628.jpg
-    @GET("/img/webpic/19/1003821191536309628.jpg")
-    Call<ResponseBody> getImage();
 
     String BASE_API_USER = "https://user.dmzj.com";
     String BASE_API_V3API = "https://v3api.dmzj.com";
