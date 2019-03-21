@@ -96,6 +96,11 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val str = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        if (str.isNullOrEmpty()) {
+            ShowErrorMsg("数据错误,可能是我没做这个功能或者正在开发中.")
+            finish()
+            return
+        }
         mCategory = Gson().fromJson(str, ComicCategoryBean::class.java)
         if (mCategory.mCategoryName != "搜索关键词")
             mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)

@@ -27,4 +27,12 @@ class PerferViewModel : BaseViewModel<ResponseBody>() {
     fun getBikaMode(): Boolean {
         return PreferenceHelper.getNoLoginBika(Comic.getContext())
     }
+
+    fun getZuiChou(): Boolean {
+        return PreferenceHelper.getZuiChou(Comic.getContext())
+    }
+
+    fun setZuiChou(mode: Boolean) {
+        PreferenceHelper.setZuiChou(Comic.getContext(), mode)
+    }
 }
