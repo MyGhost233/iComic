@@ -198,6 +198,7 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                         RecommendItemType.TYPE.TYPE_BIKA -> {
                             val bikaInfo = Gson().fromJson(data.mItemData, CategoryObject::class.java)
                             mImageSrc = Tools.getThumbnailImagePath(bikaInfo?.thumb)
+                            mCategoryName = bikaInfo.title
                             ComicSourcceType.BIKA
                         }
                         RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY -> {
