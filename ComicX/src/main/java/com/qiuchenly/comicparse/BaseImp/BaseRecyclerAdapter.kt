@@ -40,14 +40,14 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
     override fun onViewAttachedToWindow(holder: BaseViewHolder) {
         super.onViewAttachedToWindow(holder)
         val mPosition = mRecyclerView?.getChildAdapterPosition(holder.itemView)
-        if (mPosition != null)
+        if (mPosition != null && mPosition >= 0)
             onViewShowOrHide(mPosition, holder.itemView, true)
     }
 
     override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
         super.onViewDetachedFromWindow(holder)
         val mPosition = mRecyclerView?.getChildAdapterPosition(holder.itemView)
-        if (mPosition != null)
+        if (mPosition != null && mPosition >= 0)
             onViewShowOrHide(mPosition, holder.itemView, false)
         if (mFixMem) {
             Glide.with(holder.itemView)
