@@ -6,7 +6,6 @@ class RecommendItemType {
     var type: Int = 0
     var title: String? = null
     // 后期可加入Glide加载网络图片Url
-    var BikaInfo: CategoryObject? = null
     var mItemData: String = ""
 
     interface TYPE {
@@ -18,6 +17,7 @@ class RecommendItemType {
             val TYPE_DMZJ_NORMAL = 0x17
             val TYPE_DMZJ_LASTUPDATE = 0x18
             val TYPE_DMZJ_SPEC_2 = 0x19
+            val TYPE_DONGMANZHIJIA_CATEGORY = 0x20
         }
     }
 }

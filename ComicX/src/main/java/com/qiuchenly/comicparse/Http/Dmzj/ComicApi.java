@@ -8,8 +8,13 @@ import retrofit2.http.GET;
 
 public interface ComicApi {
 
-    @GET("/v3/recommend.json?channel=Android&version=2.7.009")
+    String BaseLine = "?channel=Android&version=2.7.009";
+
+    @GET("/v3/recommend.json" + BaseLine)
     Call<ResponseBody> getRecommend();
+
+    @GET("/0/category.json" + BaseLine)
+    Call<ResponseBody> getCategory();
 
     //https://images.dmzj.com/img/webpic/19/1003821191536309628.jpg
 
@@ -68,7 +73,7 @@ public interface ComicApi {
             case 24 /*24*/:
                 return "/latest/" + ".json";
             case 25 /*25*/:
-                return "/0/category.json";
+                return "";
             case 26:
                 return "/subject/" + ".json";
             case 27:

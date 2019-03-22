@@ -27,13 +27,28 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         }
     }
 
+    override fun onFailedToRecycleView(holder: BaseViewHolder): Boolean {
+        return super.onFailedToRecycleView(holder)
+
+    }
+
     private var mFixMem = false
     fun setFixMemory() {
         //mFixMem = true
     }
 
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        val mPosition = mRecyclerView?.getChildAdapterPosition(holder.itemView)
+        if (mPosition != null)
+            onViewShowOrHide(mPosition, holder.itemView, true)
+    }
+
     override fun onViewDetachedFromWindow(holder: BaseViewHolder) {
         super.onViewDetachedFromWindow(holder)
+        val mPosition = mRecyclerView?.getChildAdapterPosition(holder.itemView)
+        if (mPosition != null)
+            onViewShowOrHide(mPosition, holder.itemView, false)
         if (mFixMem) {
             Glide.with(holder.itemView)
                     .clear(holder.itemView)
@@ -55,6 +70,11 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
          */
         fun showMsg(str: String)
     }
+
+    /**
+     * 当某个Position的View状态为可见/不可见的时候会回调该方法.
+     */
+    open fun onViewShowOrHide(position: Int, item: View, isShow: Boolean) {}
 
     /**
      * 返回为真则自动加入1个item,作为加载更多的布局

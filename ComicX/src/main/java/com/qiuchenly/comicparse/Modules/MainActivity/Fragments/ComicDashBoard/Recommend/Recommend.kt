@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.GridSpacingItemDecoration
+import com.qiuchenly.comicparse.Bean.ComicHome_Category
 import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
@@ -16,6 +17,10 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class Recommend : BaseLazyFragment(), RecommentContract.View {
+    override fun onGetDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>) {
+        mRecommendRecyclerViewAdapter.addDMZJCategory(mComicCategory)
+    }
+
     override fun onGetDMZRecommendSuch(mComicList: ComicHome_RecomendList) {
         mRecommendRecyclerViewAdapter.addDMZJData(mComicList)
     }
@@ -68,11 +73,11 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
         mRecView.addItemDecoration(object : GridSpacingItemDecoration() {
             override fun needFixed(position: Int): Boolean {
                 return when (mRecommendRecyclerViewAdapter.getItemViewType(position)) {
-                    RecommendItemType.TYPE.TYPE_BIKA,
-                    RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
-                    RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2,
-                    RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> true
-                    else -> false
+                    RecommendItemType.TYPE.TYPE_TITLE,
+                    RecommendItemType.TYPE.TYPE_TOP,
+                    RecommendItemType.TYPE.TYPE_RANK
+                    -> false
+                    else -> true
                 }
             }
         })

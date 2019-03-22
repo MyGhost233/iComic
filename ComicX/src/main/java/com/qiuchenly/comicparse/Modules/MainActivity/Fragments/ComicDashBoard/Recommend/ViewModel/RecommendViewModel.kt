@@ -3,20 +3,18 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.Bean.ComicHome_Category
 import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.DefaultCategoryObject
 import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.Bika.RestWakaClient
 import com.qiuchenly.comicparse.Http.Bika.responses.CategoryResponse
 import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
 import com.qiuchenly.comicparse.Http.Bika.responses.InitialResponse
-import com.qiuchenly.comicparse.Http.Bika.responses.WakaInitResponse
 import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Http.DongManZhiJia
-import com.qiuchenly.comicparse.Http.NMSL.NMSLClient
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -44,6 +42,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
     fun getIndex() {
         getDMZJRecomend()
+        getDMZJCategory()
         if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getBikaAllCategory()
         } else {
@@ -52,6 +51,27 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 mView?.goSelectSource()
             mView?.final()
         }
+    }
+
+    fun getDMZJCategory() {
+        val mCall = DongManZhiJia.getV3API().category
+        mCall.enqueue(object : Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                loadFailure(Throwable("加载动漫之家的类别数据失败!"))
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val ret = response.body()?.string() ?: return
+                val cls = JSONArray(ret)
+                var size = 0
+                val mArrs = ArrayList<ComicHome_Category>()
+                while (size < cls.length() - 1) {
+                    mArrs.add(Gson().fromJson(cls.getJSONObject(size).toString(), ComicHome_Category()::class.java))
+                    size++
+                }
+                mView?.onGetDMZJCategory(mArrs)
+            }
+        })
     }
 
     fun getDMZJRecomend() {
@@ -129,7 +149,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
             if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             } else
             //initBikaApi()
-            return
+                return
         }
         if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
 

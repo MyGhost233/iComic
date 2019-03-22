@@ -32,4 +32,10 @@ class ComicHome_Recommend {
     var title: String = ""
 }
 
+class ComicHome_Category {
+    var tag_id = ""
+    var title = ""
+    var cover = ""
+}
+
 
