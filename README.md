@@ -7,7 +7,7 @@
 许可证使用GPL V3授权,禁止利用本App进行商业活动.
 
 ### 下载最新编译版
-[最新每日编译版 - 2019.3.23](ComicX-release.apk)
+[最新每日编译版 - 2019.3.24](ComicX-release.apk)
 
 ### 主要开发人员
 QiuChenly(秋城落叶)
@@ -22,6 +22,36 @@ QiuChenly(秋城落叶)
 | 5 | 自动保存看过的漫画 | √ |
 
 ### 开发日志
+2019-3-24:
+```
+增加了一些新功能,修改了界面.
+
+1.增加了BrowserView界面,支持点击加载动漫之家的公告显示.
+2.ComicDetails类加入了隐式Intent传递数据,来加载漫画信息.
+3.ComicApi接口类加入了获取漫画详情的接口方法getComic来获取到漫画的详情.
+4.修改BasicInfo类名为ComicBasicInfo,并针对动漫之家的数据源做了针对性适配.
+5.删除了ComicBasicInfo与ComicList类的getInstance()方法,改为setUI(Type)方法来设置Fragment数据,试图解决引用内存泄漏.
+6.ComicListViewModel类加入了getDMZJComicList(obj_id: String)方法,来加载漫画数据.
+7.ComicDetails类为动漫之家做了多数据源加载适配.
+8.ComicPageAda增加了setSourceType方法,来一次性设置数据源来源,并将ItemData设置为String来动态处理数据源数据.
+9.ComicPageAda类中的onViewShow针对多数据源做了适配.
+10.修改enum类ComicSourcceType为ComicSourceType,修改一处单词拼写错误.
+11.删除了漫画详情页的两个用不到的按钮与删除了'字母索引'和'评分'视图.
+12.主分支改为SingleSource分支.master分支暂时不作处理.
+13.RecentlyPagerAdapter类中的getInstance方法改为通过Fragment的引用名称来获取对应的Fragment实例.
+14.mTopViewBanner修改为ViewBanner类.
+15.RecommendViewModel类删除了几个冗余字段代码.
+16.搜索结果页的代码微调,未造成功能性改变.
+17.getDMZJRecommend方法,修改为当请求动漫之家的推荐数据请求成功后才会去加载动漫之家的漫画类别请求.
+18.修改数据填充逻辑.当哔咔数据比动漫之家的数据先获取到的话,则当动漫之家的数据加载出来的时候自动让哔咔数据跑到底部.
+19.支持阅读部分动漫之家漫画数据,支持加载部分动漫之家漫画数据.
+20.删除了ComicReadingAdapter类中的setBikaMode方法.
+21.MyAppGlideModule类中修复了动漫之家检查图片数据来源导致无法加载图片的bug.
+22.支持显示阅读时漫画章节名称.
+23.ReadViewModel类中增加了getDMZJImage方法.
+24.支持动漫之家 - 最近更新 板块的漫画的阅读.
+25.支持动漫之家 - 漫画详情页的番外与连载目录一起加载.
+```
 2019-3-23:
 ```
 增加了一些新功能与UI的更改.
