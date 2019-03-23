@@ -33,15 +33,6 @@ class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyc
         }
     }
 
-    enum class DataSourceType {
-        BIKA
-    }
-
-    var currentSource = DataSourceType.BIKA
-    fun setBikaMode() {
-        currentSource = DataSourceType.BIKA
-    }
-
     init {
         setFixMemory()
     }

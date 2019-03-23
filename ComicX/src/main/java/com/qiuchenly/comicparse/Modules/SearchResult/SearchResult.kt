@@ -12,7 +12,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicCategoryBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Http.Bika.responses.DataClass.ComicListResponse.ComicListData
@@ -95,22 +95,14 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val str = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
         if (str.isNullOrEmpty()) {
             ShowErrorMsg("数据错误,可能是我没做这个功能或者正在开发中.")
             finish()
             return
         }
-        mCategory = Gson().fromJson(str, ComicCategoryBean::class.java)
-        if (mCategory.mCategoryName != "搜索关键词")
-            mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
 
-        mAdapter = SearchResultAdapter(this)
-        magic_indicator.visibility = View.GONE
-        if (mCategory.mComicType == ComicSourcceType.BIKA) {
-            selectLoad()
-            activityName.text = mCategory.mCategoryName
-        }
         back_up.setOnClickListener {
             finish()
         }
@@ -122,7 +114,17 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
                 super.getItemOffsets(outRect, view, parent, state)
             }
         })
+        mAdapter = SearchResultAdapter(this)
         mResultList.adapter = mAdapter
+
+        mCategory = Gson().fromJson(str, ComicCategoryBean::class.java)
+        if (mCategory.mCategoryName != "搜索关键词")
+            mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
+        magic_indicator.visibility = View.GONE
+        if (mCategory.mComicType == ComicSourceType.BIKA) {
+            selectLoad()
+            activityName.text = mCategory.mCategoryName
+        }
     }
 
     override fun onDestroy() {

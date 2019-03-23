@@ -1,6 +1,5 @@
 package com.qiuchenly.comicparse.Http
 
-import com.qiuchenly.comicparse.Http.Bika.TLSSocketFactory
 import com.qiuchenly.comicparse.Http.Dmzj.ComicApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,8 +55,6 @@ object DongManZhiJia : BaseRetrofitManager<ComicApi>() {
                         return true
                     }
                 })
-        //val tlsSocketFactory = TLSSocketFactory()
-        //httpClient.sslSocketFactory(tlsSocketFactory, tlsSocketFactory.systemDefaultTrustManager())
         HttpLoggingInterceptor().level = HttpLoggingInterceptor.Level.BODY
         val api = Retrofit
                 .Builder()

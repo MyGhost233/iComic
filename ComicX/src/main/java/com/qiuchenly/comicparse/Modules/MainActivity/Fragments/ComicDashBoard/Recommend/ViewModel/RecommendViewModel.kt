@@ -8,7 +8,6 @@ import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
-import com.qiuchenly.comicparse.Http.Bika.DefaultCategoryObject
 import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
 import com.qiuchenly.comicparse.Http.Bika.responses.CategoryResponse
 import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
@@ -21,7 +20,6 @@ import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<ResponseBody>() {
     override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -41,16 +39,14 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     private var mCall: Call<ResponseBody>? = null
 
     fun getIndex() {
-        getDMZJRecomend()
-        getDMZJCategory()
+        getDMZJRecommend()
         if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
             getBikaAllCategory()
-        } else {
-            mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
-            if (PreferenceHelper.getIsFirst(Comic.getContext()))
-                mView?.goSelectSource()
-            mView?.final()
         }
+        //mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
+        //        if (PreferenceHelper.getIsFirst(Comic.getContext()))
+        //            mView?.goSelectSource()
+        //        mView?.final()
     }
 
     fun getDMZJCategory() {
@@ -74,7 +70,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         })
     }
 
-    fun getDMZJRecomend() {
+    private fun getDMZJRecommend() {
         val mCall = DongManZhiJia.getV3API().recommend
         mCall.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -94,6 +90,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                 mComicList.lastNewer = Gson().fromJson(cls.getJSONObject(8).toString(), ComicHome_Recommend()::class.java)
                 mComicList.normalType = mArrs
                 mView?.onGetDMZRecommendSuch(mComicList)
+                getDMZJCategory()
             }
         })
     }
@@ -103,8 +100,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
             getBikaIndex()
             return
         }
-        val callInit = BikaApi.getAPI()!!.getInit(PreferenceHelper.getToken(Comic.getContext()))
-        callInit.enqueue(object : Callback<GeneralResponse<InitialResponse>> {
+        BikaApi.getAPI()?.getInit(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(object : Callback<GeneralResponse<InitialResponse>> {
             override fun onResponse(call: Call<GeneralResponse<InitialResponse>>, response: Response<GeneralResponse<InitialResponse>>) {
                 if (response.code() == 200) {
                     val imageServer = ((response.body() as GeneralResponse<*>).data as InitialResponse).imageServer
@@ -134,22 +130,20 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
             mView?.goLoginBika()
         } else {
             if (PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()) != "") {
-                arrayList_categories = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
-                mView?.onGetBikaCategorySucc(arrayList_categories)
+                mBikaCategoryArr = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
+                mView?.onGetBikaCategorySucc(mBikaCategoryArr)
             } else getBikaAllCategory()
         }
     }
 
-    var arrayList_categories: ArrayList<CategoryObject>? = null
-    var arrayList_defaultCategories: ArrayList<DefaultCategoryObject>? = null
-    var arrayList_keywords: ArrayList<String>? = null
-    var arrayList_tags: ArrayList<String>? = null
-    fun getBikaAllCategory() {
+    var mBikaCategoryArr: ArrayList<CategoryObject>? = null
+    private fun getBikaAllCategory() {
         if (PreferenceHelper.getToken(Comic.getContext()) == "") {
             if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
-            } else
+            } else {
+            }
             //initBikaApi()
-                return
+            return
         }
         if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
 
@@ -162,14 +156,14 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                         }
 
                         override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {
-                            arrayList_categories = response.body()?.data?.getCategories()
-                            if (arrayList_categories != null) {
-                                arrayList_categories?.add(0, CategoryObject("lastUpdate", "最近更新", "", arrayList_categories!![0].thumb))
-                                arrayList_categories?.add(0, CategoryObject("randomComic", "随机本子", "", arrayList_categories!![0].thumb))
-                                arrayList_categories?.add(0, CategoryObject("", "哔咔排行", "", arrayList_categories!![0].thumb))
+                            mBikaCategoryArr = response.body()?.data?.getCategories()
+                            if (mBikaCategoryArr != null) {
+                                mBikaCategoryArr?.add(0, CategoryObject("lastUpdate", "最近更新", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("randomComic", "随机本子", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "哔咔排行", "", mBikaCategoryArr!![0].thumb))
                             }
-                            PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(arrayList_categories))
-                            mView?.onGetBikaCategorySucc(arrayList_categories)
+                            PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(mBikaCategoryArr))
+                            mView?.onGetBikaCategorySucc(mBikaCategoryArr)
                         }
                     }
             )

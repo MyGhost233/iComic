@@ -15,9 +15,9 @@ class RecentlyPagerAdapter(fm: FragmentManager, private val structArr: List<Stru
         return structArr.size
     }
 
-    fun <T : Fragment> getInstance(clazz: T): Fragment? {
+    fun getInstance(name: String): Fragment? {
         for (fragment in structArr) {
-            if (fragment.fram.javaClass.simpleName == clazz.javaClass.simpleName) {
+            if (fragment.name == name) {
                 return fragment.fram
             }
         }

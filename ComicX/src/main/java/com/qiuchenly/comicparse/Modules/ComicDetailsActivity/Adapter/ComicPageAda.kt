@@ -4,16 +4,18 @@ import android.content.Intent
 import android.view.View
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
+import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ReadingActivity.ReadPage
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 
-class ComicPageAda(val view: ComicDetailContract.View?) : BaseRecyclerAdapter<ComicEpisodeObject>() {
+class ComicPageAda : BaseRecyclerAdapter<String>() {
+
+
     override fun canLoadMore(): Boolean {
         return false
     }
@@ -26,25 +28,51 @@ class ComicPageAda(val view: ComicDetailContract.View?) : BaseRecyclerAdapter<Co
         return R.layout.comic_page_item
     }
 
-    override fun onViewShow(item: View, data: ComicEpisodeObject, position: Int, ViewType: Int) {
-        if (data is ComicEpisodeObject) {
-            item.tv_comicPageName.text = data.title
-            item.last_read.visibility = View.GONE
-            item.setOnClickListener {
-                item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
-                    putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
-                        mComicType = ComicSourcceType.BIKA
-                        mComicID = BaseBikaID
-                        mComicString = Gson().toJson(data)
-                    }))
-                })
+    override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
+        when (mType) {
+            ComicSourceType.BIKA -> {
+                val mComicEpisodeObject = Gson().fromJson(data, ComicEpisodeObject::class.java)
+                item.tv_comicPageName.text = mComicEpisodeObject.title
+                item.last_read.visibility = View.GONE
+                item.setOnClickListener {
+                    item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
+                        putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                            mComicType = ComicSourceType.BIKA
+                            mComicID = mBaseID //注意 此处必须设置书籍ID
+                            mComicString = data
+                        }))
+                    })
+                }
+            }
+            ComicSourceType.DMZJ -> {
+                val mComicHomeComicChapterList = Gson().fromJson(data, ComicChapterData::class.java)
+                item.tv_comicPageName.text = mComicHomeComicChapterList.chapter_title
+                item.last_read.visibility = View.GONE
+                item.setOnClickListener(null)
+                item.setOnClickListener {
+                    item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
+                        putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                            mComicType = ComicSourceType.DMZJ //设置数据源类型
+                            mComicID = mBaseID //设置书籍ID
+                            mComicString = data //设置数据源对应的章节json字符串
+                        }))
+                    })
+                }
+            }
+            else -> {
+
             }
         }
     }
 
+    private var mType = ComicSourceType.BIKA
 
-    var BaseBikaID = ""
+    fun setSourceType(mType: ComicSourceType) {
+        this.mType = mType
+    }
+
+    private var mBaseID = ""
     fun setBaseID(id: String) {
-        BaseBikaID = id
+        mBaseID = id
     }
 }

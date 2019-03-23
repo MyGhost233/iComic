@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.qiuchenly.comicparse.BaseImp.AppManager
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.*
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_BIKA
@@ -22,10 +21,9 @@ import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_SPEC_2
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DONGMANZHIJIA_CATEGORY
 import com.qiuchenly.comicparse.Core.ActivityKey.KEY_BIKA_CATEGORY_JUMP
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.CategoryObject
 import com.qiuchenly.comicparse.Http.Bika.Tools
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import com.qiuchenly.comicparse.Modules.SearchResult.SearchResult
 import com.qiuchenly.comicparse.R
@@ -50,6 +48,9 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
         }
     }
 
+    /**
+     * 在mInitUI(param1,param2,param3)方法后被调用.先初始化Item数据再显示该Item
+     */
     override fun onViewShowOrHide(position: Int, item: View, isShow: Boolean) {
         if (getItemViewType(position) == RecommendItemType.TYPE.TYPE_TOP) {
             if (isShow) {
@@ -100,17 +101,20 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
         }
     }
 
-    private var mBannerAdapter: mTopViewBanner? = null
+    private var mBannerAdapter: ViewBanner? = null
     private var hand: Handler = Handler(Looper.getMainLooper())
     private var mThread: BannerThread? = null
 
     @SuppressLint("SetTextI18n")
     private fun mInitUI(view: View, data: RecommendItemType?, position: Int) {
         when (data?.type) {
+            /**
+             * Banner栏数据
+             */
             RecommendItemType.TYPE.TYPE_TOP -> {
                 val mViewPager = view.findViewById<ViewPager>(R.id.pager_container)
                 mViewPager!!.pageMargin = 15
-                mBannerAdapter = mTopViewBanner(mTopAdViewData!!)
+                mBannerAdapter = ViewBanner(mTopAdViewData!!)
                 mViewPager.adapter = mBannerAdapter
                 mThread = object : BannerThread() {
                     override fun runAble() {
@@ -122,6 +126,9 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     }
                 }
             }
+            /**
+             * 暂时没用到
+             */
             RecommendItemType.TYPE.TYPE_RANK -> {
                 //RANK 点击
                 with(view) {
@@ -139,53 +146,87 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     }
                 }
             }
+            /**
+             * 类别标题
+             */
             RecommendItemType.TYPE.TYPE_TITLE -> {
                 //RANK 点击
                 with(view) {
                     tv_listName.text = data.title
-                    setOnClickListener {
-
-                    }
+                    setOnClickListener(null)
                 }
             }
+            /**
+             * 动漫之家/分类处理数据专属
+             * ID对照表
+             *  6 = 火热专题广告
+             *  5 = 新漫周刊数据 与6一致
+             *  8 = 大师级作者
+             *  1 = 漫画
+             */
             RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
+            RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE,
             RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2 -> {
-                val mItemData = Gson().fromJson(data.mItemData, DataItem::class.java)
+                var mImage = ""
+                var mComicBookName = ""
+                var mComicStatusOrAuthor = ""
+                var mItemComicType = "1" //漫画
+                var mComicStringRealInfo = ""
                 with(view) {
-                    val img = mItemData.cover
-                    CustomUtils.loadImage(view.context, img, foo_bookImg, 0, 500)
-                    foo_bookName.text = mItemData.title
-                    foo_bookName_upNews.text = if (mItemData.sub_title == "")
-                        mItemData.status
-                    else mItemData.sub_title
-                    if (mItemData.type == "8") foo_bookName_upNews.visibility = View.INVISIBLE
-                    else foo_bookName_upNews.visibility = View.VISIBLE
-                    setOnClickListener {
-                        startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            /*putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
-                                *//* this.mCategoryName = bikaInfo?.title!!
-                                 this.mComicType = ComicSourcceType.BIKA
-                                 this.mData = Gson().toJson(bikaInfo)*//*
-                            }
-                            ))*/
-                        }, null)
+                    when (data.type) {
+                        RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> {
+                            val mItemData = Gson().fromJson(data.mItemData, DataItem_lastNewer::class.java)
+                            mImage = mItemData.cover
+                            mComicBookName = mItemData.title
+                            mComicStatusOrAuthor = mItemData.authors
+                            //将数据与普通漫画数据格式化一致,修复加载数据问题.
+                            mComicStringRealInfo = Gson().toJson(DataItem().apply {
+                                this.cover = mItemData.cover
+                                this.obj_id = mItemData.id
+                                this.sub_title = mItemData.authors
+                                this.title = mItemData.title
+                                this.status = mItemData.status
+                            })
+                        }
+                        else -> {
+                            val mItemData = Gson().fromJson(data.mItemData, DataItem::class.java)
+                            mItemComicType = mItemData.type
+                            mComicStringRealInfo = data.mItemData
+                            mImage = mItemData.cover
+                            mComicBookName = mItemData.title
+                            mComicStatusOrAuthor = if (mItemData.sub_title == "") mItemData.status else mItemData.sub_title
+                            foo_bookName_upNews.visibility =
+                                    if (mItemData.type == "8") View.INVISIBLE
+                                    else View.VISIBLE
+                        }
                     }
-                }
-            }
-            RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> {
-                val mItemData = Gson().fromJson(data.mItemData, DataItem_lastNewer::class.java)
-                with(view) {
-                    val img = mItemData.cover
-                    CustomUtils.loadImage(view.context, img, foo_bookImg, 0, 500)
-                    foo_bookName.text = mItemData.title
-                    foo_bookName_upNews.text = mItemData.authors
-                    setOnClickListener {
-                        startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            /*putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
+                    CustomUtils.loadImage(view.context, mImage, foo_bookImg, 0, 500)
+                    foo_bookName.text = mComicBookName
+                    foo_bookName_upNews.text = mComicStatusOrAuthor
 
+                    setOnClickListener {
+                        //TODO 此处需要作进一步优化
+                        val mIntent = when (mItemComicType) {
+                            "1" -> {
+                                Intent("android.intent.action.ComicDetails").apply {
+                                    putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                                        this.mComicType = ComicSourceType.DMZJ
+                                        this.mComicString = mComicStringRealInfo
+                                    }))
+                                }
                             }
-                            ))*/
-                        }, null)
+                            "8", "6" -> {
+                                null
+                            }
+                            "5" -> {
+                                //周刊数据列表未处理
+                                null
+                            }
+                            else -> null
+                        }
+                        if (mIntent != null) {
+                            context.startActivity(mIntent)
+                        }
                     }
                 }
             }
@@ -199,17 +240,17 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                             val bikaInfo = Gson().fromJson(data.mItemData, CategoryObject::class.java)
                             mImageSrc = Tools.getThumbnailImagePath(bikaInfo?.thumb)
                             mCategoryName = bikaInfo.title
-                            ComicSourcceType.BIKA
+                            ComicSourceType.BIKA
                         }
                         RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY -> {
                             val mCate = Gson().fromJson(data.mItemData, ComicHome_Category::class.java)
                             mCategoryName = mCate.title
                             mImageSrc = mCate.cover
-                            ComicSourcceType.DMZJ
+                            ComicSourceType.DMZJ
                         }
                         //and more type...
                         else -> {
-                            ComicSourcceType.DMZJ
+                            ComicSourceType.DMZJ
                         }
                     }
                     CustomUtils.loadImage(view.context, mImageSrc, foo_bookImg, 0, 500)
@@ -259,6 +300,8 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
     private var mTopAdViewData: ComicHome_Recommend? = null
     private var mComicList: ComicHome_RecomendList? = null
     override fun addDMZJData(mComicList: ComicHome_RecomendList) {
+        val all = getBaseData()
+        resetData()
         this.mComicList = mComicList
         for (item in mComicList.normalType!!) {
             addData(RecommendItemType().apply {
@@ -310,20 +353,23 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                 type = RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE
             })
         }
+        if (all != null) {
+            addData(all)
+        }
     }
 
     /**
      * 顶部Banner栏
      */
-    private class mTopViewBanner(mData: ComicHome_Recommend) : PagerAdapter() {
+    private class ViewBanner(mData: ComicHome_Recommend) : PagerAdapter() {
 
         private var mCurrentView: View? = null
         override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
             val mView = `object` as View
             if (mView != mCurrentView && mView.tag != true) {
-                var mTitle = ""
-                var mImageSrc = ""
-                var mSubTitle = ""
+                val mTitle: String
+                var mImageSrc: String
+                val mSubTitle: String
                 val mContext = container.context
 
                 val itemData = mArr[position]
@@ -337,11 +383,16 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     tv_bookName.text = mTitle
                     tv_bookAuthor.text = mSubTitle
                     setOnClickListener {
-                        val i = Intent(mContext, ComicDetails::class.java)
+                        val cate = itemData.type
+                        val i = Intent(when (cate) {
+                            "7" -> "android.intent.action.GET_DMZJ_URL"
+                            else -> "android.intent.action.GET_DMZJ_URL"
+                        })
                         i.putExtras(Bundle().apply {
                             //漫画基本信息 做跳转
+                            putString(KEY_BIKA_CATEGORY_JUMP, itemData.url)
                         })
-                        startActivity(AppManager.appm.currentActivity(), i, null)
+                        context.startActivity(i)
                     }
                 }
                 if (position + 1 < mArr.size) {
@@ -374,13 +425,15 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
             return mArr.size
         }
 
+        //优化加载时二次加载导致的界面闪动.
         private var mViewList = HashMap<Int, View>()
+
         @SuppressLint("SetTextI18n")
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             var mView = mViewList[position]
             if (mView == null) {
                 mView = LayoutInflater.from(container.context)
-                        .inflate(R.layout.vpitem_top_ad, null, false)
+                        .inflate(R.layout.vpitem_top_ad, container, false)
                 mViewList[position] = mView
             }
             container.addView(mView)

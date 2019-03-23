@@ -13,7 +13,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.ComicListObject
 import com.qiuchenly.comicparse.Http.Bika.Tools
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
@@ -75,7 +75,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                         context.startActivity(Intent(context, ComicDetails::class.java).apply {
                             //TODO 需要优化此处
                             putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
-                                this.mComicType = ComicSourcceType.BIKA
+                                this.mComicType = ComicSourceType.BIKA
                                 mComicID = data.comicId
                                 mComicImg = image
                                 mComicName = data.title

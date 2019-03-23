@@ -80,36 +80,13 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/charIndex_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/author"
-        android:layout_alignBottom="@id/charIndex"
-        android:gravity="center"
-        android:text="字母索引："
-        android:textColor="@color/mDefaultListTextColor"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/charIndex"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_below="@id/author"
-        android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@id/charIndex_label"
-        android:background="@drawable/background_simple"
-        android:text="L"
-        android:textColor="@color/mDefaultListTextColor"
-        android:textSize="12sp" />
-
-    <TextView
         android:id="@+id/comicType_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/charIndex"
+        android:layout_below="@id/author"
         android:layout_alignBottom="@id/comicType"
         android:gravity="center"
-        android:text="剧情类别："
+        android:text="类别："
         android:textColor="@color/mDefaultListTextColor"
         android:textSize="12sp" />
 
@@ -117,31 +94,11 @@
         android:id="@+id/comicType"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:layout_below="@id/charIndex"
+        android:layout_below="@id/author"
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@id/comicType_label"
         android:background="@drawable/background_simple"
         android:text="少女爱情"
         android:textColor="@color/mDefaultListTextColor"
         android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/comicType"
-        android:layout_toLeftOf="@id/score_label"
-        android:text="9.1"
-        android:textColor="@color/mDefaultListTextColor"
-        android:textSize="25sp" />
-
-    <TextView
-        android:id="@+id/score_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/score"
-        android:layout_alignParentRight="true"
-        android:text="分"
-        android:textColor="@color/mDefaultListTextColor"
-        android:textSize="12sp" />
 </RelativeLayout>

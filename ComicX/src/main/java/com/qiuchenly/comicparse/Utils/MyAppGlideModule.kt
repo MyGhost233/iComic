@@ -47,7 +47,7 @@ class MyAppGlideModule : AppGlideModule() {
                             //解决动漫之家APP后台的来源检查bug(之家后台建议辞退)
                             original.newBuilder()
                                     .header("Referer",
-                                            if (s.host.contains("images.dmzj.com"))
+                                            if (s.host.contains("dmzj.com"))
                                                 "http://images.dmzj.com/" else "")
                                     .method(original.method(), original.body())
                                     .build()

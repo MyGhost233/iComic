@@ -9,9 +9,10 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
+import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicReadingAdapter
 import com.qiuchenly.comicparse.R
@@ -62,7 +63,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         }
         lastPoint = mComicImagePageAda?.itemCount!!
         mComicImagePageAda?.addData(lst)
-        currInfos.text = currInfo
+        //currInfos.text = currInfo
         if (lastPoint < 0) {
             mAppBarComicReader.setExpanded(true, true)
             rv_comicRead_list.scrollToPosition(lastPoint)
@@ -82,23 +83,32 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     var bookID = ""
     var order = 1
 
-    lateinit var mComicInfo: ComicEpisodeObject
     private var mViewModel: ReadViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
         val mStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
         val mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
-        mComicInfo = Gson().fromJson(mTempComicInfo.mComicString, ComicEpisodeObject::class.java)
         mComicImagePageAda = ComicReadingAdapter(this)
-        if (mTempComicInfo.mComicType == ComicSourcceType.BIKA) {
-            bookID = mTempComicInfo.mComicID
-            mComicImagePageAda?.setBikaMode()
-            mViewModel?.getBikaImage(bookID, mComicInfo.order)
-        }
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
 
+
+        //=============  初始化界面数据  ===============
+
+        bookID = mTempComicInfo.mComicID
+        when (mTempComicInfo.mComicType) {
+            ComicSourceType.DMZJ -> {
+                val mBase = Gson().fromJson(mTempComicInfo.mComicString, ComicChapterData::class.java)
+                currInfos.text = mBase.chapter_title
+                mViewModel?.getDMZJImage(bookID, mBase.chapter_id)
+            }
+            ComicSourceType.BIKA -> {
+                val mComicInfo = Gson().fromJson(mTempComicInfo.mComicString, ComicEpisodeObject::class.java)
+                currInfos.text = mComicInfo.title
+                mViewModel?.getBikaImage(bookID, mComicInfo.order)
+            }
+        }
     }
 
     override fun onDestroy() {

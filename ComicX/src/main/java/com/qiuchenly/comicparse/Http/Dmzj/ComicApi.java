@@ -2,9 +2,14 @@ package com.qiuchenly.comicparse.Http.Dmzj;
 
 import android.text.TextUtils;
 
+import com.qiuchenly.comicparse.Bean.ChapterList;
+import com.qiuchenly.comicparse.Bean.ComicChapterData;
+import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface ComicApi {
 
@@ -15,6 +20,12 @@ public interface ComicApi {
 
     @GET("/0/category.json" + BaseLine)
     Call<ResponseBody> getCategory();
+
+    @GET("/comic/{comicID}.json" + BaseLine)
+    Call<ComicHomeComicChapterList> getComic(@Path("comicID") String mComicID);
+
+    @GET("/chapter/{bookId}/{chapterId}.json" + BaseLine)
+    Call<ChapterList> getComic(@Path("bookId") String bookId, @Path("chapterId") String chapterId);
 
     //https://images.dmzj.com/img/webpic/19/1003821191536309628.jpg
 
@@ -76,8 +87,6 @@ public interface ComicApi {
                 return "";
             case 26:
                 return "/subject/" + ".json";
-            case 27:
-                return "/comic/" + ".json";
             case 28:
                 return "/recommend/batchUpdate";
             case 29:

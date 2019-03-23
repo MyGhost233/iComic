@@ -1,9 +1,9 @@
 package com.qiuchenly.comicparse.Bean
 
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 
 class ComicCategoryBean {
-    var mComicType = ComicSourcceType.BIKA
+    var mComicType = ComicSourceType.BIKA
     var mCategoryName = "漫画类别"
     var mData = ""
 }

@@ -4,12 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.ImageView
@@ -19,10 +16,11 @@ import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourcceType
+import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.Http.Bika.ComicListObject
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.BasicInfo
+import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.ComicBasicInfo
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList.ComicList
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDetailsViewModel
@@ -95,7 +93,8 @@ class ComicDetails :
     }
 
     override fun scrollWithPosition(position: Int) {
-        ComicList.getInstance().scrollWithPosition(position)
+        val mFragment = mAdapter?.getInstance("章节") as ComicList
+        mFragment.scrollWithPosition(position)
     }
 
     private var mComicTag = "SimpleName|SimpleCode"
@@ -119,7 +118,32 @@ class ComicDetails :
         if (mComicStr.isNullOrEmpty()) finish()
         val baseInfo = Gson().fromJson(mComicStr, ComicInfoBean::class.java)
 
-        mServerConnect = object : ServiceConnection {
+        var mComicSourceName = "预设来源"
+        var mComicSrc = ""
+        var mComicTitle = ""
+        var mComicAuthor = ""
+        var mBookCategory = "暂无分类"
+
+        when (baseInfo.mComicType) {
+            ComicSourceType.BIKA -> {
+                mComicSourceName = "哔咔漫画源"
+                mComicSrc = baseInfo.mComicImg
+                mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
+                mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
+                mComicTitle = mComicInfo.title
+                mComicAuthor = mComicInfo.author
+                mBookCategory = baseInfo.mComicTAG
+            }
+            ComicSourceType.DMZJ -> {
+                mComicSourceName = "动漫之家漫画源"
+                val mComic = Gson().fromJson(baseInfo.mComicString, DataItem::class.java)
+                mComicSrc = mComic.cover
+                mComicAuthor = mComic.sub_title
+                mComicTitle = mComic.title
+            }
+        }
+        onLoadSuccess()
+        /*mServerConnect = object : ServiceConnection {
             override fun onServiceDisconnected(name: ComponentName?) {
                 mBinder = null
             }
@@ -127,34 +151,42 @@ class ComicDetails :
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 mBinder = service as DownloadService.DownloadBinder
             }
-        }
+        }*/
 
-        mBookDownload.setOnClickListener {
-            //this will call with download service
-            /*if (mBinder != null) {
+        /* mBookDownload.setOnClickListener {
+             //this will call with download service
+             *//*if (mBinder != null) {
                 if (mBinder!!.hasBookInList(comicInfo)) {
                     ShowErrorMsg("已在下载列表中")
                 } else {
                     mBinder?.download(comicInfo, this)
                 }
-            }*/
-        }
+            }*//*
+        }*/
 
         /*bindService(
                 Intent(this, DownloadService::class.java),
                 mServerConnect,
                 Context.BIND_AUTO_CREATE)*/
-        mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
-        mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
 
-        tv_bookname.text = mComicInfo.title
-        tv_bookAuthor.text = "来源:" + mComicInfo.author
+
+        //=================  初始化界面数据  ===================
+
+        CustomUtils.loadImageEx(this, mComicSrc, comicDetails_img_real, 0, null)
+        CustomUtils.loadImage(this, mComicSrc, comicDetails_img, 10, 20)
+
+        tv_bookname.text = mComicTitle
+        tv_bookAuthor.text = "来源:$mComicAuthor"
         tv_bookname_title_small.text = tv_bookAuthor.text
-        tv_bookCategory.text = "类别:" + baseInfo.mComicTAG
+        tv_bookCategory.text = "类别:$mBookCategory"
 
         val mFragmentsList = arrayListOf(
-                RecentlyPagerAdapter.Struct("简介", BasicInfo.getInstance(this, baseInfo)),
-                RecentlyPagerAdapter.Struct("章节", ComicList.getInstance(baseInfo, this))
+                RecentlyPagerAdapter.Struct("简介", ComicBasicInfo().apply {
+                    setUI(baseInfo)
+                }),
+                RecentlyPagerAdapter.Struct("章节", ComicList().apply {
+                    setUI(baseInfo)
+                })
         )
         /* if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
              add_local_list_iv.setImageResource(R.drawable.ic_remove_black_24dp)
@@ -202,19 +234,11 @@ class ComicDetails :
                 }
             }
         })
-        var mComicSourceName = "预设来源"
-        when (baseInfo.mComicType) {
-            ComicSourcceType.BIKA -> {
-                mComicSourceName = "哔咔漫画源"
-                CustomUtils.loadImageEx(this, baseInfo.mComicImg, comicDetails_img_real, 0, null)
-                CustomUtils.loadImage(this, baseInfo.mComicImg, comicDetails_img, 10, 20)
-                onLoadSuccess()
-            }
-        }
         tv_bookname_title.text = mComicSourceName
     }
 
-    private var mAdapter: PagerAdapter? = null
+    //获取单一实例
+    private var mAdapter: RecentlyPagerAdapter? = null
 
     override fun onDestroy() {
         super.onDestroy()
