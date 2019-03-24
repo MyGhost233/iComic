@@ -38,7 +38,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
                     mViewModel?.getDMZJImage(bookID, nextUrl)
                 }
                 ComicSourceType.BIKA -> {
-                    //mViewModel?.getBikaImage(bookID, nextUrl)
+                    mViewModel?.getBikaImage(bookID, nextUrl.toInt())
                 }
             }
         } else {
@@ -73,9 +73,18 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         when (mTempComicInfo!!.mComicType) {
             ComicSourceType.DMZJ -> {
                 mPoint++
-                if (mPoint < mDMZJChapter.size) {
-                    nextUrl = mDMZJChapter.get(mPoint).chapter_id
-                    currInfos.text = mDMZJChapter.get(mPoint - 1).chapter_title
+                if (mPoint < mDMZJChapter!!.size) {
+                    nextUrl = mDMZJChapter!!.get(mPoint).chapter_id
+                    currInfos.text = mDMZJChapter!!.get(mPoint - 1).chapter_title
+                } else {
+                    nextUrl = ""
+                }
+            }
+            ComicSourceType.BIKA -> {
+                mPoint++
+                if (mPoint < mBikaChapter!!.size) {
+                    nextUrl = mBikaChapter!!.get(mPoint).order.toString()
+                    currInfos.text = mBikaChapter!!.get(mPoint - 1).title
                 } else {
                     nextUrl = ""
                 }
@@ -114,8 +123,17 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         return mArr
     }
 
+    private fun getArr2StrA(clazz: ArrayList<String>): ArrayList<ComicEpisodeObject> {
+        val mArr = ArrayList<ComicEpisodeObject>()
+        clazz.forEach {
+            mArr.add(Gson().fromJson(it, ComicEpisodeObject::class.java))
+        }
+        return mArr
+    }
+
     private var mViewModel: ReadViewModel? = null
-    private var mDMZJChapter: ArrayList<ComicChapterData> = ArrayList()
+    private var mDMZJChapter: ArrayList<ComicChapterData>? = null
+    private var mBikaChapter: ArrayList<ComicEpisodeObject>? = null
     private var mPoint = 0
     private var mTempComicInfo: ComicInfoBean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,14 +151,16 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             ComicSourceType.DMZJ -> {
                 mDMZJChapter = getArr2Str(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicChapterData>()::class.java) as ArrayList<String>)
                 mPoint = mTempComicInfo!!.mComicString.toInt()
-                val mBase = mDMZJChapter.get(mPoint)
-                currInfos.text = mBase.chapter_title
-                mViewModel?.getDMZJImage(bookID, mBase.chapter_id)
+                val mBase = mDMZJChapter?.get(mPoint)
+                currInfos.text = mBase?.chapter_title
+                mViewModel?.getDMZJImage(bookID, mBase!!.chapter_id)
             }
             ComicSourceType.BIKA -> {
-                val mComicInfo = Gson().fromJson(mTempComicInfo!!.mComicString, ComicEpisodeObject::class.java)
-                currInfos.text = mComicInfo.title
-                mViewModel?.getBikaImage(bookID, mComicInfo.order)
+                mBikaChapter = getArr2StrA(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicEpisodeObject>()::class.java) as ArrayList<String>)
+                mPoint = mTempComicInfo!!.mComicString.toInt()
+                val mBase = mBikaChapter?.get(mPoint)
+                currInfos.text = mBase?.title
+                mViewModel?.getBikaImage(bookID, mBase!!.order)
             }
         }
     }
