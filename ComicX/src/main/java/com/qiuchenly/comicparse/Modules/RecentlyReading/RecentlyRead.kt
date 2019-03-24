@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
-import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek.RecentlyByWeekFragment
 import com.qiuchenly.comicparse.R
 import com.r0adkll.slidr.Slidr
@@ -29,16 +29,16 @@ class RecentlyRead : AppCompatActivity() {
         InitUI(this, getFramList())
     }
 
-    fun getFramList(): ArrayList<RecentlyPagerAdapter.Struct> {
+    fun getFramList(): ArrayList<SuperPagerAdapter.Struct> {
         return arrayListOf(
-                RecentlyPagerAdapter.Struct("最近阅读", RecentlyByWeekFragment()),
-                RecentlyPagerAdapter.Struct("一月之前", Fragment())
+                SuperPagerAdapter.Struct("最近阅读", RecentlyByWeekFragment()),
+                SuperPagerAdapter.Struct("一月之前", Fragment())
         )
     }
 
     companion object {
-        private var mPgAdapter: RecentlyPagerAdapter? = null
-        fun InitUI(app: AppCompatActivity, arr: ArrayList<RecentlyPagerAdapter.Struct>) {
+        private var mPgAdapter: SuperPagerAdapter? = null
+        fun InitUI(app: AppCompatActivity, arr: ArrayList<SuperPagerAdapter.Struct>) {
             //init ui
             app.back_up.setOnClickListener {
                 app.finish()
@@ -47,7 +47,7 @@ class RecentlyRead : AppCompatActivity() {
                 Toast.makeText(app, "这个功能还没做", Toast.LENGTH_SHORT).show()
             }
             val list = arr
-            mPgAdapter = RecentlyPagerAdapter(app.supportFragmentManager, list)
+            mPgAdapter = SuperPagerAdapter(app.supportFragmentManager, list)
             app.tl_recently_tab_setup_vp.adapter = mPgAdapter
 
             //create tips bottom

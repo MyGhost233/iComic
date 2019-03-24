@@ -25,5 +25,6 @@ class ComicDetailsViewModel(private var callback: ComicDetailContract.View) : Ba
     override fun cancel() {
         super.cancel()
         if (mCall != null) mCall!!.cancel()
+        mCall = null
     }
 }

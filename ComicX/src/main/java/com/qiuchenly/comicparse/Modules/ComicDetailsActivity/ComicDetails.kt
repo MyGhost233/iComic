@@ -24,59 +24,64 @@ import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasi
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList.ComicList
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDetailsViewModel
-import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
+import kotlinx.android.synthetic.main.vpitem_top_ad.*
 
 class ComicDetails :
         BaseApp(),
         ComicDetailContract.View {
+    override fun onAppBarChange(position: Int) {
+        if (position == 0) {
+            appBarLayout.setExpanded(true, true)
+        } else {
+            appBarLayout.setExpanded(false, true)
+        }
+    }
+
     override fun getLayoutID(): Int? {
         return R.layout.activity_comicdetails
     }
 
     override fun onLoading() {
-        onFailed.visibility = View.INVISIBLE
-        onSuccess.visibility = View.INVISIBLE
-        onFailed.isClickable = false
-        onLoading.visibility = View.VISIBLE
+        onFailed?.visibility = View.INVISIBLE
+        onSuccess?.visibility = View.INVISIBLE
+        onFailed?.isClickable = false
+        onLoading?.visibility = View.VISIBLE
     }
 
     override fun onLoadSuccess() {
-        onFailed.visibility = View.INVISIBLE
-        onSuccess.visibility = View.VISIBLE
-        onLoading.visibility = View.INVISIBLE
-        onFailed.isClickable = false
+        onFailed?.visibility = View.INVISIBLE
+        onSuccess?.visibility = View.VISIBLE
+        onLoading?.visibility = View.INVISIBLE
+        onFailed?.isClickable = false
     }
 
 
     override fun onLoadFailed() {
-        onFailed.isClickable = true
-        onFailed.setOnClickListener {
+        onFailed?.isClickable = true
+        onFailed?.setOnClickListener {
 
         }
-        onFailed.visibility = View.VISIBLE
-        onSuccess.visibility = View.INVISIBLE
-        onLoading.visibility = View.INVISIBLE
+        onFailed?.visibility = View.VISIBLE
+        onSuccess?.visibility = View.INVISIBLE
+        onLoading?.visibility = View.INVISIBLE
     }
 
     //==============================   变量声明   ===================================================
-    private lateinit var mBookAuthor: TextView
-    private lateinit var mBookCategory: TextView
-    private lateinit var mRealImageNoBlur: ImageView
-    private lateinit var mServerConnect: ServiceConnection
     var mBinder: DownloadService.DownloadBinder? = null
-    private lateinit var mViewModel: ComicDetailsViewModel
+    private var mViewModel: ComicDetailsViewModel? = null
 
-    private lateinit var onSuccess: CoordinatorLayout
-    private lateinit var onFailed: TextView
-    private lateinit var onLoading: ProgressBar
+    private var onSuccess: CoordinatorLayout? = null
+    private var onFailed: TextView? = null
+    private var onLoading: ProgressBar? = null
 
-    private lateinit var mComicInfo: ComicListObject
+    private var mComicInfo: ComicListObject? = null
 
     //==============================   代码整理 界面预设  =============================================
 
@@ -93,21 +98,32 @@ class ComicDetails :
     }
 
     override fun scrollWithPosition(position: Int) {
-        val mFragment = mAdapter?.getInstance("章节") as ComicList
-        mFragment.scrollWithPosition(position)
+        if (mAdapter != null) {
+            val mFragment = mAdapter?.getInstance("章节") as ComicList
+            mFragment.scrollWithPosition(position)
+        }
     }
 
     private var mComicTag = "SimpleName|SimpleCode"
+    private var mPageChange: ViewPager.OnPageChangeListener? = object : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) {
+
+        }
+
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+        }
+
+        override fun onPageSelected(position: Int) {
+            onAppBarChange(position)
+        }
+    }
 
     //==============================   常规系统初始化方法  ============================================
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mViewModel = ComicDetailsViewModel(this)
-        mBookAuthor = tv_bookAuthor
-        mBookCategory = tv_bookCategory
-        mRealImageNoBlur = comicDetails_img_real
 
         onLoading = load_ing
         onFailed = load_failed
@@ -130,8 +146,8 @@ class ComicDetails :
                 mComicSrc = baseInfo.mComicImg
                 mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
                 mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
-                mComicTitle = mComicInfo.title
-                mComicAuthor = mComicInfo.author
+                mComicTitle = mComicInfo!!.title
+                mComicAuthor = mComicInfo!!.author
                 mBookCategory = baseInfo.mComicTAG
             }
             ComicSourceType.DMZJ -> {
@@ -143,55 +159,24 @@ class ComicDetails :
             }
         }
         onLoadSuccess()
-        /*mServerConnect = object : ServiceConnection {
-            override fun onServiceDisconnected(name: ComponentName?) {
-                mBinder = null
-            }
-
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                mBinder = service as DownloadService.DownloadBinder
-            }
-        }*/
-
-        /* mBookDownload.setOnClickListener {
-             //this will call with download service
-             *//*if (mBinder != null) {
-                if (mBinder!!.hasBookInList(comicInfo)) {
-                    ShowErrorMsg("已在下载列表中")
-                } else {
-                    mBinder?.download(comicInfo, this)
-                }
-            }*//*
-        }*/
-
-        /*bindService(
-                Intent(this, DownloadService::class.java),
-                mServerConnect,
-                Context.BIND_AUTO_CREATE)*/
-
-
         //=================  初始化界面数据  ===================
 
-        CustomUtils.loadImageEx(this, mComicSrc, comicDetails_img_real, 0, null)
+        CustomUtils.loadImageEx(this, mComicSrc, mRealImageNoBlur, 0, null)
         CustomUtils.loadImage(this, mComicSrc, comicDetails_img, 10, 20)
 
         tv_bookname.text = mComicTitle
-        tv_bookAuthor.text = "来源:$mComicAuthor"
-        tv_bookname_title_small.text = tv_bookAuthor.text
-        tv_bookCategory.text = "类别:$mBookCategory"
+        mBookAuthor.text = "来源:$mComicAuthor"
+        tv_bookname_title_small.text = mBookAuthor.text
+        mBookCategoryView.text = "类别:$mBookCategory"
 
         val mFragmentsList = arrayListOf(
-                RecentlyPagerAdapter.Struct("简介", ComicBasicInfo().apply {
+                SuperPagerAdapter.Struct("简介", ComicBasicInfo().apply {
                     setUI(baseInfo)
                 }),
-                RecentlyPagerAdapter.Struct("章节", ComicList().apply {
+                SuperPagerAdapter.Struct("章节", ComicList().apply {
                     setUI(baseInfo)
                 })
         )
-        /* if (realm.where(HotComicStrut::class.java).equalTo("BookName", comicInfo.BookName).findFirst() != null) {
-             add_local_list_iv.setImageResource(R.drawable.ic_remove_black_24dp)
-         }*/
-
         comicDetails_img.alpha = 0f
         mTitleLayout.alpha = 0f
         //此处实现淡入淡出效果
@@ -209,41 +194,33 @@ class ComicDetails :
             ShowErrorMsg("已复制漫画相关信息")
         }
 
-        mAdapter = RecentlyPagerAdapter(supportFragmentManager, mFragmentsList)
-        mDetailsInfoViewPager.adapter = mAdapter
+        mAdapter = SuperPagerAdapter(supportFragmentManager, mFragmentsList)
+        mComicInfoViewPager.adapter = mAdapter
         BaseNavigatorCommon.setUpWithPager(
                 this,
                 mFragmentsList,
                 magic_indicator,
-                mDetailsInfoViewPager)
+                mComicInfoViewPager)
 
-        mDetailsInfoViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-                if (position == 0) {
-                    appBarLayout.setExpanded(true, true)
-                } else {
-                    appBarLayout.setExpanded(false, true)
-                }
-            }
-        })
+        mComicInfoViewPager.addOnPageChangeListener(mPageChange!!)
         tv_bookname_title.text = mComicSourceName
     }
 
     //获取单一实例
-    private var mAdapter: RecentlyPagerAdapter? = null
+    private var mAdapter: SuperPagerAdapter? = null
 
     override fun onDestroy() {
         super.onDestroy()
 //        unbindService(mServerConnect)
+        mComicInfoViewPager.removeOnPageChangeListener(mPageChange!!)
+        mPageChange = null
+        mViewModel?.cancel()
+        mViewModel = null
         mBinder = null
-        mViewModel.cancel()
+        mAdapter = null
+
+        onLoading = null
+        onFailed = null
+        onSuccess = null
     }
 }

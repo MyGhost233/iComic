@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.google.gson.Gson
@@ -13,8 +14,7 @@ import com.qiuchenly.comicparse.Modules.ReadingActivity.ReadPage
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 
-class ComicPageAda : BaseRecyclerAdapter<String>() {
-
+class ComicPageAda(private var mContext: Context?) : BaseRecyclerAdapter<String>() {
 
     override fun canLoadMore(): Boolean {
         return false
@@ -28,6 +28,10 @@ class ComicPageAda : BaseRecyclerAdapter<String>() {
         return R.layout.comic_page_item
     }
 
+    fun clearContext() {
+        mContext = null
+    }
+
     override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
         when (mType) {
             ComicSourceType.BIKA -> {
@@ -35,7 +39,7 @@ class ComicPageAda : BaseRecyclerAdapter<String>() {
                 item.tv_comicPageName.text = mComicEpisodeObject.title
                 item.last_read.visibility = View.GONE
                 item.setOnClickListener {
-                    item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
+                    mContext?.startActivity(Intent(mContext, ReadPage::class.java).apply {
                         putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSourceType.BIKA
                             mComicID = mBaseID //注意 此处必须设置书籍ID
@@ -50,7 +54,7 @@ class ComicPageAda : BaseRecyclerAdapter<String>() {
                 item.last_read.visibility = View.GONE
                 item.setOnClickListener(null)
                 item.setOnClickListener {
-                    item.context.startActivity(Intent(item.context, ReadPage::class.java).apply {
+                    mContext?.startActivity(Intent(mContext, ReadPage::class.java).apply {
                         putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSourceType.DMZJ //设置数据源类型
                             mComicID = mBaseID //设置书籍ID

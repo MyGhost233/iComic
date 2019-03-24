@@ -45,22 +45,23 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View {
     var mViewModel: ComicListViewModel? = null
     private var comicPageAdas: ComicPageAda? = null
     private var mComicInfo: ComicInfoBean? = null
-    private lateinit var rv_comicPage: RecyclerView
     override fun getLayoutID() = R.layout.fragment_comic_list
 
     fun scrollWithPosition(position: Int) {
-        rv_comicPage.scrollToPosition(position)
-        val manager = rv_comicPage.layoutManager as LinearLayoutManager
-        manager.scrollToPositionWithOffset(position, 0)
+        /* if (mListRecyclerView != null) {
+             mListRecyclerView!!.scrollToPosition(position)
+             val manager = mListRecyclerView!!.layoutManager as LinearLayoutManager
+             manager.scrollToPositionWithOffset(position, 0)
+         }*/
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewFirstSelect(mPagerView: View) {
         mViewModel = ComicListViewModel(this)
-        comicPageAdas = ComicPageAda()
-        rv_comicPage = mPagerView.findViewById(R.id.rv_comicPage)
-        rv_comicPage.layoutManager = LinearLayoutManager(context)
-        rv_comicPage.adapter = comicPageAdas
+        comicPageAdas = ComicPageAda(activity)
+        val mListRecyclerView = mPagerView.findViewById<RecyclerView>(R.id.rv_comicPage)
+        mListRecyclerView.layoutManager = LinearLayoutManager(activity)
+        mListRecyclerView.adapter = comicPageAdas
 
         when (mComicInfo?.mComicType) {
             ComicSourceType.BIKA -> {
@@ -81,7 +82,10 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        comicPageAdas?.clearContext()
+        comicPageAdas = null
         mViewModel?.cancel()
         mViewModel = null
+        mComicInfo = null
     }
 }

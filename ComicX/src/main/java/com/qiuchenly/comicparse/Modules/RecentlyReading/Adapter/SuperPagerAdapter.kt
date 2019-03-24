@@ -2,11 +2,12 @@ package com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 
-class RecentlyPagerAdapter(fm: FragmentManager, private val structArr: List<Struct>) : FragmentPagerAdapter(fm) {
+class SuperPagerAdapter(fm: FragmentManager, private val structArr: List<Struct>) : FragmentStatePagerAdapter(fm) {
     class Struct(val name: String, val fram: Fragment)
 
+    //FragmentStateAdapter
     override fun getItem(position: Int): Fragment {
         return structArr[position].fram
     }

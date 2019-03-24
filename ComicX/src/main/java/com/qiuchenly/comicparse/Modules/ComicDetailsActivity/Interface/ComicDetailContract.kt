@@ -10,6 +10,7 @@ interface ComicDetailContract {
     interface View : BaseView, BaseLoadingView {
         fun scrollWithPosition(position: Int)
         fun onProgressChanged()
+        fun onAppBarChange(position: Int)
     }
 
     interface BaseGetCallBack {

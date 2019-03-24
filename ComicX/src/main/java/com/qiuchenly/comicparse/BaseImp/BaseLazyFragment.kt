@@ -26,8 +26,11 @@ abstract class BaseLazyFragment : Fragment(), BaseView {
         if (mFirstInitialization && !isInitView && mView != null) {
             isInitView = true
             onViewFirstSelect(mView!!)
-        }
+        } else if (isVisibleToUser) onShowUI() else onHideUI()
     }
+
+    fun onShowUI() {}
+    fun onHideUI() {}
 
     private var mView: View? = null
     private var isInitView = false

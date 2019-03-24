@@ -114,5 +114,8 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     override fun onDestroy() {
         super.onDestroy()
         mViewModel?.cancel()
+        mViewModel = null
+        mComicImagePageAda = null
+        finish()
     }
 }

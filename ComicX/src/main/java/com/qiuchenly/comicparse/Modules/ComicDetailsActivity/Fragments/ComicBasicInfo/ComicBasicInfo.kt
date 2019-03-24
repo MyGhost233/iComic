@@ -20,6 +20,8 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
     private var lastReadPageUrl = ""
     @SuppressLint("SetTextI18n")
     override fun onViewFirstSelect(mPagerView: View) {
+        mViewModel = ComicInfoViewModel(this)
+
         when (mComicInfo?.mComicType) {
             ComicSourceType.BIKA -> {
                 mViewModel?.getComicInfo(mComicInfo?.mComicID)
@@ -84,11 +86,12 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
         author.text = comic?.author
     }
 
-    var mViewModel: ComicInfoViewModel? = ComicInfoViewModel(this)
+    var mViewModel: ComicInfoViewModel? = null
     var mComicInfo: ComicInfoBean? = null
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel?.cancel()
+        mComicInfo = null
         mViewModel = null
     }
 
@@ -101,6 +104,7 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
         super.onDestroy()
         mViewModel?.cancel()
         mViewModel = null
+        this.mComicInfo = null
     }
 
     fun setUI(mComicInfo: ComicInfoBean?) {

@@ -5,7 +5,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.FriendShip.FriendShip
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Recommend
-import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_comic_board_view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
@@ -16,15 +16,15 @@ class ComicBoardFragment : BaseLazyFragment() {
         return R.layout.fragment_comic_board_view
     }
 
-    private var mAdapter: RecentlyPagerAdapter? = null
+    private var mAdapter: SuperPagerAdapter? = null
 
     override fun onViewFirstSelect(mPagerView: View) {
         val list = arrayListOf(
-                RecentlyPagerAdapter.Struct("推荐", Recommend()),
-                RecentlyPagerAdapter.Struct("更多", FriendShip())
-                //RecentlyPagerAdapter.Struct("以后增加", AndMore())
+                SuperPagerAdapter.Struct("推荐", Recommend()),
+                SuperPagerAdapter.Struct("更多", FriendShip())
+                //SuperPagerAdapter.Struct("以后增加", AndMore())
         )
-        mAdapter = RecentlyPagerAdapter(this.childFragmentManager, list)
+        mAdapter = SuperPagerAdapter(this.childFragmentManager, list)
         magic_indicator_viewpager.adapter = mAdapter
         magic_indicator_viewpager.offscreenPageLimit = 1
 

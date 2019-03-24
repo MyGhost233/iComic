@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_my_details.*
 class Recommend : BaseLazyFragment(), RecommentContract.View {
     override fun onGetDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>) {
         mRecommendRecyclerViewAdapter.addDMZJCategory(mComicCategory)
+        final()
     }
 
     override fun onGetDMZRecommendSuch(mComicList: ComicHome_RecomendList) {
@@ -88,6 +89,6 @@ class Recommend : BaseLazyFragment(), RecommentContract.View {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mViewModel?.destory()
+        mViewModel?.cancel()
     }
 }

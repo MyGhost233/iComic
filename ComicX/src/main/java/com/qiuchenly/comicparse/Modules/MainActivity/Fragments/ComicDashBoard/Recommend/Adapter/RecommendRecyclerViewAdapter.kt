@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
@@ -258,14 +257,21 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     //for this type,unuseless
                     foo_bookName_upNews.visibility = View.GONE
                     setOnClickListener {
-                        startActivity(view.context, Intent(context, SearchResult::class.java).apply {
-                            putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
-                                this.mCategoryName = mCategoryName
-                                this.mComicType = mType
-                                this.mData = data.mItemData
+                        when (data.type) {
+                            RecommendItemType.TYPE.TYPE_BIKA -> {
+                                context.startActivity(Intent(context, SearchResult::class.java).apply {
+                                    putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
+                                        this.mCategoryName = mCategoryName
+                                        this.mComicType = mType
+                                        this.mData = data.mItemData
+                                    }
+                                    ))
+                                }, null)
                             }
-                            ))
-                        }, null)
+                            RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY -> {
+
+                            }
+                        }
                     }
                 }
             }
@@ -363,6 +369,22 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
      */
     private class ViewBanner(mData: ComicHome_Recommend) : PagerAdapter() {
 
+        private var mArr = ArrayList<DataItem>()
+
+        init {
+            for (mItem in mData.data!!) {
+                mArr.add(DataItem().apply {
+                    cover = mItem["cover"]!!
+                    title = mItem["title"]!!
+                    sub_title = mItem["sub_title"]!!
+                    type = mItem["type"]!!
+                    url = mItem["url"]!!
+                    obj_id = mItem["obj_id"]!!
+                    status = mItem["status"]!!
+                })
+            }
+        }
+
         private var mCurrentView: View? = null
         override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
             val mView = `object` as View
@@ -384,15 +406,33 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     tv_bookAuthor.text = mSubTitle
                     setOnClickListener {
                         val cate = itemData.type
-                        val i = Intent(when (cate) {
-                            "7" -> "android.intent.action.GET_DMZJ_URL"
-                            else -> "android.intent.action.GET_DMZJ_URL"
-                        })
-                        i.putExtras(Bundle().apply {
-                            //漫画基本信息 做跳转
-                            putString(KEY_BIKA_CATEGORY_JUMP, itemData.url)
-                        })
-                        context.startActivity(i)
+                        val mFilterIntent = when (cate) {
+                            "7" -> {//动漫之家公告
+                                Intent("android.intent.action.GET_DMZJ_URL").apply {
+                                    putExtras(Bundle().apply {
+                                        //漫画基本信息 做跳转
+                                        putString(KEY_BIKA_CATEGORY_JUMP, itemData.url)
+                                    })
+                                }
+                            }
+                            "1" -> {//漫画
+                                //将数据与普通漫画数据格式化一致,修复加载数据问题.
+                                val mComicStringRealInfo = Gson().toJson(itemData)
+                                Intent("android.intent.action.ComicDetails").apply {
+                                    putExtras(Bundle().apply {
+                                        //漫画基本信息 做跳转
+                                        putString(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                                            this.mComicType = ComicSourceType.DMZJ
+                                            this.mComicString = mComicStringRealInfo
+                                        }))
+                                    })
+                                }
+                            }
+                            else -> null
+                        }
+                        if (mFilterIntent != null) {
+                            context.startActivity(mFilterIntent)
+                        }
                     }
                 }
                 if (position + 1 < mArr.size) {
@@ -402,22 +442,6 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                 mView.tag = true
                 mViewList[position] = mView
                 mCurrentView = mView
-            }
-        }
-
-        private var mArr = ArrayList<DataItem>()
-
-        init {
-            for (mItem in mData.data!!) {
-                mArr.add(DataItem().apply {
-                    cover = mItem["cover"]!!
-                    title = mItem["title"]!!
-                    sub_title = mItem["sub_title"]!!
-                    type = mItem["type"]!!
-                    url = mItem["url"]!!
-                    obj_id = mItem["obj_id"]!!
-                    status = mItem["status"]!!
-                })
             }
         }
 

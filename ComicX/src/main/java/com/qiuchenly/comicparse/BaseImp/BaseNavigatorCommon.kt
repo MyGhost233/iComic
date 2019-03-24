@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.view.ViewPager
 import android.util.TypedValue
-import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.RecentlyPagerAdapter
+import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.UIUtil
@@ -16,10 +16,10 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 
-class BaseNavigatorCommon(val list: ArrayList<RecentlyPagerAdapter.Struct>, val vp: ViewPager) : CommonNavigatorAdapter() {
+class BaseNavigatorCommon(val list: ArrayList<SuperPagerAdapter.Struct>, val vp: ViewPager) : CommonNavigatorAdapter() {
 
     companion object {
-        fun setUpWithPager(context: Context, lists: ArrayList<RecentlyPagerAdapter.Struct>, MagicIndicator: MagicIndicator, ViewPage: ViewPager) {
+        fun setUpWithPager(context: Context, lists: ArrayList<SuperPagerAdapter.Struct>, MagicIndicator: MagicIndicator, ViewPage: ViewPager) {
             val commonNavigator = CommonNavigator(context)
             commonNavigator.adapter = BaseNavigatorCommon(lists, ViewPage)
             commonNavigator.isAdjustMode = true//设置均分显示

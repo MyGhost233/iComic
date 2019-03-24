@@ -32,10 +32,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
 
     private var mView = Views
 
-    fun destory() {
-        mView = null
-    }
-
     private var mCall: Call<ResponseBody>? = null
 
     fun getIndex() {
@@ -172,5 +168,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     override fun cancel() {
         super.cancel()
         if (mCall != null) mCall!!.cancel()
+        mView = null
     }
 }
