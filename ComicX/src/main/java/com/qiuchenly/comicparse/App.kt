@@ -15,7 +15,7 @@ class App : Application() {
             // You should not init your app in this process.
             return
         }
-        LeakCanary.install(this)
+        //LeakCanary.install(this)
         Comic.initialization(this)
     }
 

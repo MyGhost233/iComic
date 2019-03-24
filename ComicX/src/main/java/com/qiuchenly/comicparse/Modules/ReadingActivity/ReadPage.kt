@@ -33,6 +33,14 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         if (nextUrl.isNotEmpty()) {
             currentState = ON_LOAD_ING
             //TODO 此处加载下一页
+            when (mTempComicInfo!!.mComicType) {
+                ComicSourceType.DMZJ -> {
+                    mViewModel?.getDMZJImage(bookID, nextUrl)
+                }
+                ComicSourceType.BIKA -> {
+                    //mViewModel?.getBikaImage(bookID, nextUrl)
+                }
+            }
         } else {
             currentState = ON_LOAD_NO_MORE
             mComicImagePageAda?.onNoMore()
@@ -61,6 +69,21 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             onLoadMore(true)
             return
         }
+
+        when (mTempComicInfo!!.mComicType) {
+            ComicSourceType.DMZJ -> {
+                mPoint++
+                if (mPoint < mDMZJChapter.size) {
+                    nextUrl = mDMZJChapter.get(mPoint).chapter_id
+                    currInfos.text = mDMZJChapter.get(mPoint - 1).chapter_title
+                } else {
+                    nextUrl = ""
+                }
+            }
+            else -> {
+            }
+        }
+
         lastPoint = mComicImagePageAda?.itemCount!!
         mComicImagePageAda?.addData(lst)
         //currInfos.text = currInfo
@@ -83,28 +106,39 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     var bookID = ""
     var order = 1
 
+    private fun getArr2Str(clazz: ArrayList<String>): ArrayList<ComicChapterData> {
+        val mArr = ArrayList<ComicChapterData>()
+        clazz.forEach {
+            mArr.add(Gson().fromJson(it, ComicChapterData::class.java))
+        }
+        return mArr
+    }
+
     private var mViewModel: ReadViewModel? = null
+    private var mDMZJChapter: ArrayList<ComicChapterData> = ArrayList()
+    private var mPoint = 0
+    private var mTempComicInfo: ComicInfoBean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
         val mStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
-        val mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
+        mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
         mComicImagePageAda = ComicReadingAdapter(this)
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
 
-
         //=============  初始化界面数据  ===============
-
-        bookID = mTempComicInfo.mComicID
-        when (mTempComicInfo.mComicType) {
+        bookID = mTempComicInfo!!.mComicID
+        when (mTempComicInfo!!.mComicType) {
             ComicSourceType.DMZJ -> {
-                val mBase = Gson().fromJson(mTempComicInfo.mComicString, ComicChapterData::class.java)
+                mDMZJChapter = getArr2Str(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicChapterData>()::class.java) as ArrayList<String>)
+                mPoint = mTempComicInfo!!.mComicString.toInt()
+                val mBase = mDMZJChapter.get(mPoint)
                 currInfos.text = mBase.chapter_title
                 mViewModel?.getDMZJImage(bookID, mBase.chapter_id)
             }
             ComicSourceType.BIKA -> {
-                val mComicInfo = Gson().fromJson(mTempComicInfo.mComicString, ComicEpisodeObject::class.java)
+                val mComicInfo = Gson().fromJson(mTempComicInfo!!.mComicString, ComicEpisodeObject::class.java)
                 currInfos.text = mComicInfo.title
                 mViewModel?.getBikaImage(bookID, mComicInfo.order)
             }

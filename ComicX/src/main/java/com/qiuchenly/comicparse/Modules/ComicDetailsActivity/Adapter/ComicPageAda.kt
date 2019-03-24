@@ -58,7 +58,8 @@ class ComicPageAda(private var mContext: Context?) : BaseRecyclerAdapter<String>
                         putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSourceType.DMZJ //设置数据源类型
                             mComicID = mBaseID //设置书籍ID
-                            mComicString = data //设置数据源对应的章节json字符串
+                            mComicTAG = Gson().toJson(getBaseData())  //设置书籍ID
+                            mComicString = position.toString() //设置数据源对应的章节json字符串
                         }))
                     })
                 }
