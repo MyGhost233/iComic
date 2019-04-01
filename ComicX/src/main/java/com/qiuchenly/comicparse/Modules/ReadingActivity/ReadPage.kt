@@ -13,7 +13,7 @@ import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ReadingActivity.Adapter.ComicReadingAdapter
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_reader_page.*
@@ -139,7 +139,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
-        val mStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        val mStr = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
         mComicImagePageAda = ComicReadingAdapter(this)
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)

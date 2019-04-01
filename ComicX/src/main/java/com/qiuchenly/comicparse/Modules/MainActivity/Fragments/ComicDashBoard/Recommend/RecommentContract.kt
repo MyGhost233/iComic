@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.R
 import com.qiuchenly.comicparse.BaseImp.BaseView
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
 import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
-import com.qiuchenly.comicparse.Http.Bika.CategoryObject
+import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 
 interface RecommentContract {
     interface View : BaseView, DongManZhiJia {

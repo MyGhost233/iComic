@@ -1,13 +1,15 @@
 package com.qiuchenly.comicparse.Modules.SearchResult.ViewModel
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.Bika.responses.ComicRandomListResponse
-import com.qiuchenly.comicparse.Http.Bika.responses.DataClass.ComicListResponse.ComicListResponse
-import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.BikaApi
 import com.qiuchenly.comicparse.Modules.SearchResult.View.ResultViews
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.ComicRandomListResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.ProductModules.ComicHome.DongManZhiJia
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,6 +29,20 @@ class SearchResultViewModel(view: ResultViews) : BaseViewModel<ResponseBody>() {
 
     override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
+    }
+
+    fun getCategoryComic_DMZJ(categoryType: String, page: Int) {
+        DongManZhiJia.getV3API().getCategoryComicAll(categoryType, "0", page)?.enqueue(object : Callback<List<ComicHome_CategoryComic>> {
+            override fun onFailure(call: Call<List<ComicHome_CategoryComic>>, t: Throwable) {
+                mView?.ShowErrorMsg("加载动漫之家漫画类别时出错!")
+                mView?.getComicList_DMZJ(null)
+            }
+
+            override fun onResponse(call: Call<List<ComicHome_CategoryComic>>, response: Response<List<ComicHome_CategoryComic>>) {
+                //当数据返回数组为空的时候表示无数据
+                mView?.getComicList_DMZJ(response.body())
+            }
+        })
     }
 
     fun getCategoryComic(categoryName: String?, page: Int) {

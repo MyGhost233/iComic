@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.ServiceConnection
 import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.ViewPager
 import android.view.View
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.gson.Gson
@@ -19,7 +17,7 @@ import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicListObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.ComicBasicInfo
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList.ComicList
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
@@ -31,7 +29,6 @@ import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
-import kotlinx.android.synthetic.main.vpitem_top_ad.*
 
 class ComicDetails :
         BaseApp(),
@@ -130,7 +127,7 @@ class ComicDetails :
         onSuccess = mCoordinatorLayout
 
         //对Intent传来的数据做处理
-        val mComicStr = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        val mComicStr = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         if (mComicStr.isNullOrEmpty()) finish()
         val baseInfo = Gson().fromJson(mComicStr, ComicInfoBean::class.java)
 
@@ -140,6 +137,8 @@ class ComicDetails :
         var mComicAuthor = ""
         var mBookCategory = "暂无分类"
 
+        mBookCategory = baseInfo.mComicTAG
+
         when (baseInfo.mComicType) {
             ComicSourceType.BIKA -> {
                 mComicSourceName = "哔咔漫画源"
@@ -148,7 +147,6 @@ class ComicDetails :
                 mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
                 mComicTitle = mComicInfo!!.title
                 mComicAuthor = mComicInfo!!.author
-                mBookCategory = baseInfo.mComicTAG
             }
             ComicSourceType.DMZJ -> {
                 mComicSourceName = "动漫之家漫画源"

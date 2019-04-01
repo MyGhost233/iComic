@@ -1,7 +1,5 @@
 package com.qiuchenly.comicparse.Bean
 
-import com.qiuchenly.comicparse.Http.Bika.CategoryObject
-
 class RecommendItemType {
     var type: Int = 0
     var title: String? = null

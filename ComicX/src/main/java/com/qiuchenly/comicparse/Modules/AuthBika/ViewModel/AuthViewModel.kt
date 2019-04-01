@@ -2,11 +2,11 @@ package com.qiuchenly.comicparse.Modules.AuthBika.ViewModel
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.Bika.requests.SignInBody
-import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.Bika.responses.SignInResponse
-import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.ProductModules.Bika.requests.SignInBody
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.SignInResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import com.qiuchenly.comicparse.Modules.AuthBika.AuthBikaViewContract
 import retrofit2.Call
 import retrofit2.Response

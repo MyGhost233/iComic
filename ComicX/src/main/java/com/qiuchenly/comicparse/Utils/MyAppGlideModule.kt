@@ -10,16 +10,11 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
-import com.qiuchenly.comicparse.Http.Bika.HttpDns
-import com.qiuchenly.comicparse.Http.Bika.TLSSocketFactory
-import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Bika.HttpDns
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.io.InputStream
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.SSLSession
 
 @GlideModule
 class MyAppGlideModule : AppGlideModule() {

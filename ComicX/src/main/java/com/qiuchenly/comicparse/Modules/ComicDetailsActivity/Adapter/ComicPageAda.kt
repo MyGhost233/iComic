@@ -9,7 +9,7 @@ import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ReadingActivity.ReadPage
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.comic_page_item.view.*
@@ -40,7 +40,7 @@ class ComicPageAda(private var mContext: Context?) : BaseRecyclerAdapter<String>
                 item.last_read.visibility = View.GONE
                 item.setOnClickListener {
                     mContext?.startActivity(Intent(mContext, ReadPage::class.java).apply {
-                        putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                        putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSourceType.BIKA
                             mComicID = mBaseID //注意 此处必须设置书籍ID
                             mComicTAG = Gson().toJson(getBaseData())  //设置书籍ID
@@ -56,7 +56,7 @@ class ComicPageAda(private var mContext: Context?) : BaseRecyclerAdapter<String>
                 item.setOnClickListener(null)
                 item.setOnClickListener {
                     mContext?.startActivity(Intent(mContext, ReadPage::class.java).apply {
-                        putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                        putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSourceType.DMZJ //设置数据源类型
                             mComicID = mBaseID //设置书籍ID
                             mComicTAG = Gson().toJson(getBaseData())  //设置书籍ID

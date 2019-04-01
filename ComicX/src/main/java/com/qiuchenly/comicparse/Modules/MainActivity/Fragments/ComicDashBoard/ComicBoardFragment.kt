@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.FriendShip.FriendShip
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BilibiliFragment.Bilibili
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Recommend
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import com.qiuchenly.comicparse.R
@@ -21,7 +21,7 @@ class ComicBoardFragment : BaseLazyFragment() {
     override fun onViewFirstSelect(mPagerView: View) {
         val list = arrayListOf(
                 SuperPagerAdapter.Struct("推荐", Recommend()),
-                SuperPagerAdapter.Struct("更多", FriendShip())
+                SuperPagerAdapter.Struct("bilibili", Bilibili())
                 //SuperPagerAdapter.Struct("以后增加", AndMore())
         )
         mAdapter = SuperPagerAdapter(this.childFragmentManager, list)

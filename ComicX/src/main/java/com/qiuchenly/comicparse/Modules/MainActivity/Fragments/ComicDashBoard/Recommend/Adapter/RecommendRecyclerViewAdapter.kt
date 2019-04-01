@@ -19,12 +19,12 @@ import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_NORMAL
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_SPEC_2
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DONGMANZHIJIA_CATEGORY
-import com.qiuchenly.comicparse.Core.ActivityKey.KEY_BIKA_CATEGORY_JUMP
+import com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.CategoryObject
-import com.qiuchenly.comicparse.Http.Bika.Tools
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import com.qiuchenly.comicparse.Modules.SearchResult.SearchResult
+import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
+import com.qiuchenly.comicparse.ProductModules.Bika.Tools
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.BannerThread
 import com.qiuchenly.comicparse.Utils.CustomUtils
@@ -208,7 +208,7 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                         val mIntent = when (mItemComicType) {
                             "1" -> {
                                 Intent("android.intent.action.ComicDetails").apply {
-                                    putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                                    putExtra(KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                                         this.mComicType = ComicSourceType.DMZJ
                                         this.mComicString = mComicStringRealInfo
                                     }))
@@ -258,18 +258,17 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                     foo_bookName_upNews.visibility = View.GONE
                     setOnClickListener {
                         when (data.type) {
-                            RecommendItemType.TYPE.TYPE_BIKA -> {
+                            RecommendItemType.TYPE.TYPE_BIKA,
+                            RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY
+                            -> {
                                 context.startActivity(Intent(context, SearchResult::class.java).apply {
-                                    putExtra(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
+                                    putExtra(KEY_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
                                         this.mCategoryName = mCategoryName
                                         this.mComicType = mType
                                         this.mData = data.mItemData
                                     }
                                     ))
                                 }, null)
-                            }
-                            RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY -> {
-
                             }
                         }
                     }
@@ -411,7 +410,7 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                                 Intent("android.intent.action.GET_DMZJ_URL").apply {
                                     putExtras(Bundle().apply {
                                         //漫画基本信息 做跳转
-                                        putString(KEY_BIKA_CATEGORY_JUMP, itemData.url)
+                                        putString(KEY_CATEGORY_JUMP, itemData.url)
                                     })
                                 }
                             }
@@ -421,7 +420,7 @@ class RecommendRecyclerViewAdapter(var mBaseView: RecommentContract.View) : Base
                                 Intent("android.intent.action.ComicDetails").apply {
                                     putExtras(Bundle().apply {
                                         //漫画基本信息 做跳转
-                                        putString(KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                                        putString(KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                                             this.mComicType = ComicSourceType.DMZJ
                                             this.mComicString = mComicStringRealInfo
                                         }))

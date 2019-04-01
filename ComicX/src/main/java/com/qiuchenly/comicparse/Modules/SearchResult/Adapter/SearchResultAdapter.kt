@@ -11,18 +11,20 @@ import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOA
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
+import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicListObject
-import com.qiuchenly.comicparse.Http.Bika.Tools
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
+import com.qiuchenly.comicparse.ProductModules.Bika.Tools
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.comic_local_list.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
 
-class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerAdapter<ComicListObject>() {
+class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerAdapter<String>() {
     init {
         setFixMemory()
     }
@@ -57,30 +59,61 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onViewShow(item: View, data: ComicListObject, position: Int, ViewType: Int) {
+    override fun onViewShow(item: View, data: String, position: Int, ViewType: Int) {
         with(item) {
             when (ViewType) {
                 ON_NORMAL -> {
-                    val image = Tools.getThumbnailImagePath(data.thumb)
-                    CustomUtils.loadImageCircle(context, image, bookNameImg, 8)
-                    bookName.text = data.title
-                    bookAuthor.text = data.author
-                    var categorys = data.categories?.joinToString(prefix = "", postfix = ",")
-                    categorys = if (categorys.isNullOrEmpty()) ""
-                    else
-                        categorys.substring(0, categorys.length - 1)
-                    curr_read.text = "分类:$categorys"
+                    var mImage = ""
+                    var mAuthor = ""
+                    var mTitle = ""
+                    var mCategory = ""
+
+                    when (mType) {
+                        ComicSourceType.BIKA -> {
+                            val mComicListObject = Gson().fromJson(data, ComicListObject::class.java)
+                            mImage = Tools.getThumbnailImagePath(mComicListObject.thumb)
+                            mAuthor = mComicListObject.author ?: ""//解决分类中无作者名的问题
+                            mTitle = mComicListObject.title
+                            val categorys = mComicListObject.categories?.joinToString(prefix = "", postfix = ",")
+                            mCategory = if (categorys.isNullOrEmpty()) ""
+                            else
+                                categorys.substring(0, categorys.length - 1)
+                        }
+                        ComicSourceType.DMZJ -> {
+                            val mComicListObject = Gson().fromJson(data, ComicHome_CategoryComic::class.java)
+                            mImage = mComicListObject.cover
+                            mAuthor = mComicListObject.authors
+                            mTitle = mComicListObject.title
+                            mCategory = mComicListObject.types
+                        }
+                    }
+                    CustomUtils.loadImageCircle(context, mImage, bookNameImg, 8)
+                    bookName.text = mTitle
+                    bookAuthor.text = mAuthor
+                    curr_read.text = "分类:$mCategory"
                     updateTo.visibility = View.INVISIBLE
                     setOnClickListener {
                         context.startActivity(Intent(context, ComicDetails::class.java).apply {
                             //TODO 需要优化此处
-                            putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
-                                this.mComicType = ComicSourceType.BIKA
-                                mComicID = data.comicId
-                                mComicImg = image
-                                mComicName = data.title
-                                mComicTAG = categorys
-                                this.mComicString = Gson().toJson(data)
+                            putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
+                                this.mComicType = mType
+                                mComicTAG = mCategory
+                                when (mType) {
+                                    ComicSourceType.DMZJ -> {
+                                        val mComicListObject = Gson().fromJson(data, ComicHome_CategoryComic::class.java)
+                                        this.mComicString = Gson().toJson(DataItem().apply {
+                                            this.cover = mComicListObject.cover
+                                            this.obj_id = mComicListObject.id
+                                            this.title = mComicListObject.title
+                                            this.status = mComicListObject.status
+                                            this.sub_title = mComicListObject.authors
+                                            this.type = mComicListObject.types
+                                        })
+                                    }
+                                    else -> {
+                                        this.mComicString = data
+                                    }
+                                }
                             }))
                         })
                     }
@@ -123,9 +156,13 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         mCallback.onLoadMore(retry)
     }
 
+    private var mType = ComicSourceType.BIKA
     fun addBikaComic(data: ArrayList<ComicListObject>) {
         setState(ON_LOAD_SUCCESS)
-        addData(data)
+        mType = ComicSourceType.BIKA
+        data.forEach {
+            addData(Gson().toJson(it))
+        }
     }
 
     fun setNoMore() {
@@ -134,5 +171,13 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
 
     fun setLoadFailed() {
         setState(ON_LOAD_FAILED)
+    }
+
+    fun addDMZJComic(list: List<ComicHome_CategoryComic>) {
+        setState(ON_LOAD_SUCCESS)
+        mType = ComicSourceType.DMZJ
+        list.forEach {
+            addData(Gson().toJson(it))
+        }
     }
 }

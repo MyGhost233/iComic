@@ -62,7 +62,7 @@ class SearchActivity : BaseApp(), SearchContract.View {
                         mCategoryName = "搜索关键词"
                         mData = mInputString
                     })
-                    putExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP, mStr)
+                    putExtra(ActivityKey.KEY_CATEGORY_JUMP, mStr)
                 })
                 mInputEdit.setText("")
             }

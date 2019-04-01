@@ -3,8 +3,8 @@ package com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface
 import com.qiuchenly.comicparse.BaseImp.BaseLoadingView
 import com.qiuchenly.comicparse.BaseImp.BaseView
 import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList
-import com.qiuchenly.comicparse.Http.Bika.ComicDetailObject
-import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicDetailObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 
 interface ComicDetailContract {
     interface View : BaseView, BaseLoadingView {

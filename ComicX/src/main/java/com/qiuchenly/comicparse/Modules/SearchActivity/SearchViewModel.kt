@@ -2,10 +2,10 @@ package com.qiuchenly.comicparse.Modules.SearchActivity
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.Bika.responses.GeneralResponse
-import com.qiuchenly.comicparse.Http.Bika.responses.KeywordsResponse
-import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.KeywordsResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

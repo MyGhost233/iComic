@@ -8,8 +8,8 @@ import android.view.KeyEvent
 import android.widget.ImageView
 import com.qiuchenly.comicparse.App
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
-import com.qiuchenly.comicparse.Http.BaseURL
-import com.qiuchenly.comicparse.Http.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Common.BaseURL
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import com.qiuchenly.comicparse.MVP.OtherTemp.BaseFragmentPagerStatement
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.Modules.MainActivity.Adapter.FunctionAdapter

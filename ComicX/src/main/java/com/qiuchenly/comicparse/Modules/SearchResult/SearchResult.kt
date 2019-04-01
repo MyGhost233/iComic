@@ -11,19 +11,38 @@ import com.google.gson.Gson
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicCategoryBean
+import com.qiuchenly.comicparse.Bean.ComicHome_Category
+import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.CategoryObject
-import com.qiuchenly.comicparse.Http.Bika.ComicListObject
-import com.qiuchenly.comicparse.Http.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.Modules.SearchResult.Adapter.SearchResultAdapter
 import com.qiuchenly.comicparse.Modules.SearchResult.View.ResultViews
 import com.qiuchenly.comicparse.Modules.SearchResult.ViewModel.SearchResultViewModel
+import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.activity_search_result.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener {
+    @SuppressLint("SetTextI18n")
+    override fun getComicList_DMZJ(list: List<ComicHome_CategoryComic>?) {
+        if (list != null) {
+            if (list.isEmpty()) {
+                mAdapter?.setNoMore()
+                return
+            }
+            //修复数据显示问题
+            nextPage++
+            activityName_secondTitle.visibility = View.VISIBLE
+            activityName_secondTitle.text = "加载结束 (当前第 $nextPage 页)"
+            mAdapter?.addDMZJComic(list)
+        } else {
+            mAdapter?.setLoadFailed()
+        }
+    }
+
     override fun getRandomComicList_Bika(data: ArrayList<ComicListObject>?) {
         if (data != null) {
             //修复数据显示问题
@@ -71,18 +90,25 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
     }
 
     fun selectLoad() {
-        when (mCategory.mCategoryName) {
-            "随机本子" -> {
-                mViewModel?.getRandomComic()
+        when (mCategory.mComicType) {
+            ComicSourceType.DMZJ -> {
+                mViewModel?.getCategoryComic_DMZJ(mCategoryID, nextPage)
             }
-            "最近更新" -> {
-                mViewModel?.getCategoryComic(null, nextPage)
-            }
-            "搜索关键词" -> {
-                mViewModel?.searchComic(mCategory.mData, nextPage)
-            }
-            else -> {
-                mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+            ComicSourceType.BIKA -> {
+                when (mCategory.mCategoryName) {
+                    "随机本子" -> {
+                        mViewModel?.getRandomComic()
+                    }
+                    "最近更新" -> {
+                        mViewModel?.getCategoryComic(null, nextPage)
+                    }
+                    "搜索关键词" -> {
+                        mViewModel?.searchComic(mCategory.mData, nextPage)
+                    }
+                    else -> {
+                        mViewModel?.getCategoryComic(mCategory.mCategoryName, nextPage)
+                    }
+                }
             }
         }
     }
@@ -90,13 +116,14 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
     var mViewModel: SearchResultViewModel? = SearchResultViewModel(this)
     var mAdapter: SearchResultAdapter? = null
     var nextPage = 1
+    var mCategoryID = ""
     lateinit var mCategoryObj: CategoryObject
     lateinit var mCategory: ComicCategoryBean
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val str = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        val str = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         if (str.isNullOrEmpty()) {
             ShowErrorMsg("数据错误,可能是我没做这个功能或者正在开发中.")
             finish()
@@ -121,10 +148,26 @@ class SearchResult : BaseApp(), ResultViews, BaseRecyclerAdapter.LoaderListener 
         if (mCategory.mCategoryName != "搜索关键词")
             mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
         magic_indicator.visibility = View.GONE
-        if (mCategory.mComicType == ComicSourceType.BIKA) {
-            selectLoad()
-            activityName.text = mCategory.mCategoryName
+        when (mCategory.mComicType) {
+            ComicSourceType.BIKA -> {
+                handle_bika(mCategory)
+            }
+            ComicSourceType.DMZJ -> {
+                handle_ComicHome(mCategory)
+            }
         }
+        activityName.text = mCategory.mCategoryName
+    }
+
+    private fun handle_ComicHome(mComicCategoryBean: ComicCategoryBean) {
+        val id = Gson().fromJson(mComicCategoryBean.mData, ComicHome_Category::class.java)
+        mCategoryID = id.tag_id
+        nextPage = 0
+        selectLoad()
+    }
+
+    private fun handle_bika(mComicCategoryBean: ComicCategoryBean) {
+        selectLoad()
     }
 
     override fun onDestroy() {

@@ -11,7 +11,7 @@ class BrowserView : BaseApp() {
     override fun getLayoutID() = R.layout.activity_webview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mIntent = intent.getStringExtra(ActivityKey.KEY_BIKA_CATEGORY_JUMP)
+        val mIntent = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         mUrlLoad.settings.javaScriptEnabled = true//JavaScript 启用脚本解决无法加载图片的bug
 
         if (!mIntent.isNullOrEmpty())

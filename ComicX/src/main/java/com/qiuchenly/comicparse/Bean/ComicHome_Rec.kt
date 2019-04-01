@@ -38,6 +38,7 @@ class ComicHome_Category {
     var cover = ""
 }
 
+
 data class ComicHomeComicChapterList(
         var id: Int = 0, // 41901
         var islong: Int = 0, // 2
@@ -112,3 +113,14 @@ data class ChapterList(
         var picnum: Int = 0, // 29
         var comment_count: Int = 0 // 547
 )
+
+class ComicHome_CategoryComic {
+    var id: String = "" // 27708
+    var title: String = "" // 崩坏3rd
+    var authors: String = "" // 上海米哈游
+    var status: String = "" // 连载中
+    var cover: String = "" // https://images.dmzj.com/img/webpic/16/1017039361514025908.jpg
+    var types: String = "" // 冒险/热血
+    var last_updatetime: String = "" // 1552725573
+    var num: String = "" // 52539476
+}

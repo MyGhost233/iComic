@@ -25,7 +25,7 @@ import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.Bean.ApplicationSetting
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.BaseURL
+import com.qiuchenly.comicparse.ProductModules.Common.BaseURL
 import com.qiuchenly.comicparse.R
 import jp.wasabeef.glide.transformations.BlurTransformation
 import java.nio.ByteBuffer

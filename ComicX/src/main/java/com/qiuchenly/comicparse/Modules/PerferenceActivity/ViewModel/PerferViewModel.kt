@@ -2,7 +2,7 @@ package com.qiuchenly.comicparse.Modules.PerferenceActivity.ViewModel
 
 import com.qiuchenly.comicparse.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response

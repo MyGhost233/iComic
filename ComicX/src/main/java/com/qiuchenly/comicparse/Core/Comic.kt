@@ -2,9 +2,7 @@ package com.qiuchenly.comicparse.Core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.BikaApi
-import com.qiuchenly.comicparse.Http.NMSL.NMSLClient
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.io.PrintWriter

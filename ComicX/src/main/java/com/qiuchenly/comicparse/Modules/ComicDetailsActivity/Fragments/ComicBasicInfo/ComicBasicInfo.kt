@@ -7,7 +7,7 @@ import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicDetailObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicDetailObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicInfoViewModel
 import com.qiuchenly.comicparse.R

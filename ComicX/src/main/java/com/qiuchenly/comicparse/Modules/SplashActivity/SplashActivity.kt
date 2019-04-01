@@ -7,11 +7,11 @@ import android.os.Handler
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.NMSLBean
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Http.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.Http.Bika.RestWakaClient
-import com.qiuchenly.comicparse.Http.Bika.responses.WakaInitResponse
-import com.qiuchenly.comicparse.Http.BikaApi
-import com.qiuchenly.comicparse.Http.NMSL.NMSLClient
+import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
+import com.qiuchenly.comicparse.ProductModules.Bika.RestWakaClient
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.WakaInitResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Common.NMSL.NMSLClient
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.splash_view.*

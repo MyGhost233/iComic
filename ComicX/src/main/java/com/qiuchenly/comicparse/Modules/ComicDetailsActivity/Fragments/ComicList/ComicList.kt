@@ -10,7 +10,7 @@ import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.Http.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Adapter.ComicPageAda
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicListViewModel
