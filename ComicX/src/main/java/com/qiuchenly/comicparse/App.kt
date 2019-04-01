@@ -1,6 +1,7 @@
 package com.qiuchenly.comicparse
 
 import android.app.Application
+import android.support.multidex.MultiDex
 import com.qiuchenly.comicparse.Core.Comic
 import com.squareup.leakcanary.LeakCanary
 import com.crashlytics.android.Crashlytics
@@ -15,6 +16,9 @@ class App : Application() {
             // You should not init your app in this process.
             return
         }
+        //解决dex方法超过65535
+        MultiDex.install(this)
+        //检查内存泄漏
         //LeakCanary.install(this)
         Comic.initialization(this)
     }
