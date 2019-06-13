@@ -80,7 +80,7 @@ class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyc
                             R.drawable.loading,
                             object : CustomUtils.ImageListener {
                                 override fun onRet(state: CustomUtils.GlideState, resource: Drawable?, target: Target<Drawable>?): Boolean {
-                                    if (state == CustomUtils.GlideState.onLoadFailed) {
+                                    if (state == CustomUtils.GlideState.LoadFailed) {
                                         mRetryLoad.visibility = View.VISIBLE
                                         mRetryLoad.isClickable = true
                                         mRetryLoad.text = "点击重试!"

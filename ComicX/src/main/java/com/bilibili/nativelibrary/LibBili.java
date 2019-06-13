@@ -21,9 +21,25 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * 司马崽总 这个类就是你吗的二次元pxj净土
+ */
 public final class LibBili {
+
+    /**
+     * 取你吗的接口签名 看不懂就滚
+     *
+     * @param str sb东西不传值就想得到签名?你怎么不传你吗?
+     * @return 返回你吗的东百人签名 崽总
+     */
     private static native String a(String str);
 
+    /**
+     * RSA的C++实现不会?不会你做你吗的Android开发?调用接口得到IV 懂?
+     * @param str 秘钥
+     * @return 结果
+     * @throws InvalidKeyException sb东西值都能传错 你怎么不把你吗认错
+     */
     private static native IvParameterSpec b(String str) throws InvalidKeyException;
 
     public static native int getCpuCount();

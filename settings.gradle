@@ -1,1 +1,1 @@
-include ':ComicX', ':core'
+include ':ComicX'

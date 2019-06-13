@@ -36,17 +36,17 @@ import java.security.NoSuchAlgorithmException
 object CustomUtils {
 
     enum class GlideState {
-        onLoadFailed, onResourceReady
+        LoadFailed, ResourceReady
     }
 
     interface ImageListener : RequestListener<Drawable> {
 
         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-            return onRet(CustomUtils.GlideState.onLoadFailed, null, target)
+            return onRet(CustomUtils.GlideState.LoadFailed, null, target)
         }
 
         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-            return onRet(CustomUtils.GlideState.onResourceReady, resource, target)
+            return onRet(CustomUtils.GlideState.ResourceReady, resource, target)
         }
 
         fun onRet(
