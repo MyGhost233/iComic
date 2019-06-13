@@ -29,7 +29,6 @@ class ComicListViewModel(view: ComicDetailContract.Comiclist.View) : BaseViewMod
         mView = null
     }
 
-
     fun getComicList(id: String) {
         BikaApi.getAPI()?.getComicEpisode(PreferenceHelper.getToken(Comic.getContext()), id, 1)
                 ?.enqueue(object : Callback<GeneralResponse<ComicEpisodeResponse>> {

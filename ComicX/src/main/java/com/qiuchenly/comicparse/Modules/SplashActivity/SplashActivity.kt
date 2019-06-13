@@ -12,6 +12,9 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
 import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import com.qiuchenly.comicparse.ProductModules.Bika.RestWakaClient
+import com.qiuchenly.comicparse.ProductModules.Bika.requests.SignInBody
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.SignInResponse
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.WakaInitResponse
 import com.qiuchenly.comicparse.ProductModules.Common.NMSL.NMSLClient
 import com.qiuchenly.comicparse.R
@@ -47,12 +50,25 @@ class SplashActivity : BaseApp() {
             if (init.code() == 200) {
                 if ((init.body() as WakaInitResponse).addresses != null && (init.body() as WakaInitResponse).addresses.size > 0) {
                     PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((init.body() as WakaInitResponse).addresses))
-                    ShowErrorMsg("成功加载哔咔服务器信息数据.")
+                    //ShowErrorMsg("成功加载哔咔服务器信息数据.")
                     PreferenceHelper.setGirl(Comic.getContext(), false)
                     PreferenceHelper.setChannel(Comic.getContext(), 1)
                     BikaApi.setBiCaClient(Comic.getContext()!!)//fix that app can't login & request data for the first time
+
+                    //start login bika
+                    val user = PreferenceHelper.getUserLoginEmail(Comic.getContext())
+                    val pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
+                    if (user.isNotEmpty() && pass.isNotEmpty()) {
+                        val login: Response<GeneralResponse<SignInResponse>>? = BikaApi.getAPI()?.signIn(SignInBody(user, pass))?.execute()
+                        if (login?.code() == 200) {
+                            PreferenceHelper.setToken(Comic.getContext(), login.body()?.data?.token)
+                            ShowErrorMsg("登录哔咔成功!")
+                        } else {
+                            ShowErrorMsg("登录哔咔失败!")
+                        }
+                    }
                 } else {
-                    ShowErrorMsg("无法获取到哔咔服务器的CDN地址!")
+                    ShowErrorMsg("哔咔服务器的CDN地址没有返回!")
                 }
             }
         } catch (e: Exception) {

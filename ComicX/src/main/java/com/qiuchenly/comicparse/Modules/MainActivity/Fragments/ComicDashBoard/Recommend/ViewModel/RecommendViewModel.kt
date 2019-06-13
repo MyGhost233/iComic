@@ -102,7 +102,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                     val imageServer = ((response.body() as GeneralResponse<*>).data as InitialResponse).imageServer
                     if (imageServer != null && imageServer.isNotEmpty()) {
                         PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
-                        mView?.ShowErrorMsg("使用上次登录的Token.")
+                        //mView?.ShowErrorMsg("使用上次登录的Token.")
                     }
                 } else {
                     loadFailure(Throwable("完啦,bika图片服务器炸了."))
