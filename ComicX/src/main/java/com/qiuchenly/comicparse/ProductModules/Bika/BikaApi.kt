@@ -49,7 +49,7 @@ object BikaApi : BaseRetrofitManager<ApiService>() {
                                 .header("signature", signature)
                                 .header("app-version", version)
                                 .header("app-uuid", uuid)
-                                .header("image-quality", "original")
+                                .header("image-quality", "original")//哔咔服务器加载图片质量
                                 .header("app-platform", "android")
                                 .header("app-build-version", buildVersion)
                                 .header("user-agent", "okhttp/3.8.1")

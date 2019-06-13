@@ -172,7 +172,7 @@ class ComicDetails :
                     setUI(baseInfo)
                 }),
                 SuperPagerAdapter.Struct("章节", ComicList().apply {
-                    if (baseInfo.mComicID == "") {
+                    if (baseInfo.mComicID == "" && baseInfo.mComicType == ComicSourceType.BIKA) {
                         baseInfo.mComicID = mComicInfo!!.comicId
                         //这里是为了解决加载哔咔数据源时漫画ID为空的问题，类别：官方汉化
                     }
@@ -220,7 +220,6 @@ class ComicDetails :
         mViewModel = null
         mBinder = null
         mAdapter = null
-
         onLoading = null
         onFailed = null
         onSuccess = null
