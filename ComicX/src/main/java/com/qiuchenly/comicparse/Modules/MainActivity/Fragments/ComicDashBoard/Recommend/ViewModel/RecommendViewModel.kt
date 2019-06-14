@@ -155,8 +155,12 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
                             mBikaCategoryArr = response.body()?.data?.getCategories()
                             if (mBikaCategoryArr != null) {
                                 mBikaCategoryArr?.add(0, CategoryObject("lastUpdate", "最近更新", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("randomComic", "随机本子", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "哔咔排行", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("random", "随机本子", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "愛心排行", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "那年今天", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "官方都在看", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "收藏排行", "", mBikaCategoryArr!![0].thumb))
+                                mBikaCategoryArr?.add(0, CategoryObject("", "嗶咔AI推薦", "", mBikaCategoryArr!![0].thumb))
                             }
                             PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(mBikaCategoryArr))
                             mView?.onGetBikaCategorySucc(mBikaCategoryArr)
