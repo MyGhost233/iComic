@@ -10,7 +10,7 @@ import io.fabric.sdk.android.Fabric
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Fabric.with(this, Crashlytics())
+        //Fabric.with(this, Crashlytics())
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.

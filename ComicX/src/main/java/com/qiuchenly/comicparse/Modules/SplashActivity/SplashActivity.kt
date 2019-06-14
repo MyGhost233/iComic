@@ -106,7 +106,6 @@ class SplashActivity : BaseApp() {
         mLangAuthor.text = "--- 三日杀神"
 
         thread {
-            initBikaApi()
             NMSLClient.generateNiceLang()
             val lang: Response<NMSLBean> = NMSLClient.getAPI()?.getNiceOne()?.execute()!!
             runOnUiThread {
@@ -114,6 +113,7 @@ class SplashActivity : BaseApp() {
                 mLangAuthor.text = "--- " + lang.body()?.from
                 final()
             }
+            initBikaApi()
         }
     }
 }

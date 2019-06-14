@@ -3,12 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view_magic_indicator_base" />
+    <!--<include layout="@layout/view_magic_indicator_base" />-->
 
-    <android.support.v4.view.ViewPager
+    <!--<android.support.v4.view.ViewPager-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:background="#123123"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--</android.support.v4.view.ViewPager>-->
+
+    <TextView
         android:layout_width="match_parent"
-        android:background="#123123"
-        android:layout_height="match_parent">
-
-    </android.support.v4.view.ViewPager>
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="你以为这个版块会有数据吗?不存在的哈哈哈哈"
+        android:layout_height="match_parent" />
 </RelativeLayout>
