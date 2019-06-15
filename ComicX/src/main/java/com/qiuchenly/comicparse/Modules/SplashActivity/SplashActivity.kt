@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import com.bilibili.nativelibrary.LibBili
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.NMSLBean
 import com.qiuchenly.comicparse.Core.Comic
@@ -14,13 +13,13 @@ import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import com.qiuchenly.comicparse.ProductModules.Bika.RestWakaClient
 import com.qiuchenly.comicparse.ProductModules.Bika.requests.SignInBody
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.InitialResponse
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.SignInResponse
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.WakaInitResponse
 import com.qiuchenly.comicparse.ProductModules.Common.NMSL.NMSLClient
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.splash_view.*
 import retrofit2.Response
-import java.lang.Exception
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -50,11 +49,9 @@ class SplashActivity : BaseApp() {
             if (init.code() == 200) {
                 if ((init.body() as WakaInitResponse).addresses != null && (init.body() as WakaInitResponse).addresses.size > 0) {
                     PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((init.body() as WakaInitResponse).addresses))
-                    //ShowErrorMsg("成功加载哔咔服务器信息数据.")
                     PreferenceHelper.setGirl(Comic.getContext(), false)
                     PreferenceHelper.setChannel(Comic.getContext(), 1)
                     BikaApi.setBiCaClient(Comic.getContext()!!)//fix that app can't login & request data for the first time
-
                     //start login bika
                     val user = PreferenceHelper.getUserLoginEmail(Comic.getContext())
                     val pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
@@ -66,10 +63,21 @@ class SplashActivity : BaseApp() {
                         } else {
                             ShowErrorMsg("登录哔咔失败!")
                         }
+                    } else {
+                        return//not do nothing
                     }
                 } else {
                     ShowErrorMsg("哔咔服务器的CDN地址没有返回!")
                 }
+            }
+            val imageInit = BikaApi.getAPI()?.getInit(PreferenceHelper.getToken(Comic.getContext()))?.execute()
+            if (imageInit?.code() == 200) {
+                val imageServer = ((imageInit.body() as GeneralResponse<*>).data as InitialResponse).imageServer
+                if (imageServer != null && imageServer.isNotEmpty()) {
+                    PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
+                }
+            } else {
+                ShowErrorMsg("完啦,bika图片服务器炸了.")
             }
         } catch (e: Exception) {
             ShowErrorMsg("无法获取到Bika服务器的CDN地址!")

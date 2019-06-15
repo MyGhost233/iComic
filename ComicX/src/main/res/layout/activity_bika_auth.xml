@@ -75,6 +75,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_simple1"
             android:hint="输入哔咔账号:你的邮箱."
+            android:imeOptions="actionNext"
+            android:padding="5dp"
+            android:singleLine="true"
             android:textColor="@color/mDefaultListTextColor"
             android:textColorHint="@color/mDefaultListTextColor" />
 
@@ -87,6 +90,10 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/edittext_simple1"
             android:hint="输入哔咔密码:你的密码."
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:padding="5dp"
+            android:singleLine="true"
             android:textColor="@color/mDefaultListTextColor"
             android:textColorHint="@color/mDefaultListTextColor" />
 
@@ -98,7 +105,8 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/background_simple"
             android:text="登  录"
-            android:textColor="@color/mDefaultListTextColor" />
+            android:textColor="@color/mDefaultListTextColor"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

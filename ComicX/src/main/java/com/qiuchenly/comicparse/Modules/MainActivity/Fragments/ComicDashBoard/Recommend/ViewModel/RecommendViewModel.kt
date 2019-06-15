@@ -7,14 +7,10 @@ import com.qiuchenly.comicparse.Bean.ComicHome_Category
 import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
 import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
 import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.CategoryResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.InitialResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import com.qiuchenly.comicparse.ProductModules.ComicHome.DongManZhiJia
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.RecommentContract
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import retrofit2.Call
@@ -33,17 +29,6 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
     private var mView = Views
 
     private var mCall: Call<ResponseBody>? = null
-
-    fun getIndex() {
-        getDMZJRecommend()
-        if (!PreferenceHelper.getNoLoginBika(Comic.getContext())) {
-            getBikaAllCategory()
-        }
-        //mView?.ShowErrorMsg("你还未选择漫画数据提供源!搞快丶去选择!")
-        //        if (PreferenceHelper.getIsFirst(Comic.getContext()))
-        //            mView?.goSelectSource()
-        //        mView?.final()
-    }
 
     fun getDMZJCategory() {
         val mCall = DongManZhiJia.getV3API().category
@@ -66,7 +51,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         })
     }
 
-    private fun getDMZJRecommend() {
+    fun getDMZJRecommend() {
         val mCall = DongManZhiJia.getV3API().recommend
         mCall.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -91,83 +76,7 @@ class RecommendViewModel(Views: RecommentContract.View?) : BaseViewModel<Respons
         })
     }
 
-    fun getInit() {
-        if (PreferenceHelper.getToken(Comic.getContext()) == "") {
-            getBikaIndex()
-            return
-        }
-        BikaApi.getAPI()?.getInit(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(object : Callback<GeneralResponse<InitialResponse>> {
-            override fun onResponse(call: Call<GeneralResponse<InitialResponse>>, response: Response<GeneralResponse<InitialResponse>>) {
-                if (response.code() == 200) {
-                    val imageServer = ((response.body() as GeneralResponse<*>).data as InitialResponse).imageServer
-                    if (imageServer != null && imageServer.isNotEmpty()) {
-                        PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
-                        //mView?.ShowErrorMsg("使用上次登录的Token.")
-                    }
-                } else {
-                    loadFailure(Throwable("完啦,bika图片服务器炸了."))
-                }
-            }
-
-            override fun onFailure(call: Call<GeneralResponse<InitialResponse>>, t: Throwable) {
-                t.printStackTrace()
-                loadFailure(Throwable("网络有点问题."))
-            }
-        })
-    }
-
-    var userName = ""
-    var pass = ""
-    private fun getBikaIndex() {
-        userName = PreferenceHelper.getUserLoginEmail(Comic.getContext())
-        pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
-        if (userName == "" || pass == "") {
-            mView?.ShowErrorMsg("请先登录bika账号后再刷新!")
-            mView?.goLoginBika()
-        } else {
-            if (PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()) != "") {
-                mBikaCategoryArr = Gson().fromJson(PreferenceHelper.getLocalApiDataCategoryList(Comic.getContext()), object : TypeToken<List<CategoryObject>>() {}.type) as ArrayList<CategoryObject>
-                mView?.onGetBikaCategorySucc(mBikaCategoryArr)
-            } else getBikaAllCategory()
-        }
-    }
-
     var mBikaCategoryArr: ArrayList<CategoryObject>? = null
-    private fun getBikaAllCategory() {
-        if (PreferenceHelper.getToken(Comic.getContext()) == "") {
-            if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
-            } else {
-            }
-            //initBikaApi()
-            return
-        }
-        if (PreferenceHelper.getNoLoginBika(Comic.getContext())) {
-
-        } else
-            BikaApi.getAPI()?.getCategories(PreferenceHelper.getToken(Comic.getContext()))?.enqueue(
-                    object : Callback<GeneralResponse<CategoryResponse>> {
-                        override fun onFailure(call: Call<GeneralResponse<CategoryResponse>>, t: Throwable) {
-                            //this.onFailure(call, t)
-                            mView?.OnNetFailed(t.message)
-                        }
-
-                        override fun onResponse(call: Call<GeneralResponse<CategoryResponse>>, response: Response<GeneralResponse<CategoryResponse>>) {
-                            mBikaCategoryArr = response.body()?.data?.getCategories()
-                            if (mBikaCategoryArr != null) {
-                                mBikaCategoryArr?.add(0, CategoryObject("lastUpdate", "最近更新", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("random", "随机本子", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "愛心排行", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "那年今天", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "官方都在看", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "收藏排行", "", mBikaCategoryArr!![0].thumb))
-                                mBikaCategoryArr?.add(0, CategoryObject("", "嗶咔AI推薦", "", mBikaCategoryArr!![0].thumb))
-                            }
-                            PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(mBikaCategoryArr))
-                            mView?.onGetBikaCategorySucc(mBikaCategoryArr)
-                        }
-                    }
-            )
-    }
 
     override fun cancel() {
         super.cancel()

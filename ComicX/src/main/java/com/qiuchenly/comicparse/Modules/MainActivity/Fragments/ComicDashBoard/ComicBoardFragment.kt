@@ -3,8 +3,8 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard
 import android.view.View
 import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.BaseImp.BaseNavigatorCommon
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BilibiliFragment.Bilibili
-import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.Recommend
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BiKaFragment.BiKaComic
+import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Recommend.ComicHome
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_comic_board_view.*
@@ -20,8 +20,8 @@ class ComicBoardFragment : BaseLazyFragment() {
 
     override fun onViewFirstSelect(mPagerView: View) {
         val list = arrayListOf(
-                SuperPagerAdapter.Struct("推荐", Recommend()),
-                SuperPagerAdapter.Struct("bilibili", Bilibili())
+                SuperPagerAdapter.Struct("动漫之家", ComicHome()),
+                SuperPagerAdapter.Struct("哔咔漫画", BiKaComic())
                 //SuperPagerAdapter.Struct("以后增加", AndMore())
         )
         mAdapter = SuperPagerAdapter(this.childFragmentManager, list)

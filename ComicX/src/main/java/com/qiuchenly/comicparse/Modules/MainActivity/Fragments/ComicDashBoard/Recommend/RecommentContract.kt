@@ -8,10 +8,6 @@ import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 interface RecommentContract {
     interface View : BaseView, DongManZhiJia {
         fun OnNetFailed(message: String?)
-        fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?)
-
-
-        fun goLoginBika()
         fun goSelectSource()
         fun final()
     }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_userHead"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="20dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_userHead"
+        android:layout_alignBottom="@id/iv_userHead"
+        android:layout_toEndOf="@id/iv_userHead"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="未登录"
+            android:textColor="#E6DDDD"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_userLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/btn_bika_level"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Lv.-1"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_userSign"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:layout_alignTop="@id/iv_userHead"
+        android:layout_alignBottom="@id/iv_userHead"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/btn_bika_level"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="2dp"
+        android:text="签到"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/iv_userHead"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="最近观看"
+            android:textColor="#E6DDDD"
+            android:textSize="10sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#AFAFAF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="我的收藏"
+            android:textColor="#E6DDDD"
+            android:textSize="10sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#AFAFAF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="编辑资料"
+            android:textColor="#E6DDDD"
+            android:textSize="10sp" />
+
+
+    </LinearLayout>
+</RelativeLayout>
