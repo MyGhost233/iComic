@@ -85,6 +85,8 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             val avatar = Tools.getThumbnailImagePath(mUser?.avatar)
             if (avatar != "")
                 CustomUtils.loadImageCircle(itemView.context, avatar, iv_userHead)
+            else
+                CustomUtils.loadImageCircle(itemView.context, "http://183.61.38.245/gh/692376108/692376108/100?mType=QQHeadIcon", iv_userHead)
             tv_userName.text = mUser?.name
             tv_userLevel.text = "Lv.${mUser?.level}(${mUser?.exp})"
             if (mUser?.isPunched == false) {
