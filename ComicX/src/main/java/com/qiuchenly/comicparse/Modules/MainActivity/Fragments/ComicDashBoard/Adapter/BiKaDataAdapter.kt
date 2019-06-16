@@ -58,7 +58,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             //for this type,unuseless
             foo_bookName_upNews.visibility = View.GONE
             setOnClickListener {
-                context.startActivity(android.content.Intent(context, com.qiuchenly.comicparse.Modules.SearchResult.SearchResult::class.java).apply {
+                context.startActivity(Intent(context, com.qiuchenly.comicparse.Modules.SearchResult.SearchResult::class.java).apply {
                     putExtra(com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
                         this.mCategoryName = mCategoryName
                         this.mComicType = ComicSourceType.BIKA

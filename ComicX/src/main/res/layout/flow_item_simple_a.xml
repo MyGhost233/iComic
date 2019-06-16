@@ -4,10 +4,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="#5C6BC0"
+    android:background="@drawable/edittext_simple1"
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
-    android:padding="10dp"
+    android:padding="6dp"
     android:text="123123"
     android:textColor="@color/mDefaultListTextColor" />

@@ -32,6 +32,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
             var count = 0
 
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+
                 val layout = view?.layoutParams as RecyclerView.LayoutParams
                 val position = layout.viewLayoutPosition
                 val type = mRecyclerAdapter?.getItemViewType(position)

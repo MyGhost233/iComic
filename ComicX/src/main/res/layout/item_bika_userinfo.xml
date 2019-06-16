@@ -68,49 +68,97 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="最近观看"
-            android:textColor="#E6DDDD"
-            android:textSize="10sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#E6DDDD"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="最近观看"
+                android:textColor="#E6DDDD"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <View
             android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#AFAFAF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_gravity="center"
+            android:background="#A4AFAFAF" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="我的收藏"
-            android:textColor="#E6DDDD"
-            android:textSize="10sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#E6DDDD"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="我的收藏"
+                android:textColor="#E6DDDD"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <View
             android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#AFAFAF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_gravity="center"
+            android:background="#A4AFAFAF" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="编辑资料"
-            android:textColor="#E6DDDD"
-            android:textSize="10sp" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:src="@drawable/ic_edit_profile"
+                android:textColor="#E6DDDD" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="编辑资料"
+                android:textColor="#E6DDDD"
+                android:textSize="10sp" />
+        </LinearLayout>
 
 
     </LinearLayout>
