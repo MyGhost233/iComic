@@ -14,6 +14,8 @@ import java.util.*
 
 object BikaApi : BaseRetrofitManager<ApiService>() {
 
+    var isConnectFailed = false
+
     private var TAG = "BikaApi"
     //-----------------------    bika   API  --------------------------
     private val API_KEY = "C69BAF41DA5ABD1FFEDC6D2FEA56B"

@@ -72,12 +72,20 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
 
     @SuppressLint("SetTextI18n")
     fun userProfileSet(itemView: View) {
+        CustomUtils.loadImageCircle(itemView.context, "http://183.61.38.245/gh/692376108/692376108/100?mType=QQHeadIcon", itemView.iv_userHead)
+        itemView.tv_userSign.setOnClickListener(null)
+        if (isConnectFailed) {
+            itemView.setOnClickListener(null)
+            itemView.tv_userName.text = "已切换分流,请重启App"
+            itemView.tv_userSign.text = "连接失败"
+            return
+        }
         if (mUser == null) {
             itemView.setOnClickListener {
                 itemView.context.startActivity(Intent(itemView.context, AuthBika::class.java))
             }
             itemView.tv_userName.text = "点击登录,搞快点"
-            itemView.tv_userSign.text = "请登录"
+            itemView.tv_userSign.text = "Biss"
             return
         }
         itemView.setOnClickListener(null)
@@ -85,8 +93,6 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             val avatar = Tools.getThumbnailImagePath(mUser?.avatar)
             if (avatar != "")
                 CustomUtils.loadImageCircle(itemView.context, avatar, iv_userHead)
-            else
-                CustomUtils.loadImageCircle(itemView.context, "http://183.61.38.245/gh/692376108/692376108/100?mType=QQHeadIcon", iv_userHead)
             tv_userName.text = mUser?.name
             tv_userLevel.text = "Lv.${mUser?.level}(${mUser?.exp})"
             if (mUser?.isPunched == false) {
@@ -123,6 +129,12 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
     fun setCategory(mArr: ArrayList<CategoryObject>) {
         mItems = mArr
         notifyDataSetChanged()
+    }
+
+    private var isConnectFailed = false
+    fun setConnectFailed() {
+        isConnectFailed = true
+        notifyItemChanged(0)
     }
 
     private var mUser: UserProfileObject? = null

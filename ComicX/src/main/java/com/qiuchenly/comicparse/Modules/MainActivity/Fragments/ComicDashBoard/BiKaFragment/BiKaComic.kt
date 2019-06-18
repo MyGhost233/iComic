@@ -14,9 +14,14 @@ import kotlinx.android.synthetic.main.fragment_bika.*
 
 class BiKaComic : BaseLazyFragment(), BikaInterface {
 
+    override fun ShowErrorMsg(msg: String) {
+        super.ShowErrorMsg(msg)
+
+    }
+
     private var mRecycler: RecyclerView? = null
     var mRecyclerAdapter: BiKaDataAdapter? = null
-    var model: BikaModel? = null
+    private var model: BikaModel? = null
 
     override fun onViewFirstSelect(mPagerView: View) {
         mRecycler = view?.findViewById(R.id.rv_bika_content)
@@ -29,38 +34,11 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
             }
         }
         mRecycler?.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            var count = 0
-
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-
-                val layout = view?.layoutParams as RecyclerView.LayoutParams
-                val position = layout.viewLayoutPosition
-                val type = mRecyclerAdapter?.getItemViewType(position)
-                if (type == BiKaDataAdapter.ItemType.BIKA_COMIC_TYPE) {
-                    when (count) {
-                        0 -> {
-                            outRect?.apply {
-                                left = 10
-                                right = 10
-                            }
-                        }
-                        1 -> {
-                            outRect?.apply {
-                                left = 10
-                                right = 10
-                            }
-                        }
-                        2 -> {
-                            outRect?.apply {
-                                left = 10
-                                right = 10
-                            }
-                        }
-                    }
-                    count++
-                    if (count > 2) count = 0
-                } else
-                    count = 0
+                outRect?.apply {
+                    left = 10
+                    right = 10
+                }
             }
         })
         mRecycler?.adapter = mRecyclerAdapter
@@ -76,6 +54,10 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         if (swipe_bika_refresh.isRefreshing)
             swipe_bika_refresh.isRefreshing = false
         if (model?.needLogin()!!) {
+            return
+        }
+        if (model?.connectFailed()!!) {
+            mRecyclerAdapter?.setConnectFailed()
             return
         }
         model?.updateUserInfo()

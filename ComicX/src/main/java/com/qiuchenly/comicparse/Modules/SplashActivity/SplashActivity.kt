@@ -49,8 +49,8 @@ class SplashActivity : BaseApp() {
             if (init.code() == 200) {
                 if ((init.body() as WakaInitResponse).addresses != null && (init.body() as WakaInitResponse).addresses.size > 0) {
                     PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((init.body() as WakaInitResponse).addresses))
-                    PreferenceHelper.setGirl(Comic.getContext(), false)
-                    PreferenceHelper.setChannel(Comic.getContext(), 1)
+//                    PreferenceHelper.setGirl(Comic.getContext(), false)
+//                    PreferenceHelper.setChannel(Comic.getContext(), 1)
                     BikaApi.setBiCaClient(Comic.getContext()!!)//fix that app can't login & request data for the first time
                     //start login bika
                     val user = PreferenceHelper.getUserLoginEmail(Comic.getContext())
@@ -80,7 +80,17 @@ class SplashActivity : BaseApp() {
                 ShowErrorMsg("完啦,bika图片服务器炸了.")
             }
         } catch (e: Exception) {
-            ShowErrorMsg("无法获取到Bika服务器的CDN地址!")
+            var id = PreferenceHelper.getChannel(Comic.getContext())
+            id += 1
+            if (id > 3) {
+                id = 1
+                PreferenceHelper.setGirl(Comic.getContext(), false)
+            } else {
+                PreferenceHelper.setGirl(Comic.getContext(), true)
+            }
+            PreferenceHelper.setChannel(Comic.getContext(), id)
+            BikaApi.isConnectFailed = true
+            ShowErrorMsg("无法连接哔咔服务器,已自动切换到分流$id,请重启APP试试")
         }
     }
 

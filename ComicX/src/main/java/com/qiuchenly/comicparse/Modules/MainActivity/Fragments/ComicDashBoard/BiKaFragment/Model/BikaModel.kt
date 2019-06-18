@@ -25,6 +25,10 @@ class BikaModel(val mViews: BikaInterface) {
         return mBikaToken == ""
     }
 
+    fun connectFailed(): Boolean {
+        return BikaApi.isConnectFailed
+    }
+
     fun updateUserInfo() {
         api?.getUserProfile(mBikaToken)?.enqueue(object : Callback<GeneralResponse<UserProfileResponse>> {
             override fun onFailure(call: Call<GeneralResponse<UserProfileResponse>>, t: Throwable) {
