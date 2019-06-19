@@ -113,7 +113,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
                     mdialog_view!!.rd_web2.isChecked = true
                 }
                 3 -> {
-                    mdialog_view!!.rd_web3.isChecked = true
+                    mdialog_view.rd_web3.isChecked = true
                 }
             }
 
@@ -134,7 +134,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
         itemView.setOnClickListener(null)
         with(itemView) {
             val avatar = Tools.getThumbnailImagePath(mUser?.avatar)
-            if (avatar != "")
+            if (avatar != null && avatar != "")
                 CustomUtils.loadImageCircle(itemView.context, avatar, iv_userHead)
             tv_userName.text = mUser?.name
             tv_userNick.text = mUser?.slogan
