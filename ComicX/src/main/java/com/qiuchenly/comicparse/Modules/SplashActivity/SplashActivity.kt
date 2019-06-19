@@ -6,31 +6,16 @@ import android.os.Bundle
 import android.os.Handler
 import com.qiuchenly.comicparse.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.NMSLBean
-import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.MainActivity.Activity.MainActivityUI
-import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
-import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
-import com.qiuchenly.comicparse.ProductModules.Bika.RestWakaClient
-import com.qiuchenly.comicparse.ProductModules.Bika.requests.SignInBody
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.InitialResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.SignInResponse
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.WakaInitResponse
 import com.qiuchenly.comicparse.ProductModules.Common.NMSL.NMSLClient
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.splash_view.*
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
-import kotlin.concurrent.thread
 
 class SplashActivity : BaseApp() {
-
-    fun final() {
-        Handler().postDelayed({
-            startActivity(Intent(this, MainActivityUI::class.java))
-            finish()
-        }, 5000)
-    }
 
     private var TAG = "SplashActivity"
     override fun getLayoutID() =
@@ -40,57 +25,6 @@ class SplashActivity : BaseApp() {
         return mSet.apply {
             this.isFullScreen = true
             this.isSlidr = false
-        }
-    }
-
-    fun initBikaApi() {
-        try {
-            val init = RestWakaClient().apiService.wakaInit.execute()
-            if (init.code() == 200) {
-                if ((init.body() as WakaInitResponse).addresses != null && (init.body() as WakaInitResponse).addresses.size > 0) {
-                    PreferenceHelper.setDnsIp(Comic.getContext(), HashSet((init.body() as WakaInitResponse).addresses))
-//                    PreferenceHelper.setGirl(Comic.getContext(), false)
-//                    PreferenceHelper.setChannel(Comic.getContext(), 1)
-                    BikaApi.setBiCaClient(Comic.getContext()!!)//fix that app can't login & request data for the first time
-                    //start login bika
-                    val user = PreferenceHelper.getUserLoginEmail(Comic.getContext())
-                    val pass = PreferenceHelper.getUserLoginPassword(Comic.getContext())
-                    if (user.isNotEmpty() && pass.isNotEmpty()) {
-                        val login: Response<GeneralResponse<SignInResponse>>? = BikaApi.getAPI()?.signIn(SignInBody(user, pass))?.execute()
-                        if (login?.code() == 200) {
-                            PreferenceHelper.setToken(Comic.getContext(), login.body()?.data?.token)
-                            ShowErrorMsg("登录哔咔成功!")
-                        } else {
-                            ShowErrorMsg("登录哔咔失败!")
-                        }
-                    } else {
-                        return//not do nothing
-                    }
-                } else {
-                    ShowErrorMsg("哔咔服务器的CDN地址没有返回!")
-                }
-            }
-            val imageInit = BikaApi.getAPI()?.getInit(PreferenceHelper.getToken(Comic.getContext()))?.execute()
-            if (imageInit?.code() == 200) {
-                val imageServer = ((imageInit.body() as GeneralResponse<*>).data as InitialResponse).imageServer
-                if (imageServer != null && imageServer.isNotEmpty()) {
-                    PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
-                }
-            } else {
-                ShowErrorMsg("完啦,bika图片服务器炸了.")
-            }
-        } catch (e: Exception) {
-            var id = PreferenceHelper.getChannel(Comic.getContext())
-            id += 1
-            if (id > 3) {
-                id = 1
-                PreferenceHelper.setGirl(Comic.getContext(), false)
-            } else {
-                PreferenceHelper.setGirl(Comic.getContext(), true)
-            }
-            PreferenceHelper.setChannel(Comic.getContext(), id)
-            BikaApi.isConnectFailed = true
-            ShowErrorMsg("无法连接哔咔服务器,已自动切换到分流$id,请重启APP试试")
         }
     }
 
@@ -123,15 +57,26 @@ class SplashActivity : BaseApp() {
         mLang.text = "三天之内,祝你心想事成."
         mLangAuthor.text = "--- 三日杀神"
 
-        thread {
-            NMSLClient.generateNiceLang()
-            val lang: Response<NMSLBean> = NMSLClient.getAPI()?.getNiceOne()?.execute()!!
-            runOnUiThread {
-                mLang.text = "  " + lang.body()?.hitokoto
-                mLangAuthor.text = "--- " + lang.body()?.from
+        NMSLClient.generateNiceLang()
+        NMSLClient.getAPI()?.getNiceOne()?.enqueue(object : Callback<NMSLBean> {
+            override fun onResponse(call: Call<NMSLBean>, response: Response<NMSLBean>) {
+                mLang.text = "  " + response.body()?.hitokoto
+                mLangAuthor.text = "--- " + response.body()?.from
                 final()
             }
-            initBikaApi()
-        }
+
+            override fun onFailure(call: Call<NMSLBean>, t: Throwable) {
+                ShowErrorMsg(t.message ?: "加载失败")
+                final()
+            }
+        })
+    }
+
+
+    fun final() {
+        Handler().postDelayed({
+            startActivity(Intent(this, MainActivityUI::class.java))
+            finish()
+        }, 5000)
     }
 }

@@ -10,4 +10,6 @@ interface BikaInterface : BaseView {
     fun punchSign()
     fun signResult(ret: Boolean)
     fun loadCategory(mBikaCategoryArr: ArrayList<CategoryObject>?)
+    fun initImageServerSuccess()
+    fun initSuccess()
 }

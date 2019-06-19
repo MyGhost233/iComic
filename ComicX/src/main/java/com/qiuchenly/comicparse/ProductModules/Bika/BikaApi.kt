@@ -33,39 +33,37 @@ object BikaApi : BaseRetrofitManager<ApiService>() {
         if (PreferenceHelper.isGirl(context)) {
             httpClient.dns(HttpDns())
         }
-        channel = PreferenceHelper.getChannel(context)
-        httpClient.addInterceptor(object : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                val original = chain.request()
-                val uid = UUID.randomUUID().toString().replace("-", "")
-                val url = original.url().toString().replace(BASE_URL_PIKA, "")
-                val time = ((System.currentTimeMillis() / 1000) + PreferenceHelper.getTimeDifference(context)).toString()
-                val signature = BiKaJni.getStringCon(arrayOf(BASE_URL_PIKA, url, time, uid, original.method(), API_KEY, version, buildVersion))
-                val response = chain.proceed(
-                        original.newBuilder()
-                                .header("api-key", API_KEY)
-                                .header("accept", "application/vnd.picacomic.com.v1+json")
-                                .header("app-channel", channel.toString())
-                                .header(ChatroomActionInterface.TIME, time)
-                                .header("nonce", uid)
-                                .header("signature", signature)
-                                .header("app-version", version)
-                                .header("app-uuid", uuid)
-                                .header("image-quality", "original")//哔咔服务器加载图片质量
-                                .header("app-platform", "android")
-                                .header("app-build-version", buildVersion)
-                                .header("user-agent", "okhttp/3.8.1")
-                                .method(original.method(), original.body())
-                                .build()
-                )
-                val serverTime = response.headers().get("Server-Time")
-                if (serverTime != null) {
-                    val diffTime = java.lang.Long.parseLong(serverTime) - System.currentTimeMillis() / 1000
-                    PreferenceHelper.setTimeDifference(context, diffTime)
-                }
-                return response
+        httpClient.addInterceptor { chain ->
+            val original = chain.request()
+            val uid = UUID.randomUUID().toString().replace("-", "")
+            val url = original.url().toString().replace(BASE_URL_PIKA, "")
+            val time = ((System.currentTimeMillis() / 1000) + PreferenceHelper.getTimeDifference(context)).toString()
+            val signature = BiKaJni.getStringCon(arrayOf(BASE_URL_PIKA, url, time, uid, original.method(), API_KEY, version, buildVersion))
+            channel = PreferenceHelper.getChannel(context)
+            val response = chain.proceed(
+                    original.newBuilder()
+                            .header("api-key", API_KEY)
+                            .header("accept", "application/vnd.picacomic.com.v1+json")
+                            .header("app-channel", channel.toString())
+                            .header(ChatroomActionInterface.TIME, time)
+                            .header("nonce", uid)
+                            .header("signature", signature)
+                            .header("app-version", version)
+                            .header("app-uuid", uuid)
+                            .header("image-quality", "original")//哔咔服务器加载图片质量
+                            .header("app-platform", "android")
+                            .header("app-build-version", buildVersion)
+                            .header("user-agent", "okhttp/3.8.1")
+                            .method(original.method(), original.body())
+                            .build()
+            )
+            val serverTime = response.headers().get("Server-Time")
+            if (serverTime != null) {
+                val diffTime = java.lang.Long.parseLong(serverTime) - System.currentTimeMillis() / 1000
+                PreferenceHelper.setTimeDifference(context, diffTime)
             }
-        })
+            response
+        }
         try {
             //val tlsSocketFactory = TLSSocketFactory()
             //httpClient.sslSocketFactory(tlsSocketFactory, tlsSocketFactory.systemDefaultTrustManager())

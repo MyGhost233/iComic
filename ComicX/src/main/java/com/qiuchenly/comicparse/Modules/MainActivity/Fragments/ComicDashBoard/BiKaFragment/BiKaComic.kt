@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BiKaFragment
 
+import android.app.ProgressDialog
 import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,11 +14,6 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_bika.*
 
 class BiKaComic : BaseLazyFragment(), BikaInterface {
-
-    override fun ShowErrorMsg(msg: String) {
-        super.ShowErrorMsg(msg)
-
-    }
 
     private var mRecycler: RecyclerView? = null
     var mRecyclerAdapter: BiKaDataAdapter? = null
@@ -47,19 +43,49 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         swipe_bika_refresh.setOnRefreshListener {
             update()
         }
+        model?.initBikaApi()
+    }
+
+    override fun ShowErrorMsg(msg: String) {
+        super.ShowErrorMsg(msg)
+        if (!isInitImageServer) {
+            messageDialog?.hide()
+            messageDialog = null
+        }
+    }
+
+    override fun initImageServerSuccess() {
+        if (!isInitImageServer) {
+            messageDialog?.hide()
+            messageDialog = null
+            isInitImageServer = true
+            update()//reinitialization application
+        }
+    }
+
+    override fun initSuccess() {
         update()
     }
 
+    var isInitImageServer = false
+    var messageDialog: ProgressDialog? = null
     fun update() {
-        if (swipe_bika_refresh.isRefreshing)
-            swipe_bika_refresh.isRefreshing = false
         if (model?.needLogin()!!) {
             return
         }
-        if (model?.connectFailed()!!) {
-            mRecyclerAdapter?.setConnectFailed()
+        if (!isInitImageServer) {
+            messageDialog = ProgressDialog(this.context)
+            messageDialog?.setTitle("请稍后")
+            messageDialog?.apply {
+                setMessage("正在初始化哔咔图片服务器...")
+                setCancelable(false)
+
+            }?.show()
+            model?.initImage()
             return
         }
+        if (swipe_bika_refresh.isRefreshing)
+            swipe_bika_refresh.isRefreshing = false
         model?.updateUserInfo()
         model?.getCategory()
     }

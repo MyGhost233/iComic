@@ -13,7 +13,7 @@ import retrofit2.Response
 
 class AuthViewModel(private var mView: AuthBikaViewContract.View?) : BaseViewModel<GeneralResponse<SignInResponse>>() {
     override fun loadFailure(t: Throwable) {
-        mView?.ShowErrorMsg("登录Bika失败!检查网络")
+        mView?.ShowErrorMsg("访问哔咔服务器失败。")
         mView?.LoginFailed()
     }
 
