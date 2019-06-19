@@ -75,7 +75,7 @@
             </android.support.v7.widget.Toolbar>
         </FrameLayout>
 
-        <include  layout="@layout/view_magic_indicator_base" />
+        <include layout="@layout/view_magic_indicator_base" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView

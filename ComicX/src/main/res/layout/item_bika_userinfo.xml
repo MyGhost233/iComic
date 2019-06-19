@@ -24,26 +24,26 @@
             android:gravity="center"
             android:layout_gravity="left"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_userLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_bika_level"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="Lv.-1"
-                android:textSize="8sp" />
-
             <TextView
                 android:id="@+id/tv_userName"
-                android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:text="未登录"
                 android:textColor="#E6DDDD"
                 android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_userLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/btn_bika_level"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="Lv.-1"
+                android:textSize="10sp" />
+
         </LinearLayout>
 
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="伺服器君是个Hentai."
+            android:text="伺服器君就是个弔中弔,二次元这块必须拿下."
             android:textColor="#E6DDDD"
             android:textSize="10sp" />
     </LinearLayout>

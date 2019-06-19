@@ -91,7 +91,6 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                     bookName.text = mTitle
                     bookAuthor.text = mAuthor
                     curr_read.text = "分类:$mCategory"
-                    updateTo.visibility = View.INVISIBLE
                     setOnClickListener {
                         context.startActivity(Intent(context, ComicDetails::class.java).apply {
                             //TODO 需要优化此处
