@@ -127,7 +127,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             itemView.setOnClickListener {
                 itemView.context.startActivity(Intent(itemView.context, AuthBika::class.java))
             }
-            itemView.tv_userName.text = "点击登录,搞快点"
+            itemView.tv_userName.text = "点击登录"
             itemView.tv_userSign.text = "Biss"
             return
         }
@@ -137,6 +137,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             if (avatar != "")
                 CustomUtils.loadImageCircle(itemView.context, avatar, iv_userHead)
             tv_userName.text = mUser?.name
+            tv_userNick.text = mUser?.slogan
             tv_userLevel.text = "Lv.${mUser?.level}(${mUser?.exp})"
             if (mUser?.isPunched == false) {
                 tv_userSign.text = "签到"
@@ -183,11 +184,5 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
     object ItemType {
         val BIKA_ACCOUNT = 0x1
         val BIKA_COMIC_TYPE = 0x2
-    }
-
-    open class ItemData {
-        var name = ""
-        var image = ""
-        var id = ""
     }
 }

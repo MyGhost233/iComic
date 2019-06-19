@@ -52,11 +52,13 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
             messageDialog?.hide()
             messageDialog = null
         }
+        if (swipe_bika_refresh.isRefreshing)
+            swipe_bika_refresh.isRefreshing = false
     }
 
     override fun initImageServerSuccess() {
         if (!isInitImageServer) {
-            messageDialog?.hide()
+            messageDialog?.dismiss()
             messageDialog = null
             isInitImageServer = true
             update()//reinitialization application

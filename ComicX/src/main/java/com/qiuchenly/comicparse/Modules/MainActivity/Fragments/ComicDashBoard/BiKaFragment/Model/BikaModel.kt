@@ -61,7 +61,7 @@ class BikaModel(val mViews: BikaInterface) {
             }
 
             override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
-                mViews.ShowErrorMsg(t.message!!)
+                mViews.ShowErrorMsg("访问哔咔CDN服务器失败：" + t.message!!)
             }
         })
         /*var id = PreferenceHelper.getChannel(Comic.getContext())
@@ -167,12 +167,7 @@ class BikaModel(val mViews: BikaInterface) {
                         if (mBikaCategoryArr != null) {
                             mBikaCategoryArr.add(0, CategoryObject("lastUpdate", "最近更新", "", mBikaCategoryArr[0].thumb))
                             mBikaCategoryArr.add(0, CategoryObject("random", "随机本子", "", mBikaCategoryArr[0].thumb))
-                            mBikaCategoryArr.add(0, CategoryObject("", "愛心排行", "", mBikaCategoryArr[0].thumb))
-                            mBikaCategoryArr.add(0, CategoryObject("", "那年今天", "", mBikaCategoryArr[0].thumb))
-                            mBikaCategoryArr.add(0, CategoryObject("", "官方都在看", "", mBikaCategoryArr[0].thumb))
-                            mBikaCategoryArr.add(0, CategoryObject("", "收藏排行", "", mBikaCategoryArr[0].thumb))
-                            mBikaCategoryArr.add(0, CategoryObject("", "嗶咔AI推薦", "", mBikaCategoryArr[0].thumb))
-                        }
+                        }//哔咔搞什么鬼，返回了所有包括广告的类别 晕死
                         PreferenceHelper.setLocalApiDataCategoryList(Comic.getContext(), Gson().toJson(mBikaCategoryArr))
                         mViews.loadCategory(mBikaCategoryArr)
                     }

@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestWakaClient {
     public static final String BASE_URL = "http://68.183.234.72/";
+    public static final String BASE_URL_BACKUP = "http://206.189.95.169/";
     public static final String TAG = "RestWakaClient";
     private ApiService apiService;
 

@@ -9,6 +9,7 @@ import com.qiuchenly.comicparse.ProductModules.Bika.requests.RegisterBody;
 import com.qiuchenly.comicparse.ProductModules.Bika.requests.SignInBody;
 import com.qiuchenly.comicparse.ProductModules.Bika.requests.UpdateProfileBody;
 import com.qiuchenly.comicparse.ProductModules.Bika.requests.UpdateUserTitleBody;
+import com.qiuchenly.comicparse.ProductModules.Bika.requests.UserIdBody;
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.ActionResponse;
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.BannersResponse;
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.CategoryResponse;
@@ -55,6 +56,9 @@ public interface ApiService {
     @POST("utils/adjust-exp")
     Call<RegisterResponse> adjustExp(@Header("authorization") String str, @Body AdjustExpBody adjustExpBody);
 
+    @POST("utils/block-user")
+    Call<GeneralResponse> blockUser(@Header("authorization") String str, @Body UserIdBody userIdBody);
+
     @POST("comics/{comicId}/favourite")
     Call<GeneralResponse<ActionResponse>> bookmarkComicWithId(@Header("authorization") String str, @Path("comicId") String str2);
 
@@ -80,7 +84,7 @@ public interface ApiService {
     Call<GeneralResponse<ComicEpisodeResponse>> getComicEpisode(@Header("authorization") String str, @Path("comicId") String str2, @Query("page") int i);
 
     @GET("comics")
-    Call<GeneralResponse<ComicListResponse>> getComicList(@Header("authorization") String authorization, @Query("page") int page, @Query("c") String c, @Query("t") String t, @Query("getApi") String a, @Query("f") String f, @Query("s") String s, @Query("ct") String ct, @Query("ca") String ca);
+    Call<GeneralResponse<ComicListResponse>> getComicList(@Header("authorization") String authorization, @Query("page") int page, @Query("c") String c, @Query("t") String t, @Query("a") String a, @Query("f") String f, @Query("s") String s, @Query("ct") String ct, @Query("ca") String ca);
 
     @GET("comics/search")
     Call<GeneralResponse<ComicListResponse>> getComicListWithSearchKey(@Header("authorization") String str, @Query("page") int i, @Query("q") String str2);
@@ -183,6 +187,9 @@ public interface ApiService {
 
     @POST("auth/register")
     Call<RegisterResponse> register(@Body RegisterBody registerBody);
+
+    @POST("utils/remove-comment")
+    Call<GeneralResponse> removeAllComment(@Header("authorization") String str, @Body UserIdBody userIdBody);
 
     @POST("auth/resend-activation")
     Call<RegisterResponse> resendActivation(@Body ForgotPasswordBody forgotPasswordBody);

@@ -14,16 +14,14 @@ import java.util.*
 
 object BikaApi : BaseRetrofitManager<ApiService>() {
 
-    var isConnectFailed = false
-
     private var TAG = "BikaApi"
     //-----------------------    bika   API  --------------------------
     private val API_KEY = "C69BAF41DA5ABD1FFEDC6D2FEA56B"
     private val BASE_URL_PIKA = "https://picaapi.picacomic.com/"
     private val CERT_URL = "picaapi.picacomic.com"
-    private var buildVersion: String = "39"
+    private var buildVersion: String = "41"
     private var uuid: String = "ca7ad142-bb59-388d-aafd-d6bc5a6c6b48"
-    private var version: String = "2.1.0.5"
+    private var version: String = "2.1.0.8"
     private var channel: Int = 1
 
     fun setBiCaClient(context: Context) {
@@ -40,6 +38,18 @@ object BikaApi : BaseRetrofitManager<ApiService>() {
             val time = ((System.currentTimeMillis() / 1000) + PreferenceHelper.getTimeDifference(context)).toString()
             val signature = BiKaJni.getStringCon(arrayOf(BASE_URL_PIKA, url, time, uid, original.method(), API_KEY, version, buildVersion))
             channel = PreferenceHelper.getChannel(context)
+//            <array name="setting_options_image_qualities">
+//            <item>原圖</item>
+//            <item>低</item>
+//            <item>中</item>
+//            <item>高</item>
+//            </array>
+//            <array name="setting_options_image_qualities_server">
+//            <item>original</item>
+//            <item>low</item>
+//            <item>medium</item>
+//            <item>high</item>
+//            </array>
             val response = chain.proceed(
                     original.newBuilder()
                             .header("api-key", API_KEY)
