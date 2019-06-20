@@ -19,6 +19,7 @@ import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import com.qiuchenly.comicparse.ProductModules.Bika.Tools
 import com.qiuchenly.comicparse.ProductModules.Bika.UserProfileObject
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.dialog_switchweb.view.*
@@ -84,6 +85,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             PreferenceHelper.setGirl(Comic.getContext(), true)
         }
         PreferenceHelper.setChannel(Comic.getContext(), ids)
+        mViews.reInitAPI()
     }
 
 
@@ -148,6 +150,13 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
                 tv_userSign.text = "已签到"
                 tv_userSign.setOnClickListener(null)
             }
+            ll_favourite.setOnClickListener(null)
+            if (mFavourite != null) {
+                tv_favourite.text = "" + mFavourite?.total
+                ll_favourite.setOnClickListener {
+                    //todo 跳转到收藏页
+                }
+            }
         }
     }
 
@@ -178,6 +187,12 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
     private var mUser: UserProfileObject? = null
     fun setUserProfile(user: UserProfileObject) {
         mUser = user
+        notifyItemChanged(0)
+    }
+
+    private var mFavourite: ComicListData? = null
+    fun setFav(comics: ComicListData) {
+        mFavourite = comics
         notifyItemChanged(0)
     }
 

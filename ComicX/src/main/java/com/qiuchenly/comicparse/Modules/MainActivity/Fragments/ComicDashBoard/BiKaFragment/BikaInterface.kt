@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.B
 import com.qiuchenly.comicparse.BaseImp.BaseView
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.UserProfileObject
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import java.util.*
 
 interface BikaInterface : BaseView {
@@ -12,4 +13,6 @@ interface BikaInterface : BaseView {
     fun loadCategory(mBikaCategoryArr: ArrayList<CategoryObject>?)
     fun initImageServerSuccess()
     fun initSuccess()
+    fun getFavourite(comics: ComicListData)
+    fun reInitAPI()
 }

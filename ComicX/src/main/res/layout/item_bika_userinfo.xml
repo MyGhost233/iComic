@@ -120,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="-10dp"
+            android:id="@+id/ll_favourite"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -127,6 +128,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/tv_favourite"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="0"

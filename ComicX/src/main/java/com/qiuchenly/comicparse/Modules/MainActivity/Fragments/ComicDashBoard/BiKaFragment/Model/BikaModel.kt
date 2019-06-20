@@ -5,12 +5,7 @@ import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BiKaFragment.BikaInterface
 import com.qiuchenly.comicparse.ProductModules.Bika.*
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.*
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.internal.schedulers.IoScheduler
-import io.reactivex.schedulers.Schedulers
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,6 +82,7 @@ class BikaModel(val mViews: BikaInterface) {
                 val ret = response.body()?.data?.user
                 if (ret != null) {
                     mViews.updateUser(ret)
+                    getFav()
                 } else {
                     mViews.ShowErrorMsg("账户信息错误!")
                 }
@@ -155,6 +151,22 @@ class BikaModel(val mViews: BikaInterface) {
         })
     }
 
+    fun getFav() {
+        api?.getFavourite(mBikaToken, 1)?.enqueue(object : Callback<GeneralResponse<ComicListResponse>> {
+            override fun onResponse(call: Call<GeneralResponse<ComicListResponse>>, response: Response<GeneralResponse<ComicListResponse>>) {
+                if (response.body()?.data?.comics != null) {
+                    mViews.getFavourite(response.body()?.data?.comics!!)
+                } else {
+                    mViews.ShowErrorMsg("没有拿到喜爱漫画数据。")
+                }
+            }
+
+            override fun onFailure(call: Call<GeneralResponse<ComicListResponse>>, t: Throwable) {
+                mViews.ShowErrorMsg("获取收藏数据失败!")
+            }
+        })
+    }
+
     fun getCategory() {
         api?.getCategories(mBikaToken)?.enqueue(
                 object : Callback<GeneralResponse<CategoryResponse>> {
@@ -173,4 +185,5 @@ class BikaModel(val mViews: BikaInterface) {
                     }
                 })
     }
+
 }

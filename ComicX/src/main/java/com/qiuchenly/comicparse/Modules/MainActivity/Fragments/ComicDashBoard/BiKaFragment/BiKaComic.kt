@@ -10,6 +10,7 @@ import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.Ad
 import com.qiuchenly.comicparse.Modules.MainActivity.Fragments.ComicDashBoard.BiKaFragment.Model.BikaModel
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.UserProfileObject
+import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_bika.*
 
@@ -43,17 +44,26 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         swipe_bika_refresh.setOnRefreshListener {
             update()
         }
+        reInitAPI()
+    }
+
+    override fun reInitAPI() {
         model?.initBikaApi()
     }
 
     override fun ShowErrorMsg(msg: String) {
         super.ShowErrorMsg(msg)
         if (!isInitImageServer) {
-            messageDialog?.hide()
+            messageDialog?.dismiss()
             messageDialog = null
+            isInitImageServer = true
         }
         if (swipe_bika_refresh.isRefreshing)
             swipe_bika_refresh.isRefreshing = false
+    }
+
+    override fun getFavourite(comics: ComicListData) {
+        mRecyclerAdapter?.setFav(comics)
     }
 
     override fun initImageServerSuccess() {
@@ -73,6 +83,8 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
     var messageDialog: ProgressDialog? = null
     fun update() {
         if (model?.needLogin()!!) {
+            if (swipe_bika_refresh.isRefreshing)
+                swipe_bika_refresh.isRefreshing = false
             return
         }
         if (!isInitImageServer) {
@@ -80,9 +92,11 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
             messageDialog?.setTitle("请稍后")
             messageDialog?.apply {
                 setMessage("正在初始化哔咔图片服务器...")
+                isIndeterminate = true
                 setCancelable(false)
 
-            }?.show()
+            }
+            messageDialog?.show()
             model?.initImage()
             return
         }
