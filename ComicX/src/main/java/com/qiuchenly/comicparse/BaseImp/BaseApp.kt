@@ -3,12 +3,15 @@ package com.qiuchenly.comicparse.BaseImp
 import android.app.Activity
 import android.content.ComponentCallbacks2
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.qiuchenly.comicparse.R
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition

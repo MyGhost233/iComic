@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.ViewPager
 import android.view.View
@@ -17,12 +18,12 @@ import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
-import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicBasicInfo.ComicBasicInfo
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Fragments.ComicList.ComicList
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
 import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ViewModel.ComicDetailsViewModel
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.SuperPagerAdapter
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Utils.CustomUtils
@@ -182,13 +183,13 @@ class ComicDetails :
         comicDetails_img.alpha = 0f
         mTitleLayout.alpha = 0f
         //此处实现淡入淡出效果
-        appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val mCurrentPercents = (-verticalOffset * 1f) / appBarLayout.totalScrollRange
             comicDetails_img.alpha = mCurrentPercents//实现渐变模糊特效
             details.alpha = 1f - mCurrentPercents
             tv_bookname.alpha = 1f - mCurrentPercents
             mTitleLayout.alpha = mCurrentPercents
-        }
+        })
         back_up.setOnClickListener { finish() }
         mShareButton.setOnClickListener {
             val mClipboardManager = getSystemService(Service.CLIPBOARD_SERVICE) as ClipboardManager

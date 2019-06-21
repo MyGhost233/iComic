@@ -18,7 +18,10 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     private var mRecycler: RecyclerView? = null
     var mRecyclerAdapter: BiKaDataAdapter? = null
-    private var model: BikaModel? = null
+
+    companion object {
+        var model: BikaModel? = null
+    }
 
     override fun onViewFirstSelect(mPagerView: View) {
         mRecycler = view?.findViewById(R.id.rv_bika_content)
@@ -31,11 +34,12 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
             }
         }
         mRecycler?.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-                outRect?.apply {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                outRect.apply {
                     left = 10
                     right = 10
                 }
+                super.getItemOffsets(outRect, view, parent, state)
             }
         })
         mRecycler?.adapter = mRecyclerAdapter
@@ -56,7 +60,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         if (!isInitImageServer) {
             messageDialog?.dismiss()
             messageDialog = null
-            isInitImageServer = true
+            //此处并不需要取消初始化，因为获取图片服务器失败也要重新获取一遍
         }
         if (swipe_bika_refresh.isRefreshing)
             swipe_bika_refresh.isRefreshing = false
@@ -132,5 +136,9 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        mRecycler = null
+        mRecyclerAdapter = null
+        model?.cancel()
+        model = null
     }
 }

@@ -40,15 +40,10 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         }
     }
 
-    override fun canLoadMore(): Boolean {
-        return true
-    }
+    override fun canLoadMore() = true
 
     override fun getItemLayout(viewType: Int): Int {
         return when (viewType) {
-            ON_NORMAL -> {
-                R.layout.comic_local_list
-            }
             ON_LOAD_MORE -> {
                 R.layout.loadmore_view
             }
