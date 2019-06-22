@@ -41,7 +41,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
         })
         mComicCategory.forEach {
             addData(RecommendItemType().apply {
-                type = RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY
+                type = TYPE_DONGMANZHIJIA_CATEGORY
                 this.mItemData = Gson().toJson(it)
             })
         }
@@ -72,11 +72,11 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
     override fun getItemLayout(viewType: Int) = when (viewType) {
         RecommendItemType.TYPE.TYPE_TOP -> R.layout.item_recommend_topview
         RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
-        RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
-        RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE,
-        RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY,
-        RecommendItemType.TYPE.TYPE_BIKA -> R.layout.item_foosize_newupdate
-        RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
+        TYPE_DMZJ_NORMAL,
+        TYPE_DMZJ_LASTUPDATE,
+        TYPE_DONGMANZHIJIA_CATEGORY,
+        TYPE_BIKA -> R.layout.item_foosize_newupdate
+        TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
         RecommendItemType.TYPE.TYPE_TITLE -> R.layout.item_recommend_normal
         else -> R.layout.item_recommend_normal
     }
@@ -163,9 +163,9 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
              *  8 = 大师级作者
              *  1 = 漫画
              */
-            RecommendItemType.TYPE.TYPE_DMZJ_NORMAL,
-            RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE,
-            RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2 -> {
+            TYPE_DMZJ_NORMAL,
+            TYPE_DMZJ_LASTUPDATE,
+            TYPE_DMZJ_SPEC_2 -> {
                 var mImage = ""
                 var mComicBookName = ""
                 var mComicStatusOrAuthor = ""
@@ -173,7 +173,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                 var mComicStringRealInfo = ""
                 with(view) {
                     when (data.type) {
-                        RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE -> {
+                        TYPE_DMZJ_LASTUPDATE -> {
                             val mItemData = Gson().fromJson(data.mItemData, DataItem_lastNewer::class.java)
                             mImage = mItemData.cover
                             mComicBookName = mItemData.title
@@ -229,19 +229,19 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                     }
                 }
             }
-            RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY,
-            RecommendItemType.TYPE.TYPE_BIKA -> {
+            TYPE_DONGMANZHIJIA_CATEGORY,
+            TYPE_BIKA -> {
                 with(view) {
                     var mImageSrc = ""
                     var mCategoryName = ""
                     val mType = when (data.type) {
-                        RecommendItemType.TYPE.TYPE_BIKA -> {
+                        TYPE_BIKA -> {
                             val bikaInfo = Gson().fromJson(data.mItemData, CategoryObject::class.java)
                             mImageSrc = Tools.getThumbnailImagePath(bikaInfo?.thumb)
                             mCategoryName = bikaInfo.title
                             ComicSourceType.BIKA
                         }
-                        RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY -> {
+                        TYPE_DONGMANZHIJIA_CATEGORY -> {
                             val mCate = Gson().fromJson(data.mItemData, ComicHome_Category::class.java)
                             mCategoryName = mCate.title
                             mImageSrc = mCate.cover
@@ -258,8 +258,8 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                     foo_bookName_upNews.visibility = View.GONE
                     setOnClickListener {
                         when (data.type) {
-                            RecommendItemType.TYPE.TYPE_BIKA,
-                            RecommendItemType.TYPE.TYPE_DONGMANZHIJIA_CATEGORY
+                            TYPE_BIKA,
+                            TYPE_DONGMANZHIJIA_CATEGORY
                             -> {
                                 context.startActivity(Intent(context, SearchResult::class.java).apply {
                                     putExtra(KEY_CATEGORY_JUMP, Gson().toJson(ComicCategoryBean().apply {
@@ -295,7 +295,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
         })
         arrayList_categories.forEach {
             addData(RecommendItemType().apply {
-                type = RecommendItemType.TYPE.TYPE_BIKA
+                type = TYPE_BIKA
                 this.mItemData = Gson().toJson(it)
             })
         }
@@ -334,8 +334,8 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                             status = mItem["status"]!!
                         })
                         type = when (item.category_id) {
-                            "48", "53", "55" -> RecommendItemType.TYPE.TYPE_DMZJ_SPEC_2
-                            else -> RecommendItemType.TYPE.TYPE_DMZJ_NORMAL
+                            "48", "53", "55" -> TYPE_DMZJ_SPEC_2
+                            else -> TYPE_DMZJ_NORMAL
                         }
                     })
                 }
@@ -355,7 +355,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                     authors = mItem["authors"]!!
                     status = mItem["status"]!!
                 })
-                type = RecommendItemType.TYPE.TYPE_DMZJ_LASTUPDATE
+                type = TYPE_DMZJ_LASTUPDATE
             })
         }
         if (all != null) {

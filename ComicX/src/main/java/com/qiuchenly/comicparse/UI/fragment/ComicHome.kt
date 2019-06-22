@@ -34,15 +34,6 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
             MyDetails_Refresh.isRefreshing = false
     }
 
-//    override fun goLoginBika() {
-//        startActivity(Intent(this.context, AuthBika::class.java))
-//    }
-//
-//    override fun onGetBikaCategorySucc(arrayList_categories: java.util.ArrayList<CategoryObject>?) {
-//        mRecommendRecyclerViewAdapter.addBikaData(arrayList_categories!!)
-//        final()
-//    }
-
     override fun OnNetFailed(message: String?) {
         final()
         ShowErrorMsg(message!!)
@@ -81,7 +72,6 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
                 }
             }
         })
-        //mViewModel?.initBikaApi()
         mViewModel?.getDMZJRecommend()
     }
 

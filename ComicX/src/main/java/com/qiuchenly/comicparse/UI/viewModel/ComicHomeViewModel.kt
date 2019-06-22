@@ -73,8 +73,6 @@ class ComicHomeViewModel(Views: ComicHomeContract.View?) : BaseViewModel<Respons
         })
     }
 
-    var mBikaCategoryArr: ArrayList<CategoryObject>? = null
-
     override fun cancel() {
         super.cancel()
         if (mCall != null) mCall!!.cancel()

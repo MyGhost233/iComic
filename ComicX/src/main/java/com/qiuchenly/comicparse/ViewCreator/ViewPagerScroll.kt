@@ -7,12 +7,10 @@ import android.view.MotionEvent
 
 class ViewPagerScroll(context: Context, attrs: AttributeSet?) : ViewPager(context, attrs) {
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        return false
-        //return super.onTouchEvent(ev)
+        return super.onTouchEvent(ev)
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return false
-        //return super.onInterceptTouchEvent(ev)
+        return super.onInterceptTouchEvent(ev)
     }
 }

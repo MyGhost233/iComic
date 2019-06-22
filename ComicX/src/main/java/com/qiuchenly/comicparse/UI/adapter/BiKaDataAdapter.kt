@@ -92,8 +92,6 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
 
     @SuppressLint("SetTextI18n")
     fun userProfileSet(itemView: View) {
-
-
         CustomUtils.loadImageCircle(itemView.context, "http://183.61.38.245/gh/692376108/692376108/100?mType=QQHeadIcon", itemView.iv_userHead)
         itemView.tv_userSign.setOnClickListener(null)
         itemView.lt_switchWeb.setOnClickListener { view ->
