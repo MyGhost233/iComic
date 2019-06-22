@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/mDefaultDarkThemeColor"
     android:fitsSystemWindows="true"
-    tools:context=".Modules.SearchActivity.SearchActivity">
+    tools:context=".UI.activity.SearchActivity">
 
     <LinearLayout
         android:id="@+id/mInputLayout"

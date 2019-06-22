@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.ProductModules.Common.NMSL
 
-import com.qiuchenly.comicparse.Http.BaseRetrofitManager
+import com.qiuchenly.comicparse.HttpRequests.BaseRetrofitManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response

@@ -2,7 +2,7 @@ package com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek
 
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.qiuchenly.comicparse.BaseImp.BaseLazyFragment
+import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.MyRecentlyBookListAdapter
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.recently_week.*

@@ -8,7 +8,7 @@ import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DownloadBookInfo
 import com.qiuchenly.comicparse.Bean.PageInfo
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.Interface.ComicDetailContract
+import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.RealmResults
 import java.io.File

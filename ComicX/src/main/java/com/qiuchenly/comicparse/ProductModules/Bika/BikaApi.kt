@@ -3,10 +3,8 @@ package com.qiuchenly.comicparse.ProductModules.Bika
 import android.content.Context
 import android.util.Log
 import com.qiuchenly.comicparse.EncryptUtils.BiKaJni
-import com.qiuchenly.comicparse.Http.BaseRetrofitManager
-import okhttp3.Interceptor
+import com.qiuchenly.comicparse.HttpRequests.BaseRetrofitManager
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

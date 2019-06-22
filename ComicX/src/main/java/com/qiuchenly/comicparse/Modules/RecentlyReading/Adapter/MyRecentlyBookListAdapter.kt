@@ -1,15 +1,9 @@
 package com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter
 
-import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
-import com.qiuchenly.comicparse.BaseImp.AppManager
-import com.qiuchenly.comicparse.BaseImp.BaseRecyclerAdapter
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
-import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Modules.ComicDetailsActivity.ComicDetails
 import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Utils.CustomUtils
-import kotlinx.android.synthetic.main.comic_local_list.view.*
 
 class MyRecentlyBookListAdapter : BaseRecyclerAdapter<ComicInfoBean>() {
     override fun canLoadMore(): Boolean {

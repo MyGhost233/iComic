@@ -23,7 +23,7 @@
             android:value="88b3f784c717edcc991c951c3f375c11e12649cb" />
 
         <activity
-            android:name=".Modules.ComicDetailsActivity.ComicDetails"
+            android:name=".UI.activity.ComicDetails"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -33,18 +33,18 @@
         </activity>
 
         <activity
-            android:name=".Modules.ReadingActivity.ReadPage"
+            android:name=".UI.activity.ReadPage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.MainActivity.Activity.MainActivityUI"
+            android:name=".UI.activity.MainActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.SplashActivity.SplashActivity"
+            android:name=".UI.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -55,7 +55,7 @@
         </activity>
 
         <activity
-            android:name="com.qiuchenly.comicparse.Modules.RecentlyReading.RecentlyRead"
+            android:name="com.qiuchenly.comicparse.UI.activity.RecentlyRead"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
@@ -64,27 +64,27 @@
             android:exported="true" />
 
         <activity
-            android:name=".Modules.SearchActivity.SearchActivity"
+            android:name=".UI.activity.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.SearchResult.SearchResult"
+            android:name=".UI.activity.SearchResult"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.AuthBika.AuthBika"
+            android:name=".UI.activity.AuthBika"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.PerferenceActivity.PerferenceActivity"
+            android:name=".UI.activity.PerferenceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".Modules.WebBrowser.BrowserView"
+            android:name=".UI.activity.BrowserView"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

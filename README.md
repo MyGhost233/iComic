@@ -7,7 +7,7 @@
 许可证使用MIT授权.
 
 ### 下载最新编译版
-[最新每日编译版 - 2019.6.19](ComicX-debug.apk)
+[最新每日编译版 - 2019.6.22](ComicX-debug.apk)
 
 关于漫画阅读时有些图不清晰的问题:因为原图画质很低,加载时自动适配屏幕宽高等比拉伸后就相当于放大了,所以看起来有些模糊,实际上是正常情况.
 
@@ -47,6 +47,18 @@ QiuChenly(秋城落叶)
 2.[🈚️牌面]哔咔漫画APP(APP协议,RSA Sign算法加密+SO层算法逆向,官方使用OkHttp3 双向SSL认证.)
 
 ### 开发日志
+2019-6-22:
+```
+修改了一些UI元素。
+
+1.【哔咔】如果需要签到，才会在界面显示签到按钮。
+2.支持漫画阅读时缩放滑动阅读。
+3.重新设计App架构与分包，学习前人的经验。
+4.参考了一些大佬的代码与Copy。
+
+X.缩放列表源码来自于：https://github.com/PortgasAce/ZoomRecyclerView/blob/master/demo/src/main/java/com/portgas/view/demo/MainActivity.java
+
+```
 2019-6-19:
 ```
 增加了哔咔服务器切换功能，优化了整体流程。

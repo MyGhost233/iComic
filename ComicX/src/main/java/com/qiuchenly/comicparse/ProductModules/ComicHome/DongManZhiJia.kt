@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.ProductModules.ComicHome
 
-import com.qiuchenly.comicparse.Http.BaseRetrofitManager
+import com.qiuchenly.comicparse.HttpRequests.BaseRetrofitManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

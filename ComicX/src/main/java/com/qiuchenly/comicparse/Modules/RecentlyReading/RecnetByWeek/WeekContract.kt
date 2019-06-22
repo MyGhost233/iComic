@@ -1,8 +1,7 @@
 package com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek
 
-import com.qiuchenly.comicparse.BaseImp.BaseModel
-import com.qiuchenly.comicparse.BaseImp.BasePresenter
-import com.qiuchenly.comicparse.BaseImp.BaseView
+import com.qiuchenly.comicparse.UI.BaseImp.BaseModel
+import com.qiuchenly.comicparse.UI.BaseImp.BaseView
 
 interface WeekContract {
 
