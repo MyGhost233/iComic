@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.UI.BaseImp
 import android.app.Activity
 import android.content.ComponentCallbacks2
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity

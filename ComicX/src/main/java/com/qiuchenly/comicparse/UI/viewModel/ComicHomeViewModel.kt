@@ -1,13 +1,11 @@
 package com.qiuchenly.comicparse.UI.viewModel
 
 import com.google.gson.Gson
-import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.Bean.ComicComm
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
-import com.qiuchenly.comicparse.Bean.ComicHome_RecomendList
-import com.qiuchenly.comicparse.Bean.ComicHome_Recommend
-import com.qiuchenly.comicparse.UI.view.ComicHomeContract
-import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.ComicHome.DongManZhiJia
+import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
+import com.qiuchenly.comicparse.UI.view.ComicHomeContract
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import retrofit2.Call
@@ -50,24 +48,14 @@ class ComicHomeViewModel(Views: ComicHomeContract.View?) : BaseViewModel<Respons
 
     fun getDMZJRecommend() {
         val mCall = DongManZhiJia.getV3API().recommend
-        mCall.enqueue(object : Callback<ResponseBody> {
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        mCall.enqueue(object : Callback<ArrayList<ComicComm>> {
+            override fun onFailure(call: Call<ArrayList<ComicComm>>, t: Throwable) {
                 loadFailure(Throwable("加载动漫之家的推荐数据失败!"))
             }
 
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val ret = response.body()?.string() ?: return
-                val cls = JSONArray(ret)
-                var size = 0
-                val mArrs = ArrayList<ComicHome_Recommend>()
-                while (size < cls.length() - 1) {
-                    mArrs.add(Gson().fromJson(cls.getJSONObject(size).toString(), ComicHome_Recommend()::class.java))
-                    size++
-                }
-                val mComicList = ComicHome_RecomendList()
-                mComicList.lastNewer = Gson().fromJson(cls.getJSONObject(8).toString(), ComicHome_Recommend()::class.java)
-                mComicList.normalType = mArrs
-                mView?.onGetDMZRecommendSuch(mComicList)
+            override fun onResponse(call: Call<ArrayList<ComicComm>>, response: Response<ArrayList<ComicComm>>) {
+                val ret = response.body() ?: return
+                mView?.onGetDMZRecommendSuch(ret)
                 getDMZJCategory()
             }
         })

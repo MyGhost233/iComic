@@ -3,10 +3,12 @@ package com.qiuchenly.comicparse.ProductModules.ComicHome;
 import android.text.TextUtils;
 
 import com.qiuchenly.comicparse.Bean.ChapterList;
+import com.qiuchenly.comicparse.Bean.ComicComm;
 import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList;
 import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic;
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -19,7 +21,7 @@ public interface ComicApi {
     String BaseLine = "?channel=Android&version=2.7.009";
 
     @GET("/v3/recommend.json" + BaseLine)
-    Call<ResponseBody> getRecommend();
+    Call<ArrayList<ComicComm>> getRecommend();
 
     @GET("/0/category.json" + BaseLine)
     Call<ResponseBody> getCategory();
