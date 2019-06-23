@@ -12,33 +12,38 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.gson.Gson
-import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
-import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Enum.ComicSourceType
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
+import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Service.DownloadService
+import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
+import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
+import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
 import com.qiuchenly.comicparse.UI.fragment.ComicBasicInfo
 import com.qiuchenly.comicparse.UI.fragment.ComicList
 import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicDetailsViewModel
-import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
-import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
-import com.qiuchenly.comicparse.R
-import com.qiuchenly.comicparse.Service.DownloadService
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.activity_comicdetails.*
 import kotlinx.android.synthetic.main.layout_loading.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
+import java.lang.ref.WeakReference
 
 class ComicDetails :
         BaseApp(),
         ComicDetailContract.View {
+
+    //解决内存泄漏
+    private var mAppBarLayout: WeakReference<AppBarLayout>? = null
+
     override fun onAppBarChange(position: Int) {
         if (position == 0) {
-            appBarLayout.setExpanded(true, true)
+            mAppBarLayout?.get()?.setExpanded(true, true)
         } else {
-            appBarLayout.setExpanded(false, true)
+            mAppBarLayout?.get()?.setExpanded(false, true)
         }
     }
 
@@ -127,6 +132,8 @@ class ComicDetails :
         onFailed = load_failed
         onSuccess = mCoordinatorLayout
 
+        mAppBarLayout = WeakReference(appBarLayout)
+
         //对Intent传来的数据做处理
         val mComicStr = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         if (mComicStr.isNullOrEmpty()) finish()
@@ -185,6 +192,7 @@ class ComicDetails :
         //此处实现淡入淡出效果
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val mCurrentPercents = (-verticalOffset * 1f) / appBarLayout.totalScrollRange
+
             comicDetails_img.alpha = mCurrentPercents//实现渐变模糊特效
             details.alpha = 1f - mCurrentPercents
             tv_bookname.alpha = 1f - mCurrentPercents

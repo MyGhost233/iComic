@@ -5,10 +5,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
-import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek.RecentlyByWeekFragment
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
+import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
 import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_recently_read.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
@@ -26,7 +26,7 @@ class RecentlyRead : AppCompatActivity() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         Slidr.attach(this)
         if (supportActionBar != null) supportActionBar!!.hide()
-        InitUI(this, getFramList())
+        InitUI(getFramList())
     }
 
     fun getFramList(): ArrayList<SuperPagerAdapter.Struct> {
@@ -36,22 +36,20 @@ class RecentlyRead : AppCompatActivity() {
         )
     }
 
-    companion object {
-        private var mPgAdapter: SuperPagerAdapter? = null
-        fun InitUI(app: AppCompatActivity, arr: ArrayList<SuperPagerAdapter.Struct>) {
-            //init ui
-            app.back_up.setOnClickListener {
-                app.finish()
-            }
-            app.clear_all.setOnClickListener {
-                Toast.makeText(app, "这个功能还没做", Toast.LENGTH_SHORT).show()
-            }
-            val list = arr
-            mPgAdapter = SuperPagerAdapter(app.supportFragmentManager, list)
-            app.tl_recently_tab_setup_vp.adapter = mPgAdapter
-
-            //create tips bottom
-            BaseNavigatorCommon.setUpWithPager(app, list, app.magic_indicator, app.tl_recently_tab_setup_vp)
+    private var mPgAdapter: SuperPagerAdapter? = null
+    fun InitUI(arr: ArrayList<SuperPagerAdapter.Struct>) {
+        //init ui
+        back_up.setOnClickListener {
+            finish()
         }
+        clear_all.setOnClickListener {
+            Toast.makeText(this, "这个功能还没做", Toast.LENGTH_SHORT).show()
+        }
+        val list = arr
+        mPgAdapter = SuperPagerAdapter(supportFragmentManager, list)
+        tl_recently_tab_setup_vp.adapter = mPgAdapter
+
+        //create tips bottom
+        BaseNavigatorCommon.setUpWithPager(this.applicationContext, list, magic_indicator, tl_recently_tab_setup_vp)
     }
 }

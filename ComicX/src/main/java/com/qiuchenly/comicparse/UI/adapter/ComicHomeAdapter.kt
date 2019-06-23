@@ -217,7 +217,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                 var mComicBookName = ""
                 var mComicStatusOrAuthor = ""
                 var mItemComicType: String //漫画
-                var mComicStringRealInfo = ""
+                var mComicStringRealInfo: String
                 with(view) {
                     when (data.type) {
                         TYPE_DMZJ_LASTUPDATE -> {

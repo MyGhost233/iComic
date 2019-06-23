@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex
 import com.crashlytics.android.Crashlytics
 import com.orhanobut.hawk.Hawk
 import com.qiuchenly.comicparse.Core.Comic
+import com.squareup.leakcanary.LeakCanary
 import io.fabric.sdk.android.Fabric
 import kotlin.system.exitProcess
 
@@ -14,11 +15,11 @@ class App : Application() {
         Hawk.init(this)
                 .build()
         Fabric.with(this, Crashlytics())
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
-//            return
-//        }
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return
+        }
         //解决dex方法超过65535
         MultiDex.install(this)
         //检查内存泄漏
