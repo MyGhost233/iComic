@@ -5,8 +5,8 @@ import android.view.View
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicDetailObject
 import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicInfoViewModel
@@ -23,10 +23,10 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
         mViewModel = ComicInfoViewModel(this)
 
         when (mComicInfo?.mComicType) {
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 mViewModel?.getComicInfo(mComicInfo?.mComicID)
             }
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 val mComicInfo = Gson().fromJson(mComicInfo?.mComicString, DataItem::class.java)
                 tv_comicName.text = "${mComicInfo.title}(${mComicInfo.status})"
                 author.text = mComicInfo.sub_title

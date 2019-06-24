@@ -2,23 +2,27 @@ package com.qiuchenly.comicparse.UI.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.google.gson.Gson
+import com.qiuchenly.comicparse.Bean.ComicChapterData
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
+import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
+import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
+import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
-import com.qiuchenly.comicparse.Bean.ComicChapterData
-import com.qiuchenly.comicparse.Bean.ComicInfoBean
-import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.UI.adapter.ComicReadingAdapter
-import com.qiuchenly.comicparse.UI.viewModel.ReadViewModel
 import com.qiuchenly.comicparse.UI.view.ReaderContract
-import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
-import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.viewModel.ReadViewModel
 import kotlinx.android.synthetic.main.activity_reader_page.*
+import java.lang.ref.WeakReference
 
 
 class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListener {
@@ -36,10 +40,10 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             currentState = ON_LOAD_ING
             //TODO 此处加载下一页
             when (mTempComicInfo!!.mComicType) {
-                ComicSourceType.DMZJ -> {
+                ComicSource.DongManZhiJia -> {
                     mViewModel?.getDMZJImage(bookID, nextUrl)
                 }
-                ComicSourceType.BIKA -> {
+                ComicSource.BikaComic -> {
                     mViewModel?.getBikaImage(bookID, nextUrl.toInt())
                 }
             }
@@ -50,7 +54,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         }
     }
 
-    override fun getUISet(mSet: BaseApp.UISet): UISet {
+    override fun getUISet(mSet: UISet): UISet {
         return mSet.apply {
             isSlidr = true
         }
@@ -73,7 +77,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         }
 
         when (mTempComicInfo!!.mComicType) {
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 mPoint++
                 if (mPoint < mDMZJChapter!!.size) {
                     nextUrl = mDMZJChapter!!.get(mPoint).chapter_id
@@ -82,7 +86,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
                     nextUrl = ""
                 }
             }
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 mPoint++
                 if (mPoint < mBikaChapter!!.size) {
                     nextUrl = mBikaChapter!!.get(mPoint).order.toString()
@@ -138,6 +142,8 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     private var mBikaChapter: ArrayList<ComicEpisodeObject>? = null
     private var mPoint = 0
     private var mTempComicInfo: ComicInfoBean? = null
+
+    var realm = WeakReference(Comic.getRealm())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ReadViewModel(this)
@@ -150,14 +156,14 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         //=============  初始化界面数据  ===============
         bookID = mTempComicInfo!!.mComicID
         when (mTempComicInfo!!.mComicType) {
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 mDMZJChapter = getArr2Str(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicChapterData>()::class.java) as ArrayList<String>)
                 mPoint = mTempComicInfo!!.mComicString.toInt()
                 val mBase = mDMZJChapter?.get(mPoint)
                 currInfos.text = mBase?.chapter_title
                 mViewModel?.getDMZJImage(bookID, mBase!!.chapter_id)
             }
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 mBikaChapter = getArr2StrA(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicEpisodeObject>()::class.java) as ArrayList<String>)
                 mPoint = mTempComicInfo!!.mComicString.toInt()
                 val mBase = mBikaChapter?.get(mPoint)

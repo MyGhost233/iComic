@@ -15,7 +15,6 @@ import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DONGM
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_TITLE
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_TOP
 import com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.SearchResult
@@ -158,7 +157,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                                     putExtras(android.os.Bundle().apply {
                                         //漫画基本信息 做跳转
                                         putString(KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(ComicInfoBean().apply {
-                                            this.mComicType = ComicSourceType.DMZJ
+                                            this.mComicType = ComicSource.DongManZhiJia
                                             this.mComicString = mComicStringRealInfo
                                         }))
                                     })
@@ -263,7 +262,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                             "1" -> {
                                 Intent("android.intent.action.ComicDetails").apply {
                                     putExtra(KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
-                                        this.mComicType = ComicSourceType.DMZJ
+                                        this.mComicType = ComicSource.DongManZhiJia
                                         this.mComicString = mComicStringRealInfo
                                     }))
                                 }
@@ -288,7 +287,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                     val mCate = Gson().fromJson(data.mItemData, ComicHome_Category::class.java)
                     var mImageSrc = ""
                     var mCategoryName = ""
-                    val mType = ComicSourceType.DMZJ
+                    val mType = ComicSource.DongManZhiJia
                     mCategoryName = mCate.title
                     mImageSrc = mCate.cover
 

@@ -8,14 +8,16 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
+import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
@@ -148,7 +150,7 @@ class ComicDetails :
         mBookCategory = baseInfo.mComicTAG
 
         when (baseInfo.mComicType) {
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 mComicSourceName = "哔咔漫画源"
                 mComicSrc = baseInfo.mComicImg
                 mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
@@ -156,7 +158,7 @@ class ComicDetails :
                 mComicTitle = mComicInfo!!.title
                 mComicAuthor = mComicInfo!!.author
             }
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 mComicSourceName = "动漫之家漫画源"
                 val mComic = Gson().fromJson(baseInfo.mComicString, DataItem::class.java)
                 mComicSrc = mComic.cover
@@ -180,7 +182,7 @@ class ComicDetails :
                     setUI(baseInfo)
                 }),
                 SuperPagerAdapter.Struct("章节", ComicList().apply {
-                    if (baseInfo.mComicID == "" && baseInfo.mComicType == ComicSourceType.BIKA) {
+                    if (baseInfo.mComicID == "" && baseInfo.mComicType == ComicSource.BikaComic) {
                         baseInfo.mComicID = mComicInfo!!.comicId
                         //这里是为了解决加载哔咔数据源时漫画ID为空的问题，类别：官方汉化
                     }
@@ -215,6 +217,22 @@ class ComicDetails :
 
         mComicInfoViewPager.addOnPageChangeListener(mPageChange!!)
         tv_bookname_title.text = mComicSourceName
+
+
+        //todo 准备插入数据 明天再写
+        /*//数据插入
+        val mRecentlyReadingBean = RecentlyReadingBean().apply {
+            this.mComicName = mTempComicInfo?.mComicName ?: ""
+            if (mComicName.isEmpty())
+                Throwable("准备插入数据时发现数据为空.")
+            this.mComicImageUrl = mTempComicInfo?.mComicImg ?: ""
+            this.mComicType = mTempComicInfo!!.mComicType
+            this.mComicData = mTempComicInfo!!.mComicTAG
+        }
+        realm.get()?.executeTransaction {
+            it.copyToRealmOrUpdate(mRecentlyReadingBean)
+            Log.d("QiuChen", Gson().toJson(mRecentlyReadingBean))
+        }*/
     }
 
     //获取单一实例

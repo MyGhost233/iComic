@@ -23,7 +23,7 @@ class App : Application() {
         //解决dex方法超过65535
         MultiDex.install(this)
         //检查内存泄漏
-        //LeakCanary.install(this)
+        LeakCanary.install(this)
         Comic.initialization(this)
     }
 

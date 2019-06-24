@@ -13,9 +13,9 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
 import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.UI.activity.ComicDetails
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.ProductModules.Bika.Tools
@@ -64,7 +64,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                     var mCategory = ""
 
                     when (mType) {
-                        ComicSourceType.BIKA -> {
+                        ComicSource.BikaComic -> {
                             val mComicListObject = Gson().fromJson(data, ComicListObject::class.java)
                             mImage = Tools.getThumbnailImagePath(mComicListObject.thumb)
                             mAuthor = mComicListObject.author ?: ""//解决分类中无作者名的问题
@@ -74,7 +74,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                             else
                                 categorys.substring(0, categorys.length - 1)
                         }
-                        ComicSourceType.DMZJ -> {
+                        ComicSource.DongManZhiJia -> {
                             val mComicListObject = Gson().fromJson(data, ComicHome_CategoryComic::class.java)
                             mImage = mComicListObject.cover
                             mAuthor = mComicListObject.authors
@@ -93,7 +93,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                                 this.mComicType = mType
                                 mComicTAG = mCategory
                                 when (mType) {
-                                    ComicSourceType.DMZJ -> {
+                                    ComicSource.DongManZhiJia -> {
                                         val mComicListObject = Gson().fromJson(data, ComicHome_CategoryComic::class.java)
                                         this.mComicString = Gson().toJson(DataItem().apply {
                                             this.cover = mComicListObject.cover
@@ -150,10 +150,10 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
         mCallback.onLoadMore(retry)
     }
 
-    private var mType = ComicSourceType.BIKA
+    private var mType = ComicSource.BikaComic
     fun addBikaComic(data: ArrayList<ComicListObject>) {
         setState(ON_LOAD_SUCCESS)
-        mType = ComicSourceType.BIKA
+        mType = ComicSource.BikaComic
         data.forEach {
             addData(Gson().toJson(it))
         }
@@ -169,7 +169,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
 
     fun addDMZJComic(list: List<ComicHome_CategoryComic>) {
         setState(ON_LOAD_SUCCESS)
-        mType = ComicSourceType.DMZJ
+        mType = ComicSource.DongManZhiJia
         list.forEach {
             addData(Gson().toJson(it))
         }

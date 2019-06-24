@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
-import com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek.RecentlyByWeekFragment
+import com.qiuchenly.comicparse.UI.fragment.RecentlyByWeekFragment
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
@@ -31,8 +31,8 @@ class RecentlyRead : AppCompatActivity() {
 
     fun getFramList(): ArrayList<SuperPagerAdapter.Struct> {
         return arrayListOf(
-                SuperPagerAdapter.Struct("最近阅读", RecentlyByWeekFragment()),
-                SuperPagerAdapter.Struct("一月之前", Fragment())
+                SuperPagerAdapter.Struct("最近阅读", RecentlyByWeekFragment())
+                //,SuperPagerAdapter.Struct("一月之前", Fragment())
         )
     }
 

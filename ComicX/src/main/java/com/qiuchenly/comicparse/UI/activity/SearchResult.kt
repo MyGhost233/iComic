@@ -13,8 +13,8 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicCategoryBean
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
 import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.UI.adapter.SearchResultAdapter
 import com.qiuchenly.comicparse.UI.viewModel.SearchResultViewModel
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
@@ -91,10 +91,10 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
 
     fun selectLoad() {
         when (mCategory.mComicType) {
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 mViewModel?.getCategoryComic_DMZJ(mCategoryID, nextPage)
             }
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 when (mCategory.mCategoryName) {
                     "随机本子" -> {
                         mViewModel?.getRandomComic()
@@ -149,10 +149,10 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
             mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
         magic_indicator.visibility = View.GONE
         when (mCategory.mComicType) {
-            ComicSourceType.BIKA -> {
+            ComicSource.BikaComic -> {
                 handle_bika(mCategory)
             }
-            ComicSourceType.DMZJ -> {
+            ComicSource.DongManZhiJia -> {
                 handle_ComicHome(mCategory)
             }
         }

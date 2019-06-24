@@ -3,9 +3,10 @@ package com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter
 import android.view.View
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.R
 
-class MyRecentlyBookListAdapter : BaseRecyclerAdapter<ComicInfoBean>() {
+class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
     override fun canLoadMore(): Boolean {
         return false
     }
@@ -18,7 +19,7 @@ class MyRecentlyBookListAdapter : BaseRecyclerAdapter<ComicInfoBean>() {
         return R.layout.comic_local_list
     }
 
-    override fun onViewShow(item: View, data: ComicInfoBean, position: Int, ViewType: Int) {
+    override fun onViewShow(item: View, data: RecentlyReadingBean, position: Int, ViewType: Int) {
         with(item) {
 /*            bookName.text = bookNames
             bookAuthor.text = author

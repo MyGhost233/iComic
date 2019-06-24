@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.gson.Gson
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
 import com.qiuchenly.comicparse.ProductModules.Bika.Tools
@@ -67,7 +67,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
                 context.startActivity(Intent(context, SearchResult::class.java).apply {
                     putExtra(com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
                         this.mCategoryName = mCategoryName
-                        this.mComicType = ComicSourceType.BIKA
+                        this.mComicType = ComicSource.BikaComic
                         this.mData = Gson().toJson(data)
                     }
                     ))

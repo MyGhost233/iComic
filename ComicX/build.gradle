@@ -7,8 +7,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'//解决报错apply plugin: 'kotlin-kapt'
 
 apply plugin: 'realm-android'
-
+realm {
+    syncEnabled = true
+}
 apply plugin: 'io.fabric'
+
 
 android {
     compileSdkVersion 28
@@ -101,7 +104,7 @@ dependencies {
 
     implementation 'com.hyman:flowlayout-lib:1.1.2'
 
-    implementation ('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
 

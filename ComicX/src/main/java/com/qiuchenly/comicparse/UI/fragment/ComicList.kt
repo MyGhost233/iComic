@@ -8,8 +8,8 @@ import com.google.gson.Gson
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
-import com.qiuchenly.comicparse.Enum.ComicSourceType
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.UI.adapter.ComicPageAdapter
 import com.qiuchenly.comicparse.UI.view.ComicDetailContract
@@ -64,12 +64,12 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View {
         mListRecyclerView.adapter = comicPageAdas
 
         when (mComicInfo?.mComicType) {
-            ComicSourceType.BIKA -> {
-                comicPageAdas?.setSourceType(ComicSourceType.BIKA)
+            ComicSource.BikaComic -> {
+                comicPageAdas?.setSourceType(ComicSource.BikaComic)
                 mViewModel?.getComicList(mComicInfo!!.mComicID)
             }
-            ComicSourceType.DMZJ -> {
-                comicPageAdas?.setSourceType(ComicSourceType.DMZJ)
+            ComicSource.DongManZhiJia -> {
+                comicPageAdas?.setSourceType(ComicSource.DongManZhiJia)
                 val mComicInfo = Gson().fromJson(mComicInfo?.mComicString, DataItem::class.java)
                 comicPageAdas?.setBaseID(mComicInfo.obj_id)
                 mViewModel?.getDMZJComicList(mComicInfo.obj_id)
