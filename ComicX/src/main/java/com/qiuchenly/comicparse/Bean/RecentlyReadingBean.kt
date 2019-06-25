@@ -30,4 +30,18 @@ open class RecentlyReadingBean : RealmObject() {
      */
     var mComicData = ""
 
+    /**
+     * 漫画最后阅读时间
+     */
+    var mComicLastReadTime = System.currentTimeMillis()
+
+    /**
+     * 最后阅读进度：int数字下标
+     */
+    var mComicReadProgress: Int = -1
+
+    /**
+     * 最后阅读进度：文本格式
+     */
+    var mComicReadProgressText: Int = -1
 }

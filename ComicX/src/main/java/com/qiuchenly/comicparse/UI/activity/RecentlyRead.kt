@@ -1,16 +1,17 @@
 package com.qiuchenly.comicparse.UI.activity
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
-import com.qiuchenly.comicparse.UI.fragment.RecentlyByWeekFragment
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseNavigatorCommon
 import com.qiuchenly.comicparse.UI.BaseImp.SuperPagerAdapter
+import com.qiuchenly.comicparse.UI.fragment.RecentlyByWeekFragment
 import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_recently_read.*
+import kotlinx.android.synthetic.main.dialog_confirm_clear_all_recently.view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 
 
@@ -43,7 +44,28 @@ class RecentlyRead : AppCompatActivity() {
             finish()
         }
         clear_all.setOnClickListener {
-            Toast.makeText(this, "这个功能还没做", Toast.LENGTH_SHORT).show()
+            val mView = LayoutInflater.from(it.context)
+                    .inflate(R.layout.dialog_confirm_clear_all_recently, null, false)
+            val mDialog = AlertDialog.Builder(it.context)
+                    .setView(mView)
+                    .setCancelable(false)
+                    .setOnDismissListener {
+
+                    }
+                    .show()
+            with(mView) {
+                tv_dialog_title.text = "重要操作"
+                tv_dialog_content.text = "这样将会导致整个最近阅读与漫画阅读进度丢失!\n\n真的要这么做吗？"
+
+                btn_dialog_confirm.setOnClickListener {
+                    mDialog.dismiss()
+                }
+                btn_dialog_cancel.setOnClickListener {
+                    mDialog.dismiss()
+                }
+            }
+
+
         }
         val list = arr
         mPgAdapter = SuperPagerAdapter(supportFragmentManager, list)

@@ -3,7 +3,7 @@ package com.qiuchenly.comicparse.UI.fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
-import com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter.MyRecentlyAdapter
+import com.qiuchenly.comicparse.UI.adapter.MyRecentlyAdapter
 import com.qiuchenly.comicparse.UI.model.RecentlyModel
 import com.qiuchenly.comicparse.Modules.RecentlyReading.RecnetByWeek.WeekContract
 import com.qiuchenly.comicparse.R

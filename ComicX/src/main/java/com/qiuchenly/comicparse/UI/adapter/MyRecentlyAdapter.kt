@@ -1,4 +1,4 @@
-package com.qiuchenly.comicparse.Modules.RecentlyReading.Adapter
+package com.qiuchenly.comicparse.UI.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,6 +13,7 @@ import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.AppManager
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.ComicDetails
+import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.comic_local_list.view.*
 
 class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
@@ -33,17 +34,12 @@ class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
         with(item) {
             bookName.text = data.mComicName
             curr_read.visibility = View.INVISIBLE
-            bookAuthor.text = "来自" + when (data.mComicType) {
-                ComicSource.BikaComic -> "哔咔漫画"
-                ComicSource.DongManZhiJia -> "动漫之家"
-                ComicSource.BilibiliComic -> "哔哩哔哩漫画"
-                ComicSource.TencentComic -> "腾讯漫画"
-                else -> "未知漫画源"
-            }
+            bookAuthor.text = "来自" + ComicSource.getTypeName(data.mComicType)
+            CustomUtils.loadImageCircle(this.context, data.mComicImageUrl, bookNameImg, 8)
 //            val mItem = Comic.getRealm().where(RecentlyReadingBean::class.java).equalTo("BookName", data.BookName!!).findFirst()
 //            curr_read.text = if (mItem != null) mItem.BookName_read_point else "无数据"
             setOnClickListener {
-                val i = Intent(this.context, ComicDetails::class.java)
+                val i = Intent(this.context.applicationContext, ComicDetails::class.java)
                 i.putExtras(android.os.Bundle().apply {
                     putString(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                         mComicString = data.mComicData

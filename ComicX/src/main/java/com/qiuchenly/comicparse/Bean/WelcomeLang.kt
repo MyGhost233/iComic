@@ -1,6 +1,6 @@
 package com.qiuchenly.comicparse.Bean
 
-class NMSLBean {
+class WelcomeLang {
     //====================  好词好句  ========================
     var id = ""
     var hitokoto = "" //好词好句

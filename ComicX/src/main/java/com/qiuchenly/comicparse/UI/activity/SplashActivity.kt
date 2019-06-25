@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
-import com.qiuchenly.comicparse.Bean.NMSLBean
-import com.qiuchenly.comicparse.ProductModules.Common.NMSL.NMSLClient
+import com.qiuchenly.comicparse.Bean.WelcomeLang
+import com.qiuchenly.comicparse.ProductModules.Common.NMSL.WelcomeLangClient
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.splash_view.*
 import retrofit2.Call
@@ -56,15 +56,15 @@ class SplashActivity : BaseApp() {
         mLang.text = "三天之内,祝你心想事成."
         mLangAuthor.text = "--- 三日杀神"
 
-        NMSLClient.generateNiceLang()
-        NMSLClient.getAPI()?.getNiceOne()?.enqueue(object : Callback<NMSLBean> {
-            override fun onResponse(call: Call<NMSLBean>, response: Response<NMSLBean>) {
+        WelcomeLangClient.generateNiceLang()
+        WelcomeLangClient.getAPI()?.getNiceOne()?.enqueue(object : Callback<WelcomeLang> {
+            override fun onResponse(call: Call<WelcomeLang>, response: Response<WelcomeLang>) {
                 mLang.text = "  " + response.body()?.hitokoto
                 mLangAuthor.text = "--- " + response.body()?.from
                 final()
             }
 
-            override fun onFailure(call: Call<NMSLBean>, t: Throwable) {
+            override fun onFailure(call: Call<WelcomeLang>, t: Throwable) {
                 ShowErrorMsg(t.message ?: "加载失败")
                 final()
             }
