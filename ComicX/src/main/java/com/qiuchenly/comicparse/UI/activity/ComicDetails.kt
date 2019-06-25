@@ -18,6 +18,7 @@ import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Service.DownloadService
@@ -219,20 +220,20 @@ class ComicDetails :
         tv_bookname_title.text = mComicSourceName
 
 
-        //todo 准备插入数据 明天再写
-        /*//数据插入
+        //todo 准备插入数据
+        //数据插入
         val mRecentlyReadingBean = RecentlyReadingBean().apply {
-            this.mComicName = mTempComicInfo?.mComicName ?: ""
+            this.mComicName = mComicTitle
             if (mComicName.isEmpty())
                 Throwable("准备插入数据时发现数据为空.")
-            this.mComicImageUrl = mTempComicInfo?.mComicImg ?: ""
-            this.mComicType = mTempComicInfo!!.mComicType
-            this.mComicData = mTempComicInfo!!.mComicTAG
+            this.mComicImageUrl = mComicSrc
+            this.mComicType = baseInfo.mComicType
+            this.mComicData = baseInfo.mComicString
         }
-        realm.get()?.executeTransaction {
+        Comic.getRealm().executeTransaction {
             it.copyToRealmOrUpdate(mRecentlyReadingBean)
             Log.d("QiuChen", Gson().toJson(mRecentlyReadingBean))
-        }*/
+        }
     }
 
     //获取单一实例
