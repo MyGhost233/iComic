@@ -16,6 +16,10 @@ import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicListViewModel
 import com.qiuchenly.comicparse.R
 
+/**
+ * 漫画章节列表获取
+ *
+ */
 class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View {
     override fun SetDMZJChapter(docs: ComicHomeComicChapterList) {
         docs.chapters.forEach {

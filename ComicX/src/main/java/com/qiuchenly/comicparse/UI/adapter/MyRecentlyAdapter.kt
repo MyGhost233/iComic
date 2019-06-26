@@ -43,6 +43,7 @@ class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
                 i.putExtras(android.os.Bundle().apply {
                     putString(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                         mComicString = data.mComicData
+                        mComicImg = data.mComicImageUrl
                         mComicType = data.mComicType
                     }))
                 })

@@ -15,6 +15,7 @@ import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_comicpage.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
+import kotlin.math.roundToInt
 
 
 class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyclerAdapter<String>() {
@@ -90,7 +91,7 @@ class ComicReadingAdapter(private val loadListenter: LoaderListener) : BaseRecyc
                                         val params = item.iv_img_page.layoutParams
                                         val realWidth = iv_img_page.width - iv_img_page.paddingLeft - iv_img_page.paddingRight
                                         val scale = realWidth / (resource.intrinsicWidth * 1.0000)
-                                        val realHeight = Math.round(resource.intrinsicHeight * scale).toInt()
+                                        val realHeight = (resource.intrinsicHeight * scale).roundToInt()
                                         params.height = realHeight + iv_img_page.paddingTop + iv_img_page.paddingBottom
                                         iv_img_page.layoutParams = params
                                         iv_img_page.invalidate()
