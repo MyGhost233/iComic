@@ -91,7 +91,7 @@ class ComicDetails :
 
     //==============================   代码整理 界面预设  =============================================
 
-    override fun getUISet(mSet: BaseApp.UISet): UISet {
+    override fun getUISet(mSet: UISet): UISet {
         return mSet.apply {
             isSlidr = true
         }
@@ -169,14 +169,16 @@ class ComicDetails :
         }
         onLoadSuccess()
         //=================  初始化界面数据  ===================
-
-        CustomUtils.loadImageEx(this, mComicSrc, mRealImageNoBlur, 0, null)
+        CustomUtils.loadImage(this, mComicSrc, mRealImageNoBlur, 10, 20)
+        CustomUtils.loadImageCircle(this, mComicSrc, iv_comic_image, 8)
         CustomUtils.loadImage(this, mComicSrc, comicDetails_img, 10, 20)
 
+        tv_bookname_title.text = mComicTitle
         tv_bookname.text = mComicTitle
         mBookAuthor.text = "来源:$mComicAuthor"
-        tv_bookname_title_small.text = mBookAuthor.text
+        tv_bookname_title_small.text = mComicSourceName
         mBookCategoryView.text = "类别:$mBookCategory"
+        tv_book_details.text = ""
 
         val mFragmentsList = arrayListOf(
                 SuperPagerAdapter.Struct("简介", ComicBasicInfo().apply {
@@ -191,15 +193,14 @@ class ComicDetails :
                 })
         )
         comicDetails_img.alpha = 0f
-        mTitleLayout.alpha = 0f
+        //mTitleLayout.alpha = 0f
         //此处实现淡入淡出效果
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val mCurrentPercents = (-verticalOffset * 1f) / appBarLayout.totalScrollRange
 
             comicDetails_img.alpha = mCurrentPercents//实现渐变模糊特效
-            details.alpha = 1f - mCurrentPercents
-            tv_bookname.alpha = 1f - mCurrentPercents
-            mTitleLayout.alpha = mCurrentPercents
+            rl_comic_content.alpha = 1f - mCurrentPercents
+            //mTitleLayout.alpha = mCurrentPercents
         })
         back_up.setOnClickListener { finish() }
         mShareButton.setOnClickListener {
@@ -217,7 +218,6 @@ class ComicDetails :
                 mComicInfoViewPager)
 
         mComicInfoViewPager.addOnPageChangeListener(mPageChange!!)
-        tv_bookname_title.text = mComicSourceName
 
 
         //todo 准备插入数据

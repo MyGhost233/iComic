@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicSource
+import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
@@ -65,7 +66,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             foo_bookName_upNews.visibility = View.GONE
             setOnClickListener {
                 context.startActivity(Intent(context, SearchResult::class.java).apply {
-                    putExtra(com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
+                    putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
                         this.mCategoryName = mCategoryName
                         this.mComicType = ComicSource.BikaComic
                         this.mData = Gson().toJson(data)

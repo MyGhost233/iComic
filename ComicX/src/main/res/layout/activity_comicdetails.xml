@@ -19,7 +19,7 @@
             android:layout_weight="1"
             app:expandedTitleMarginEnd="10dp"
             app:expandedTitleMarginStart="10dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:toolbarId="@+id/toolbar">
 
             <ImageView
@@ -44,17 +44,25 @@
                 android:background="#5b000000" />
 
             <RelativeLayout
+                android:id="@+id/rl_comic_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom">
+                android:layout_height="match_parent"
+                android:layout_marginTop="82dp">
+
+                <ImageView
+                    android:id="@+id/iv_comic_image"
+                    android:layout_width="110dp"
+                    android:layout_height="150dp"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp" />
 
                 <LinearLayout
                     android:id="@+id/details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="10dp"
+                    android:layout_alignTop="@id/iv_comic_image"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@id/iv_comic_image"
                     android:orientation="vertical">
 
                     <TextView
@@ -84,6 +92,17 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginTop="5dp"
                         android:text="剧情类别：少女爱情"
+                        android:textColor="#ffffff"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/tv_book_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_bookName"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="介绍...."
                         android:textColor="#ffffff"
                         android:textSize="11sp" />
 
@@ -129,10 +148,13 @@
 
                         <TextView
                             android:id="@+id/tv_bookname_title"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
+                            android:maxEms="8"
+                            android:ellipsize="end"
+                            android:singleLine="true"
                             android:text="指染成婚"
                             android:textColor="#ffffff"
                             android:textSize="17sp" />

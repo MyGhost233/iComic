@@ -4,6 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.View
 import com.google.gson.Gson
+import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.ComicSource
+import com.qiuchenly.comicparse.Bean.DataItem
+import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
+import com.qiuchenly.comicparse.ProductModules.Bika.Tools
+import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
@@ -11,15 +19,7 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
-import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic
-import com.qiuchenly.comicparse.Bean.ComicInfoBean
-import com.qiuchenly.comicparse.Bean.ComicSource
-import com.qiuchenly.comicparse.Bean.DataItem
-import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.UI.activity.ComicDetails
-import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
-import com.qiuchenly.comicparse.ProductModules.Bika.Tools
-import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.comic_local_list.view.*
 import kotlinx.android.synthetic.main.loadmore_view.view.*
@@ -105,6 +105,7 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                                         })
                                     }
                                     else -> {
+                                        this.mComicImg = mImage
                                         this.mComicString = data
                                     }
                                 }
@@ -116,23 +117,23 @@ class SearchResultAdapter(private val mCallback: LoaderListener) : BaseRecyclerA
                     when (getState()) {
                         ON_LOAD_NO_MORE -> {
                             noMore_tip.text = "没有更多的结果了 铁汁!"
-                            noMore_tip.visibility = android.view.View.VISIBLE
-                            loadingView.visibility = android.view.View.INVISIBLE
-                            clickRetry.visibility = android.view.View.INVISIBLE
+                            noMore_tip.visibility = View.VISIBLE
+                            loadingView.visibility = View.INVISIBLE
+                            clickRetry.visibility = View.INVISIBLE
                             setOnClickListener(null)
                         }
                         ON_LOAD_FAILED -> {
-                            noMore_tip.visibility = android.view.View.INVISIBLE
-                            loadingView.visibility = android.view.View.INVISIBLE
-                            clickRetry.visibility = android.view.View.VISIBLE
+                            noMore_tip.visibility = View.INVISIBLE
+                            loadingView.visibility = View.INVISIBLE
+                            clickRetry.visibility = View.VISIBLE
                             setOnClickListener {
                                 onLoading(true)
                             }
                         }
                         else -> {
-                            noMore_tip.visibility = android.view.View.INVISIBLE
-                            loadingView.visibility = android.view.View.VISIBLE
-                            clickRetry.visibility = android.view.View.INVISIBLE
+                            noMore_tip.visibility = View.INVISIBLE
+                            loadingView.visibility = View.VISIBLE
+                            clickRetry.visibility = View.INVISIBLE
                             onLoading(false)
                             setOnClickListener(null)
                         }

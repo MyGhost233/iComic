@@ -18,7 +18,7 @@ import retrofit2.http.Path;
 
 public interface ComicApi {
 
-    String BaseLine = "?channel=Android&version=2.7.009";
+    String BaseLine = "?channel=Android&version=2.7.017";
 
     @GET("/v3/recommend.json" + BaseLine)
     Call<ArrayList<ComicComm>> getRecommend();

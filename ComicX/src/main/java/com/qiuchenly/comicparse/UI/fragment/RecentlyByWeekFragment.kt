@@ -27,4 +27,9 @@ class RecentlyByWeekFragment : BaseLazyFragment(), WeekContract.View {
         mMyDetailsLocalBookList!!.sort(1)
         rv_recently.adapter = mMyDetailsLocalBookList
     }
+
+    fun reInitData() {
+        val arr = ArrayList(mPres.getAllRecently())
+        mMyDetailsLocalBookList!!.setData(arr)
+    }
 }
