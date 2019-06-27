@@ -19,6 +19,7 @@ import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicLis
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseViewHolder
 import com.qiuchenly.comicparse.UI.activity.AuthBika
+import com.qiuchenly.comicparse.UI.activity.BrowserView
 import com.qiuchenly.comicparse.UI.activity.SearchResult
 import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter.ItemType.BIKA_ACCOUNT
 import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter.ItemType.BIKA_COMIC_TYPE
@@ -27,6 +28,7 @@ import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.dialog_switchweb.view.*
 import kotlinx.android.synthetic.main.item_bika_userinfo.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
+
 
 class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<BaseViewHolder>() {
     //the first item must be an account information.
@@ -54,6 +56,14 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
         }
     }
 
+
+    val KEY_PICA_APP_NAME = "KEY_PICA_APP_NAME"
+    val KEY_PICA_APP_URL = "KEY_PICA_APP_URL"
+    val TAG = "PicaAppFragment"
+    val secret1 = "e6gi9vWqh225GU9KcxU9FRoNFJemspDr"
+    val secret2 = "ftTEuepoipBgfCPzS6Fciu4gAJuL24gn"
+    val secret3 = "pb6XkQ94iBBny1WUAxY0dY5fksexw0dt"
+    val secret4 = "3Vms3EUjb7MzR6ivKkQPDOg1ldwl4XwY"
     fun categorySet(itemView: View, data: CategoryObject) {
         with(itemView) {
             var mImageSrc = ""
@@ -65,14 +75,26 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             //for this type,unuseless
             foo_bookName_upNews.visibility = View.GONE
             setOnClickListener {
-                context.startActivity(Intent(context, SearchResult::class.java).apply {
-                    putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
-                        this.mCategoryName = mCategoryName
-                        this.mComicType = ComicSource.BikaComic
-                        this.mData = Gson().toJson(data)
-                    }
-                    ))
-                }, null)
+                if (data.web == true) {
+                    val stringBuilder = StringBuilder()
+                    stringBuilder.append(data.link)
+                    stringBuilder.append("?token=")
+                    stringBuilder.append(PreferenceHelper.getToken(context.applicationContext))
+                    stringBuilder.append("&secret=")
+                    stringBuilder.append(secret3)
+                    context.startActivity(Intent(context, BrowserView::class.java).apply {
+                        putExtra(ActivityKey.KEY_CATEGORY_JUMP, stringBuilder.toString())
+                    }, null)
+                } else {
+                    context.startActivity(Intent(context, SearchResult::class.java).apply {
+                        putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(com.qiuchenly.comicparse.Bean.ComicCategoryBean().apply {
+                            this.mCategoryName = mCategoryName
+                            this.mComicType = ComicSource.BikaComic
+                            this.mData = Gson().toJson(data)
+                        }
+                        ))
+                    }, null)
+                }
             }
         }
     }
@@ -98,7 +120,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
         itemView.lt_switchWeb.setOnClickListener { view ->
             var mdialog_view: View? = null
             if (mdialog_view == null) {
-                mdialog_view = LayoutInflater.from(view.context).inflate(R.layout.dialog_switchweb, null, false)
+                mdialog_view = LayoutInflater.from(view.context).inflate(com.qiuchenly.comicparse.R.layout.dialog_switchweb, null, false)
                 mdialog_view!!.rd_web1.setOnClickListener {
                     setWeb(1)
                 }

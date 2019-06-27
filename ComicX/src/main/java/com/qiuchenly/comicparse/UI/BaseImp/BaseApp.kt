@@ -13,9 +13,6 @@ import com.bumptech.glide.Glide
 import com.r0adkll.slidr.Slidr
 import com.r0adkll.slidr.model.SlidrConfig
 import com.r0adkll.slidr.model.SlidrPosition
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 abstract class BaseApp : AppCompatActivity(), BaseView {
     private val REQUEST_EXTERNAL_STORAGE = 1
@@ -53,13 +50,9 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
             }.build()
             Slidr.attach(this, config)
         }
-        EventBus.getDefault().register(this)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    open fun onSubscribe(str: String) {
 
-    }
 
     abstract fun getLayoutID(): Int?
     open fun getUISet(mSet: UISet = UISet().apply {
@@ -77,7 +70,6 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
     override fun onDestroy() {
         super.onDestroy()
         AppManager.appm.removeActivity(this)
-        EventBus.getDefault().unregister(this)//订阅者事件绑定
     }
 
 

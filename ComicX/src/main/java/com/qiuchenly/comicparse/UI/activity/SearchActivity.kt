@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.google.gson.Gson
-import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.ComicCategoryBean
+import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.UI.view.SearchContract
 import com.qiuchenly.comicparse.UI.viewModel.SearchViewModel
-import com.qiuchenly.comicparse.R
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import kotlinx.android.synthetic.main.activity_search.*
@@ -46,15 +49,27 @@ class SearchActivity : BaseApp(), SearchContract.View {
         }
     }
 
-    var mSearchViewModel: SearchViewModel? = null
+    private var mSearchViewModel: SearchViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCancelButton.setOnClickListener {
-            finish()
-        }
         mSearchViewModel = SearchViewModel(this)
+
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ComicSource.getAllSource())
         mSearchViewModel?.getBikaKeyWords()
+
+        sp_search_source.adapter = adapter
+        sp_search_source.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
         mInputEdit.setOnEditorActionListener { v, actionId, event ->
             val mInputString = mInputEdit.text.toString()
             if (actionId == EditorInfo.IME_ACTION_SEARCH && !mInputString.isNullOrEmpty()) {

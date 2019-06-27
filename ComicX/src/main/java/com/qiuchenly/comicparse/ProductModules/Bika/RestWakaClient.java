@@ -38,12 +38,8 @@ public class RestWakaClient {
             SSLContext instance = SSLContext.getInstance("SSL");
             instance.init(null, trustManagerArr, new SecureRandom());
             builder.sslSocketFactory(instance.getSocketFactory(), (X509TrustManager) trustManagerArr[0]);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String str, SSLSession sSLSession) {
-                    return true;
-                }
-            });
-            this.apiService = (ApiService) new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(builder.build()).build().create(ApiService.class);
+            builder.hostnameVerifier((str, sSLSession) -> true);
+            this.apiService = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).client(builder.build()).build().create(ApiService.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

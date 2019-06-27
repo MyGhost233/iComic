@@ -8,6 +8,33 @@ public class CategoryObject {
     String description;
     ThumbnailObject thumb;
     String title;
+    Boolean isWeb;
+    Boolean active;
+    String link;
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setWeb(Boolean web) {
+        isWeb = web;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public Boolean getWeb() {
+        return isWeb;
+    }
+
+    public String getLink() {
+        return link;
+    }
 
     public CategoryObject(String categoryId, String title, String description, ThumbnailObject thumb) {
         this.categoryId = categoryId;

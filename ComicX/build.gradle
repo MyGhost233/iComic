@@ -36,9 +36,6 @@ android {
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
     }
-    dataBinding {
-        enabled = false
-    }
     productFlavors {
     }
     compileOptions {
@@ -58,31 +55,19 @@ dependencies {
 
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:gridlayout-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:support-v13:28.0.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.r0adkll:slidableactivity:2.0.6'
 
-    //renderscript
-    //implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
     implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
 
     // kotlin使用realm的注解处理依赖库
     kapt "io.realm:realm-annotations:5.9.1"
     kapt "io.realm:realm-annotations-processor:5.9.1"
-    // Retrofit库
-    implementation 'org.greenrobot:eventbus:3.1.1'
-
-    implementation 'com.r0adkll:slidableactivity:2.0.6'
-
-    //CallAdapterFactory的Rx依赖包---导这个包才能配合rxAndroid使用
-    implementation 'com.squareup.retrofit2:adapter-rxjava:2.5.0'
 
     //ConverterFactory的String依赖包----这个是解析数据的工厂.用来格式化数据的,配置编码啊,gson解析啊.
-    implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
-    //api project(':core')
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
@@ -90,17 +75,16 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
 
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
     implementation 'jp.wasabeef:glide-transformations:3.0.1'
 
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    // Optional, if you use support library fragments:
-    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+//    // Optional, if you use support library fragments:
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 
     implementation 'com.hyman:flowlayout-lib:1.1.2'
 
@@ -116,5 +100,7 @@ dependencies {
     implementation 'com.orhanobut:hawk:2.0.1'
 
     implementation 'com.youth.banner:banner:1.4.9'
+
+    implementation 'com.github.yalantis:jellytoolbar:v1.0'
 
 }

@@ -8,18 +8,18 @@
     <FrameLayout
         android:id="@+id/fl_main_root_view"
         android:layout_width="match_parent"
-        android:background="@color/mDefaultDarkThemeColor"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/mDefaultDarkThemeColor">
 
         <ImageView
             android:id="@+id/main_src"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,16 +33,20 @@
 
                 app:elevation="0dp">
 
-                <android.support.v7.widget.Toolbar
+                <com.yalantis.jellytoolbar.widget.JellyToolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_marginTop="26dp"
-                    app:contentInsetStart="0dp">
+                    android:layout_height="wrap_content"
+                    app:cancelIcon="@drawable/ic_arrow_back"
+                    app:endColor="#794242"
+                    app:icon="@drawable/ic_search_black_24dp"
+                    app:startColor="#1D51B1">
 
                     <FrameLayout
                         android:id="@+id/control_menu"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="26dp">
 
                         <FrameLayout
                             android:id="@+id/btn_menu_main"
@@ -123,7 +127,7 @@
                         <FrameLayout
                             android:id="@+id/btn_menu_search"
                             android:layout_width="?attr/actionBarSize"
-                            android:layout_height="match_parent"
+                            android:layout_height="0dp"
                             android:layout_gravity="end"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
@@ -138,8 +142,7 @@
                         </FrameLayout>
 
                     </FrameLayout>
-                </android.support.v7.widget.Toolbar>
-
+                </com.yalantis.jellytoolbar.widget.JellyToolbar>
             </android.support.design.widget.AppBarLayout>
 
             <android.support.v4.view.ViewPager

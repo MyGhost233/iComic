@@ -6,7 +6,6 @@ import com.qiuchenly.comicparse.Bean.ChapterList;
 import com.qiuchenly.comicparse.Bean.ComicComm;
 import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList;
 import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic;
-import com.qiuchenly.comicparse.ProductModules.Bika.responses.GeneralResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +46,9 @@ public interface ComicApi {
      */
     @GET("/classify/{categoryType}/{a}/{page}.json" + BaseLine)
     Call<List<ComicHome_CategoryComic>> getCategoryComicAll(@Path("categoryType") String categoryType, @Path("a") String a, @Path("page") int page);
+
+    @GET("/search/hot/0.json" + BaseLine + "&timestamp={time}")
+    Call<ResponseBody> getHotSearchKey(@Path("time") long 时间戳);
 
     //https://images.dmzj.com/img/webpic/19/1003821191536309628.jpg
 
@@ -232,8 +234,6 @@ public interface ComicApi {
                 return "/search/fuzzy/" + ".json";
             case 87:
                 return "/search/show/" + ".json";
-            case 88:
-                return "/search/hot/" + ".json";
             case 89:
                 return "/old/comment/" + ".json";
             case 90:

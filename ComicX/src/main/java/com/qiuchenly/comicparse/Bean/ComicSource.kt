@@ -22,4 +22,21 @@ object ComicSource {
             else -> "未知漫画源"
         }
     }
+
+    /**
+     * 获取代号
+     */
+    fun getTypeName(type: String): Int {
+        return when (type) {
+            "哔咔漫画" -> BikaComic
+            "动漫之家" -> DongManZhiJia
+            "哔哩哔哩漫画" -> BilibiliComic
+            "腾讯漫画" -> TencentComic
+            else -> -1
+        }
+    }
+
+    fun getAllSource(): ArrayList<String> {
+        return arrayListOf("哔咔漫画", "动漫之家", "哔哩哔哩漫画", "腾讯漫画")
+    }
 }

@@ -1,25 +1,38 @@
 package com.qiuchenly.comicparse.UI.viewModel
 
+import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
+import android.support.v7.widget.AppCompatEditText
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import com.google.gson.Gson
 import com.qiuchenly.comicparse.App
-import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
-import com.qiuchenly.comicparse.ProductModules.Common.BaseURL
+import com.qiuchenly.comicparse.Bean.ComicCategoryBean
+import com.qiuchenly.comicparse.Bean.TempInfo
+import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.HttpRequests.WeatherRequest
 import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
+import com.qiuchenly.comicparse.ProductModules.Common.BaseURL
+import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseFragmentPagerStatement
+import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.UI.activity.MainActivity
+import com.qiuchenly.comicparse.UI.activity.SearchActivity
+import com.qiuchenly.comicparse.UI.activity.SearchResult
 import com.qiuchenly.comicparse.UI.adapter.FunctionAdapter
 import com.qiuchenly.comicparse.UI.fragment.ComicBoardFragment
 import com.qiuchenly.comicparse.UI.fragment.MyDetailsFragment
 import com.qiuchenly.comicparse.UI.view.MainActivityCallback
-import com.qiuchenly.comicparse.Bean.TempInfo
-import com.qiuchenly.comicparse.HttpRequests.WeatherRequest
-import com.qiuchenly.comicparse.UI.activity.SearchActivity
 import com.qiuchenly.comicparse.Utils.CustomUtils
+import com.yalantis.jellytoolbar.listener.JellyListener
+import com.yalantis.jellytoolbar.widget.JellyToolbar
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*
 import okhttp3.ResponseBody
@@ -27,7 +40,9 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import retrofit2.Call
 import retrofit2.Response
+import java.lang.ref.WeakReference
 import kotlin.concurrent.thread
+
 
 class MainActivityViewModel(private var mContentView: MainActivity) : MainActivityCallback.Callbacks, BaseViewModel<ResponseBody>() {
 
@@ -138,6 +153,8 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
 
     private var mFuncAdapter: FunctionAdapter? = null
 
+    private var mToolbar: WeakReference<JellyToolbar>? = null
+
     init {
         with(mContentView) {
             mSwitchList.add(switch_my_list_img)
@@ -177,10 +194,56 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
             btn_menu_search.setOnClickListener {
                 startActivity(Intent(this, SearchActivity::class.java))
             }
+
+
+            mToolbar = WeakReference(toolbar)
+            val editText = LayoutInflater.from(this).inflate(R.layout.toolbar_search_bar, null) as AppCompatEditText
+            editText.isFocusable = false
+            editText.isFocusableInTouchMode = false
+            editText.setOnEditorActionListener { v, actionId, event ->
+                val mInputString = editText.text.toString()
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && !mInputString.isNullOrEmpty()) {
+                    startActivity(Intent(this, SearchResult::class.java).apply {
+                        val mStr = Gson().toJson(ComicCategoryBean().apply {
+                            mCategoryName = "搜索关键词"
+                            mData = mInputString
+                        })
+                        putExtra(ActivityKey.KEY_CATEGORY_JUMP, mStr)
+                    })
+                    editText.setText("")
+                    mToolbar?.get()?.jellyListener?.onCancelIconClicked()
+                }
+                false
+            }
+
+            mToolbar?.get()?.jellyListener = object : JellyListener() {
+                override fun onToolbarExpandingStarted() {
+                    super.onToolbarExpandingStarted()
+                    control_menu?.visibility = View.INVISIBLE
+                    editText.isFocusable = true
+                    editText.isFocusableInTouchMode = true
+                    editText.requestFocus()
+                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.showSoftInput(editText, 0)
+                    toolbarIsOpen = true
+                }
+
+                override fun onCancelIconClicked() {
+                    mToolbar?.get()?.collapse()
+                    control_menu?.visibility = View.VISIBLE
+                    editText.isFocusable = false
+                    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+                    toolbarIsOpen = false
+                }
+            }
+            mToolbar?.get()?.contentView = editText
         }
     }
 
-    fun getFunctionList(): ArrayList<FunctionType> {
+    private var toolbarIsOpen = false
+
+    private fun getFunctionList(): ArrayList<FunctionType> {
         val arrs = ArrayList<FunctionType>()
         arrs.add(FunctionType().apply {
             title = "漫画主页"
@@ -227,6 +290,9 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
     fun canExit(keyCode: Int): Boolean {
         return if (isOpenDrawable && keyCode == KeyEvent.KEYCODE_BACK) {
             closeDrawer()
+            false
+        } else if (toolbarIsOpen) {
+            mToolbar?.get()?.jellyListener?.onCancelIconClicked()
             false
         } else {
             val curr = System.currentTimeMillis()
