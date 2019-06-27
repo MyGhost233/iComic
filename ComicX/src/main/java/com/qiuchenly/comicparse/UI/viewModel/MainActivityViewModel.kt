@@ -277,7 +277,7 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
         isOpenDrawable = state == MainActivityCallback.TYPE_OPEND
     }
 
-    fun closeDrawer() {
+    private fun closeDrawer() {
         with(mContentView) {
             dl_navigation_main.closeDrawer(Gravity.START)
         }
@@ -287,11 +287,11 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
         (mFragments[0] as MyDetailsFragment).notifyData()
     }
 
-    fun canExit(keyCode: Int): Boolean {
+    fun canExit(keyCode: Int, event: KeyEvent?): Boolean {
         return if (isOpenDrawable && keyCode == KeyEvent.KEYCODE_BACK) {
             closeDrawer()
             false
-        } else if (toolbarIsOpen) {
+        } else if (toolbarIsOpen || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
             mToolbar?.get()?.jellyListener?.onCancelIconClicked()
             false
         } else {

@@ -49,7 +49,7 @@ class MainActivity : BaseApp(), View.OnClickListener {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return if (!mViewModel!!.canExit(keyCode)) false
+        return if (!mViewModel!!.canExit(keyCode, event)) false
         else super.onKeyUp(keyCode, event)
     }
 
