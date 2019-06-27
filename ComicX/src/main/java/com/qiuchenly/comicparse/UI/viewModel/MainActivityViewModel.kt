@@ -292,7 +292,11 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
             closeDrawer()
             false
         } else if (toolbarIsOpen || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-            mToolbar?.get()?.jellyListener?.onCancelIconClicked()
+            when (event?.keyCode) {
+                KeyEvent.KEYCODE_ENTER,
+                KeyEvent.KEYCODE_BACK ->
+                    mToolbar?.get()?.jellyListener?.onCancelIconClicked()
+            }
             false
         } else {
             val curr = System.currentTimeMillis()

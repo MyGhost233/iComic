@@ -1,10 +1,8 @@
 package com.qiuchenly.comicparse.Bean
 
 import io.realm.RealmObject
-import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
-import io.realm.annotations.Required
 
 /**
  * 最近阅读漫画类
@@ -33,7 +31,7 @@ open class RecentlyReadingBean : RealmObject() {
     /**
      * 漫画最后阅读时间
      */
-    var mComicLastReadTime = System.currentTimeMillis()
+    var mComicLastReadTime: Long = -1
 
     /**
      * 最后阅读进度：int数字下标
@@ -43,5 +41,5 @@ open class RecentlyReadingBean : RealmObject() {
     /**
      * 最后阅读进度：文本格式
      */
-    var mComicReadProgressText: Int = -1
+    var mComicReadProgressText = ""
 }

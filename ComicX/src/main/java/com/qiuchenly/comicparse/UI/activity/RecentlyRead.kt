@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference
 /**
  * 这个类 就这么跟你👄吧 最近阅读活动类 你了解⑧？
  * 作者：新津恶霸丶mata川
- * 时间：⚽️⚽️你萌让我①个月拿驾驶证⑧
+ * 时间：⚽⚽你萌让我①个月拿驾驶证⑧
  */
 class RecentlyRead : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class RecentlyRead : AppCompatActivity() {
             with(mView) {
                 this?.tv_dialog_title?.text = "重要操作"
                 this?.tv_dialog_content?.text = "这样将会导致整个最近阅读与漫画阅读进度丢失!\n\n真的要这么做吗？\n" +
-                        "\n(其实你没有选择。)"
+                        "\n(你以为你还有选择吗?)"
 
                 this?.tv_dialog_content?.setOnClickListener {
                     mDialog?.get()?.dismiss()

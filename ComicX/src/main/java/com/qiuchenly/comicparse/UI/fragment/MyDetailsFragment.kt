@@ -10,6 +10,9 @@ import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
 
 class MyDetailsFragment : BaseLazyFragment(), MyDetailsContract.View {
+    override fun setRecentlySize(size: Int) {
+        mUserDetailsAdapter?.setRecentBooks(size)
+    }
 
     override fun onSrcReady(img: String) {
         mUserDetailsAdapter?.loadImg(img)
@@ -28,6 +31,7 @@ class MyDetailsFragment : BaseLazyFragment(), MyDetailsContract.View {
 
     private fun initializationInfo() {
         mViewModel.getBingSrc()
+        mViewModel.getRecentlyReadSize()
     }
 
     private var TAG = "MyDetailsFragment"

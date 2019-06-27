@@ -5,5 +5,6 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseView
 interface MyDetailsContract {
     interface View : BaseView {
         fun onSrcReady(img: String)
+        fun setRecentlySize(size: Int)
     }
 }

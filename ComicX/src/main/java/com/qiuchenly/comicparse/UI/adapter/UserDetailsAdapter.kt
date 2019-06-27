@@ -10,11 +10,11 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
-import com.qiuchenly.comicparse.UI.view.MyDetailsContract
-import com.qiuchenly.comicparse.UI.activity.RecentlyRead
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
+import com.qiuchenly.comicparse.UI.activity.RecentlyRead
+import com.qiuchenly.comicparse.UI.view.MyDetailsContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.my_main_spec.view.*
 import kotlinx.android.synthetic.main.my_main_topview.view.*
@@ -46,21 +46,21 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                     val recently_Size = findViewById<TextView>(R.id.recently_Size)
                     normal_item.text = when (position) {
                         1 -> {
-                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.local_img)
+                            item_img.setImageResource(R.mipmap.local_img)
                             "本地漫画"
                         }
                         2 -> {
-                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.recently_read)
-//                            recently_Size.text = "(${com.qiuchenly.comicparse.Core.Comic.getRealm().where(com.qiuchenly.comicparse.Bean.ComicBookInfo_Recently::class.java).findAll().size})"
+                            item_img.setImageResource(R.mipmap.recently_read)
+                            recently_Size.text = "($mRecentlyBook)"
                             click_recently_read_item(this)
                             "最近浏览(本地)"
                         }
                         3 -> {
-                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.favorite)
+                            item_img.setImageResource(R.mipmap.favorite)
                             "我的收藏(本地)"
                         }
                         4 -> {
-                            item_img.setImageResource(com.qiuchenly.comicparse.R.drawable.ic_down)
+                            item_img.setImageResource(R.drawable.ic_down)
                             this.setOnClickListener {
                                 /* android.support.v4.content.ContextCompat.startActivity(this.context,
                                          android.content.Intent(this.context,
@@ -70,7 +70,7 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                             "下载管理"
                         }
                         else -> {
-                            item_img.setImageResource(com.qiuchenly.comicparse.R.mipmap.other)
+                            item_img.setImageResource(R.mipmap.other)
                             "同上"
                         }
                     } + "  "
@@ -158,6 +158,12 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
             my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
             item_name.text = "我的收藏（本地有${arr.size}本）"
         }
+    }
+
+    private var mRecentlyBook = 0
+    fun setRecentBooks(size: Int) {
+        mRecentlyBook = size
+        notifyItemChanged(2)
     }
 
     private val TYPE_NORMAL = 0

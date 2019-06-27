@@ -229,6 +229,7 @@ class ComicDetails :
             this.mComicImageUrl = mComicSrc
             this.mComicType = baseInfo.mComicType
             this.mComicData = baseInfo.mComicString
+            this.mComicLastReadTime = System.currentTimeMillis()
         }
         Comic.getRealm().executeTransaction {
             it.copyToRealmOrUpdate(mRecentlyReadingBean)

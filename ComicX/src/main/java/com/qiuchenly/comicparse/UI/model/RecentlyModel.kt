@@ -15,7 +15,7 @@ class RecentlyModel(mView: WeekContract.View?) {
 
     fun getAllRecently(): ArrayList<RecentlyReadingBean> {
         val list = realm?.get()?.where(RecentlyReadingBean::class.java)
-                ?.findAll() ?: return ArrayList()
+                ?.findAll()?.sort("mComicLastReadTime") ?: return ArrayList()
         return ArrayList(list.toList())
     }
 }
