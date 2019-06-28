@@ -26,6 +26,10 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View, BaseRe
         mViewModel?.getComicList(mComicInfo!!.mComicID, pageSize)
     }
 
+    override fun loadFailure(t: Throwable) {
+        comicPageAdas?.setLoadFailed()
+    }
+
     var pageSize = 1
 
     override fun showMsg(str: String) {

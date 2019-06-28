@@ -14,9 +14,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ComicListViewModel(view: ComicDetailContract.Comiclist.View) : BaseViewModel<ResponseBody>() {
+class ComicListViewModel(private val view: ComicDetailContract.Comiclist.View) : BaseViewModel<ResponseBody>() {
     override fun loadFailure(t: Throwable) {
-
+        view.loadFailure(t)
     }
 
     var mView: ComicDetailContract.Comiclist.View? = view
@@ -28,10 +28,6 @@ class ComicListViewModel(view: ComicDetailContract.Comiclist.View) : BaseViewMod
         super.cancel()
         mView = null
     }
-
-    private var hasMore = false
-
-    fun isMore() = hasMore
 
     fun getComicList(id: String, page: Int) {
         BikaApi.getAPI()?.getComicEpisode(PreferenceHelper.getToken(Comic.getContext()), id, page)

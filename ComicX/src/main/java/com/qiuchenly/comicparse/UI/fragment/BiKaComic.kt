@@ -5,14 +5,14 @@ import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
-import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter
-import com.qiuchenly.comicparse.UI.view.BikaInterface
-import com.qiuchenly.comicparse.UI.model.BikaModel
 import com.qiuchenly.comicparse.ProductModules.Bika.CategoryObject
 import com.qiuchenly.comicparse.ProductModules.Bika.UserProfileObject
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
+import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter
+import com.qiuchenly.comicparse.UI.model.BikaModel
+import com.qiuchenly.comicparse.UI.view.BikaInterface
 import kotlinx.android.synthetic.main.fragment_bika.*
 
 class BiKaComic : BaseLazyFragment(), BikaInterface {
@@ -47,7 +47,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         model = BikaModel(this)
 
         swipe_bika_refresh.setOnRefreshListener {
-            update()
+            if (mInitBikaAPISucc) update() else reInitAPI()
         }
         reInitAPI()
     }
@@ -84,12 +84,14 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         }
     }
 
+    private var mInitBikaAPISucc = false
     override fun initSuccess() {
         update()
+        mInitBikaAPISucc = true
     }
 
-    var isInitImageServer = false
-    var messageDialog: ProgressDialog? = null
+    private var isInitImageServer = false
+    private var messageDialog: ProgressDialog? = null
     fun update() {
         if (model?.needLogin()!!) {
             if (swipe_bika_refresh.isRefreshing)
@@ -103,7 +105,6 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
                 setMessage("正在初始化哔咔图片服务器...")
                 isIndeterminate = true
                 setCancelable(false)
-
             }
             messageDialog?.show()
             model?.initImage()
