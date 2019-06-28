@@ -62,7 +62,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     override fun ShowErrorMsg(msg: String) {
         super.ShowErrorMsg(msg)
-        if (!isInitImageServer) {
+        if (!isInitImageServer || messageDialog?.isShowing == true) {
             messageDialog?.dismiss()
             messageDialog = null
             //此处并不需要取消初始化，因为获取图片服务器失败也要重新获取一遍
