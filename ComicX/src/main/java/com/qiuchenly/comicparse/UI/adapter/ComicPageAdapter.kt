@@ -4,28 +4,26 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import com.google.gson.Gson
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
-import com.qiuchenly.comicparse.UI.activity.ReadPage
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
+import com.qiuchenly.comicparse.UI.activity.ReadPage
 import kotlinx.android.synthetic.main.comic_page_item.view.*
 
-class ComicPageAdapter(private var mContext: Context?) : BaseRecyclerAdapter<String>() {
+class ComicPageAdapter(private var mContext: Context?, mCallback: LoaderListener) : BaseRecyclerAdapter<String>() {
 
-    override fun canLoadMore(): Boolean {
-        return false
-    }
-
-    override fun getViewType(position: Int): Int {
-        return position
-    }
+    override fun canLoadMore() = true
 
     override fun getItemLayout(viewType: Int): Int {
         return R.layout.comic_page_item
+    }
+
+    init {
+        setLoadMoreCallBack(mCallback)
     }
 
     fun clearContext() {

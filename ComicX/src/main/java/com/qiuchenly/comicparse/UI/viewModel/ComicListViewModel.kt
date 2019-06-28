@@ -29,15 +29,19 @@ class ComicListViewModel(view: ComicDetailContract.Comiclist.View) : BaseViewMod
         mView = null
     }
 
-    fun getComicList(id: String) {
-        BikaApi.getAPI()?.getComicEpisode(PreferenceHelper.getToken(Comic.getContext()), id, 1)
+    private var hasMore = false
+
+    fun isMore() = hasMore
+
+    fun getComicList(id: String, page: Int) {
+        BikaApi.getAPI()?.getComicEpisode(PreferenceHelper.getToken(Comic.getContext()), id, page)
                 ?.enqueue(object : Callback<GeneralResponse<ComicEpisodeResponse>> {
                     override fun onFailure(call: Call<GeneralResponse<ComicEpisodeResponse>>, t: Throwable) {
                         loadFailure(Throwable("加载漫画章节失败!"))
                     }
 
                     override fun onResponse(call: Call<GeneralResponse<ComicEpisodeResponse>>, response: Response<GeneralResponse<ComicEpisodeResponse>>) {
-                        mView?.SetBikaPages(response.body()?.data?.eps?.docs, id)
+                        mView?.SetBikaPages(response.body()?.data, id)
                     }
                 })
     }

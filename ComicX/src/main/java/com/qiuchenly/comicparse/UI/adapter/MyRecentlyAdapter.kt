@@ -21,10 +21,6 @@ class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
         return false
     }
 
-    override fun getViewType(position: Int): Int {
-        return position
-    }
-
     override fun getItemLayout(viewType: Int): Int {
         return R.layout.comic_local_list
     }

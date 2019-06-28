@@ -6,11 +6,11 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_MORE
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_NORMAL
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_FAILED
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_ING
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_MORE
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_NO_MORE
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_NORMAL
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_comicpage.view.*

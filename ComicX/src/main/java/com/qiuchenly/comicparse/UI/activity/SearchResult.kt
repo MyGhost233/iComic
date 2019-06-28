@@ -83,7 +83,7 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
     }
 
     override fun getLayoutID() = R.layout.activity_search_result
-    override fun getUISet(mSet: BaseApp.UISet): BaseApp.UISet {
+    override fun getUISet(mSet: UISet): UISet {
         return mSet.apply {
             this.isSlidr = true
         }

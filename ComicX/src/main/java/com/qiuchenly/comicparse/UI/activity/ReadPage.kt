@@ -2,22 +2,20 @@ package com.qiuchenly.comicparse.UI.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.ComicSource
-import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicEpisodeObject
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_FAILED
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_ING
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_NO_MORE
-import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerState.ON_LOAD_SUCCESS
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_FAILED
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_ING
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_NO_MORE
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatus.ON_LOAD_SUCCESS
 import com.qiuchenly.comicparse.UI.adapter.ComicReadingAdapter
 import com.qiuchenly.comicparse.UI.view.ReaderContract
 import com.qiuchenly.comicparse.UI.viewModel.ReadViewModel
