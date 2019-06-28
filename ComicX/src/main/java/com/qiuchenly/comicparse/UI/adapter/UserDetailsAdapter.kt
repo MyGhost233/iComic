@@ -11,6 +11,8 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.RecentlyRead
@@ -30,11 +32,9 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
         with(item) {
             when (getItemViewType(position)) {
                 TYPE_TOPVIEW -> {
-                    Log.d(TAG, "onBindViewHolder:TYPE_TOPVIEW")
                     if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
                     CustomUtils.loadImageCircle(this.context, bingSrc, top_userImg)
                     CustomUtils.loadImage(this.context, bingSrc, topview_back, 20, 50)
-                    Log.d(TAG, "onBindViewHolder:bingSrc = $bingSrc")
                 }
                 TYPE_EXPAND_LIST -> {
                     init_SpecItem(item)
@@ -44,6 +44,8 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                     val normal_item = findViewById<TextView>(R.id.normal_item)
                     val item_img = findViewById<ImageView>(R.id.item_img)
                     val recently_Size = findViewById<TextView>(R.id.recently_Size)
+                    this.setOnClickListener(null)
+                    recently_Size.text = "(0)"
                     normal_item.text = when (position) {
                         1 -> {
                             item_img.setImageResource(R.mipmap.local_img)
@@ -120,8 +122,10 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
      */
     private fun click_recently_read_item(view: View) {
         view.setOnClickListener {
-            val i = Intent(view.context, RecentlyRead::class.java)
-            startActivity(view.context, i, null)
+            val i = Intent(view.context.applicationContext, RecentlyRead::class.java).apply {
+                putExtra(ActivityKey.KEY_RECENTLY_READ_METHOD, -1)
+            }
+            startActivity(view.context.applicationContext, i, null)
         }
     }
 

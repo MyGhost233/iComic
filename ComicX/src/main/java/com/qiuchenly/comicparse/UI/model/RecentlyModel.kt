@@ -4,6 +4,7 @@ import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.UI.view.WeekContract
 import io.realm.Realm
+import io.realm.Sort
 import java.lang.ref.WeakReference
 
 class RecentlyModel(mView: WeekContract.View?) {
@@ -13,9 +14,22 @@ class RecentlyModel(mView: WeekContract.View?) {
         realm = WeakReference(Comic.getRealm())
     }
 
+    /**
+     * 获取所有漫画源的最近阅读数据
+     */
     fun getAllRecently(): ArrayList<RecentlyReadingBean> {
         val list = realm?.get()?.where(RecentlyReadingBean::class.java)
-                ?.findAll()?.sort("mComicLastReadTime") ?: return ArrayList()
+                ?.findAll()?.sort("mComicLastReadTime", Sort.DESCENDING) ?: return ArrayList()
+        return ArrayList(list.toList())
+    }
+
+    /**
+     * 获取指定漫画源的最近阅读数据
+     */
+    fun getTargetRecently(mSource: Int): ArrayList<RecentlyReadingBean> {
+        val list = realm?.get()?.where(RecentlyReadingBean::class.java)
+                ?.equalTo("mComicType", mSource)
+                ?.findAll()?.sort("mComicLastReadTime", Sort.DESCENDING) ?: return ArrayList()
         return ArrayList(list.toList())
     }
 }

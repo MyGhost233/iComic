@@ -16,7 +16,7 @@ class MyDetailsFragment : BaseLazyFragment(), MyDetailsContract.View {
 
     override fun onSrcReady(img: String) {
         mUserDetailsAdapter?.loadImg(img)
-        mUserDetailsAdapter?.notifyItemRangeChanged(1, 5)
+//        mUserDetailsAdapter?.notifyItemRangeChanged(1, 5)
     }
 
     private var mViewModel = DetailsModel(this)

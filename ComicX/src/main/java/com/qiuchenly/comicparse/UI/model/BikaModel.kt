@@ -1,14 +1,18 @@
 package com.qiuchenly.comicparse.UI.model
 
 import com.google.gson.Gson
+import com.qiuchenly.comicparse.Bean.ComicSource
+import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.Comic
-import com.qiuchenly.comicparse.UI.view.BikaInterface
 import com.qiuchenly.comicparse.ProductModules.Bika.*
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.*
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListResponse
+import com.qiuchenly.comicparse.UI.view.BikaInterface
+import io.realm.Realm
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.ref.WeakReference
 import java.util.*
 
 class BikaModel(var mViews: BikaInterface?) {
@@ -16,6 +20,8 @@ class BikaModel(var mViews: BikaInterface?) {
     var mBikaToken = ""
 
     var api: ApiService? = null
+
+    var mRealm: WeakReference<Realm>? = WeakReference(Comic.getRealm())
 
     fun needLogin(): Boolean {
         mBikaToken = PreferenceHelper.getToken(Comic.getContext())
@@ -83,6 +89,7 @@ class BikaModel(var mViews: BikaInterface?) {
                 if (ret != null) {
                     mViews?.updateUser(ret)
                     getFav()
+                    getBikaRecentlySize()
                 } else {
                     mViews?.ShowErrorMsg("账户信息错误!")
                 }
@@ -186,7 +193,18 @@ class BikaModel(var mViews: BikaInterface?) {
                 })
     }
 
+    /**
+     * 获取漫画源的最近阅读数据数量
+     */
+    fun getBikaRecentlySize() {
+        val size = mRealm?.get()?.where(RecentlyReadingBean::class.java)
+                ?.equalTo("mComicType", ComicSource.BikaComic)
+                ?.findAll()?.size ?: 0
+        mViews?.setRecentlyRead(size)
+    }
+
     fun cancel() {
+        mRealm = null
         mViews = null
     }
 }

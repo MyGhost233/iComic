@@ -2,6 +2,7 @@ package com.qiuchenly.comicparse.UI.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseViewHolder
 import com.qiuchenly.comicparse.UI.activity.AuthBika
 import com.qiuchenly.comicparse.UI.activity.BrowserView
+import com.qiuchenly.comicparse.UI.activity.RecentlyRead
 import com.qiuchenly.comicparse.UI.activity.SearchResult
 import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter.ItemType.BIKA_ACCOUNT
 import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter.ItemType.BIKA_COMIC_TYPE
@@ -182,6 +184,15 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
                     //todo 跳转到收藏页
                 }
             }
+
+            //最近阅读:哔咔
+            tv_recently.text = "" + mRecentRead
+            ll_recently_read.setOnClickListener {
+                val i = Intent(it.context.applicationContext, RecentlyRead::class.java).apply {
+                    putExtra(ActivityKey.KEY_RECENTLY_READ_METHOD, ComicSource.BikaComic)
+                }
+                ContextCompat.startActivity(it.context.applicationContext, i, null)
+            }
         }
     }
 
@@ -218,6 +229,12 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
     private var mFavourite: ComicListData? = null
     fun setFav(comics: ComicListData) {
         mFavourite = comics
+        notifyItemChanged(0)
+    }
+
+    var mRecentRead = 0
+    fun setRecentRead(size: Int) {
+        mRecentRead = size
         notifyItemChanged(0)
     }
 

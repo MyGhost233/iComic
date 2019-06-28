@@ -15,4 +15,5 @@ interface BikaInterface : BaseView {
     fun initSuccess()
     fun getFavourite(comics: ComicListData)
     fun reInitAPI()
+    fun setRecentlyRead(size: Int)
 }

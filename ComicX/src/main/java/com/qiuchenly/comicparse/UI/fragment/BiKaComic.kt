@@ -56,6 +56,10 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         model?.initBikaApi()
     }
 
+    override fun setRecentlyRead(size: Int) {
+        mRecyclerAdapter?.setRecentRead(size)
+    }
+
     override fun ShowErrorMsg(msg: String) {
         super.ShowErrorMsg(msg)
         if (!isInitImageServer) {
