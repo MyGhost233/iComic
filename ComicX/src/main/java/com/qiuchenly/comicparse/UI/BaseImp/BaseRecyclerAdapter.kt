@@ -12,12 +12,12 @@ import kotlinx.android.synthetic.main.loadmore_view.view.*
 abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
     object RecyclerLoadStatus {
-        const val ON_LOAD_ING = 0x01
-        const val ON_LOAD_SUCCESS = 0x02
-        const val ON_LOAD_FAILED = 0x03
-        const val ON_LOAD_NO_MORE = 0x04
-        const val ON_LOAD_MORE = 0x05
-        const val ON_NORMAL = 0x06
+        const val ON_LOAD_ING = -0x01
+        const val ON_LOAD_SUCCESS = -0x02
+        const val ON_LOAD_FAILED = -0x03
+        const val ON_LOAD_NO_MORE = -0x04
+        const val ON_LOAD_MORE = -0x05
+        const val ON_NORMAL = -0x06
     }
 
     override fun onViewRecycled(holder: BaseViewHolder) {
@@ -119,7 +119,8 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         //if (this.mState != RecyclerLoadStatus.ON_LOAD_ING && this.mState != RecyclerLoadStatus.ON_LOAD_SUCCESS)
         if (needNotifyChange(mState))
             mRecyclerView?.post {
-                notifyItemChanged(getRealSize())
+                val item = getRealSize()
+                notifyItemChanged(item)
             }
     }
 
@@ -199,12 +200,12 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        if (map!!.size <= 0) return 0
+        if (map!!.size == 0) return 0
         return map!!.size + if (canLoadMore()) 1 else 0
     }
 
     fun getRealSize(): Int {
-        if (map!!.size <= 0) return 0
+        if (map!!.size == 0) return 0
         return map!!.size
     }
 

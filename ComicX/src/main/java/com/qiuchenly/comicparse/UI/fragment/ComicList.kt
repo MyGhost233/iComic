@@ -37,8 +37,12 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View, BaseRe
     }
 
     override fun SetDMZJChapter(docs: ComicHomeComicChapterList) {
-        docs.chapters.forEach {
-            comicPageAdas?.addData(getArr2Str(ArrayList(it.data)))
+        if (docs.chapters.isNotEmpty())
+            docs.chapters.forEach {
+                comicPageAdas?.addData(getArr2Str(ArrayList(it.data)))
+            }
+        else {
+            ShowErrorMsg("该漫画还没有上传任何章节!")
         }
     }
 

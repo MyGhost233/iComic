@@ -100,6 +100,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
              * Banner栏数据
              */
             TYPE_TOP -> {
+                return
                 val mViewPager = view.findViewById<Banner>(R.id.pager_container)
                 mViewPager.apply {
                     val banner = this
