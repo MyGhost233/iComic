@@ -1,13 +1,21 @@
 package com.qiuchenly.comicparse.UI.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.WelcomeLang
 import com.qiuchenly.comicparse.ProductModules.Common.NMSL.WelcomeLangClient
 import com.qiuchenly.comicparse.R
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
+import com.tencent.bugly.beta.UpgradeInfo
+import com.tencent.bugly.beta.ui.UILifecycleListener
+import com.tencent.bugly.beta.upgrade.UpgradeListener
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.splash_view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -69,6 +77,9 @@ class SplashActivity : BaseApp() {
                 final()
             }
         })
+
+        //bugly 崩溃测试
+        //CrashReport.testJavaCrash()
     }
 
 
@@ -76,6 +87,7 @@ class SplashActivity : BaseApp() {
         Handler().postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
+            Bugly.init(applicationContext, "f4b1fcb8dd", false)
         }, 5000)
     }
 }

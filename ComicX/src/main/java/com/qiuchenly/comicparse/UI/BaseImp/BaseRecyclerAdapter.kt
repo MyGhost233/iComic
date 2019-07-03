@@ -76,7 +76,9 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         /**
          * 投递的消息
          */
-        fun showMsg(str: String)
+        fun showMsg(str: String) {
+
+        }
     }
 
     /**

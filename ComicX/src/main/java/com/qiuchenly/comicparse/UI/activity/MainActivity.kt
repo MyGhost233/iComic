@@ -6,6 +6,7 @@ import android.view.View
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.UI.viewModel.MainActivityViewModel
 import com.qiuchenly.comicparse.R
+import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*
 
@@ -33,8 +34,10 @@ class MainActivity : BaseApp(), View.OnClickListener {
         mViewModel = MainActivityViewModel(this)
         mUpdateInfo.setOnRefreshListener {
             mViewModel?.getWeathers()
+            Beta.checkUpgrade()//防止有时候没加载出来
         }
         mViewModel?.getWeathers()
+        Beta.checkUpgrade()//防止有时候没加载出来
         //TODO 此处启动后台下载服务暂时不写
         //startService(Intent(this, DownloadService::class.java))
     }

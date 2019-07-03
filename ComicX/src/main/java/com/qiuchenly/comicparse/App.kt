@@ -2,10 +2,10 @@ package com.qiuchenly.comicparse
 
 import android.app.Application
 import android.support.multidex.MultiDex
-import com.crashlytics.android.Crashlytics
 import com.orhanobut.hawk.Hawk
 import com.qiuchenly.comicparse.Core.Comic
-import io.fabric.sdk.android.Fabric
+import com.tencent.bugly.Bugly
+import com.tencent.bugly.beta.Beta
 import kotlin.system.exitProcess
 
 class App : Application() {
@@ -13,7 +13,6 @@ class App : Application() {
         super.onCreate()
         Hawk.init(this)
                 .build()
-        Fabric.with(this, Crashlytics())
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
 //            // This process is dedicated to LeakCanary for heap analysis.
 //            // You should not init your app in this process.
