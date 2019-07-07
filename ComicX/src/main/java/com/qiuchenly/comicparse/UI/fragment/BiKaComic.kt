@@ -10,10 +10,12 @@ import com.qiuchenly.comicparse.ProductModules.Bika.UserProfileObject
 import com.qiuchenly.comicparse.ProductModules.Bika.responses.DataClass.ComicListResponse.ComicListData
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
+import com.qiuchenly.comicparse.UI.activity.MainActivity
 import com.qiuchenly.comicparse.UI.adapter.BiKaDataAdapter
 import com.qiuchenly.comicparse.UI.model.BikaModel
 import com.qiuchenly.comicparse.UI.view.BikaInterface
 import kotlinx.android.synthetic.main.fragment_bika.*
+import java.lang.ref.WeakReference
 
 class BiKaComic : BaseLazyFragment(), BikaInterface {
 
@@ -26,7 +28,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     override fun onViewFirstSelect(mPagerView: View) {
         mRecycler = view?.findViewById(R.id.rv_bika_content)
-        mRecyclerAdapter = BiKaDataAdapter(this)
+        mRecyclerAdapter = BiKaDataAdapter(this, WeakReference(activity as MainActivity))
         mRecycler?.layoutManager = GridLayoutManager(this.activity, 6).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {

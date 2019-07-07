@@ -55,8 +55,4 @@ class MainActivity : BaseApp(), View.OnClickListener {
         return if (!mViewModel!!.canExit(keyCode, event)) false
         else super.onKeyUp(keyCode, event)
     }
-
-    fun updateInfo() {
-        mViewModel!!.notifyData()
-    }
 }

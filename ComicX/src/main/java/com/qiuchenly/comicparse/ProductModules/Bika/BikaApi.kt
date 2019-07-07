@@ -9,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 object BikaApi : BaseRetrofitManager<ApiService>() {
 
@@ -29,6 +30,8 @@ object BikaApi : BaseRetrofitManager<ApiService>() {
         if (PreferenceHelper.isGirl(context)) {
             httpClient.dns(HttpDns())
         }
+        httpClient.connectTimeout(5, TimeUnit.SECONDS)
+        httpClient.readTimeout(5, TimeUnit.SECONDS)
         httpClient.addInterceptor { chain ->
             val original = chain.request()
             val uid = UUID.randomUUID().toString().replace("-", "")

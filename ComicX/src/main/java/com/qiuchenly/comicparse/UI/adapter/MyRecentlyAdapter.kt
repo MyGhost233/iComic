@@ -1,6 +1,7 @@
 package com.qiuchenly.comicparse.UI.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.View
@@ -15,8 +16,9 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.ComicDetails
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.comic_local_list.view.*
+import java.lang.ref.WeakReference
 
-class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
+class MyRecentlyAdapter(private var mContext: WeakReference<Context>) : BaseRecyclerAdapter<RecentlyReadingBean>() {
     override fun canLoadMore(): Boolean {
         return false
     }
@@ -35,7 +37,7 @@ class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
 //            val mItem = Comic.getRealm().where(RecentlyReadingBean::class.java).equalTo("BookName", data.BookName!!).findFirst()
 //            curr_read.text = if (mItem != null) mItem.BookName_read_point else "无数据"
             setOnClickListener {
-                val i = Intent(this.context.applicationContext, ComicDetails::class.java)
+                val i = Intent(mContext.get(), ComicDetails::class.java)
                 i.putExtras(android.os.Bundle().apply {
                     putString(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                         mComicString = data.mComicData
@@ -43,7 +45,7 @@ class MyRecentlyAdapter : BaseRecyclerAdapter<RecentlyReadingBean>() {
                         mComicType = data.mComicType
                     }))
                 })
-                startActivity(AppManager.appm.currentActivity(), i, null)
+                mContext.get()?.startActivity(i)
             }
         }
     }

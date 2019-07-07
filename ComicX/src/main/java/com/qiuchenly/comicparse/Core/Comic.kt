@@ -62,12 +62,12 @@ object Comic {
     }
 
     private var realm: Realm? = null
-    fun getRealm() = realm!!
+    fun getRealm() = realm
 
     fun getContext() = mContext
 
     fun closed() {
-        Comic.getRealm().close()
+        getRealm()?.close()
         realm = null
         mContext = null
     }

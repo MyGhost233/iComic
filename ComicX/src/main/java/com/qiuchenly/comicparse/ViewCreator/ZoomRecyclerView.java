@@ -42,7 +42,7 @@ public class ZoomRecyclerView extends RecyclerView {
     // constant
     private static final int DEFAULT_SCALE_DURATION = 300;
     private static final float DEFAULT_SCALE_FACTOR = 1.f;
-    private static final float DEFAULT_MAX_SCALE_FACTOR = 2.0f;
+    private static final float DEFAULT_MAX_SCALE_FACTOR = 5.0f;
     private static final float DEFAULT_MIN_SCALE_FACTOR = 0.5f;
     private static final String PROPERTY_SCALE = "scale";
     private static final String PROPERTY_TRANX = "tranX";
@@ -304,17 +304,14 @@ public class ZoomRecyclerView extends RecyclerView {
     private void newZoomAnimation() {
         mScaleAnimator = new ValueAnimator();
         mScaleAnimator.setInterpolator(new DecelerateInterpolator());
-        mScaleAnimator.addUpdateListener(new AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                //update scaleFactor & tranX & tranY
-                mScaleFactor = (float) animation.getAnimatedValue(PROPERTY_SCALE);
-                setTranslateXY(
-                        (float) animation.getAnimatedValue(PROPERTY_TRANX),
-                        (float) animation.getAnimatedValue(PROPERTY_TRANY)
-                );
-                invalidate();
-            }
+        mScaleAnimator.addUpdateListener(animation -> {
+            //update scaleFactor & tranX & tranY
+            mScaleFactor = (float) animation.getAnimatedValue(PROPERTY_SCALE);
+            setTranslateXY(
+                    (float) animation.getAnimatedValue(PROPERTY_TRANX),
+                    (float) animation.getAnimatedValue(PROPERTY_TRANY)
+            );
+            invalidate();
         });
 
         // set listener to update scale flag

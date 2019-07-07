@@ -1,5 +1,7 @@
 package com.qiuchenly.comicparse.UI.viewModel
 
+import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.LocalFavoriteBean
 import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.ProductModules.Bika.PreferenceHelper
@@ -25,7 +27,10 @@ class ComicInfoViewModel(view: ComicDetailContract.ComicInfo.View) : BaseViewMod
     override fun cancel() {
         super.cancel()
         mView = null
+        mRealm = null
     }
+
+    private var mRealm = Comic.getRealm()
 
     fun getComicInfo(bookID: String?) {
         BikaApi.getAPI()?.getComicWithId(PreferenceHelper.getToken(Comic.getContext()), bookID)
@@ -38,5 +43,26 @@ class ComicInfoViewModel(view: ComicDetailContract.ComicInfo.View) : BaseViewMod
                         mView?.SetBikaInfo(response.body()?.data?.comic)
                     }
                 })
+    }
+
+    fun comicExist(mComicInfo: ComicInfoBean?): LocalFavoriteBean? {
+        return mRealm?.where(LocalFavoriteBean::class.java)
+                ?.equalTo("mComicName", mComicInfo?.mComicName)
+                ?.findFirst()
+    }
+
+    fun comicDel(book: String) {
+        val data = mRealm?.where(LocalFavoriteBean::class.java)
+                ?.equalTo("mComicName", book)
+                ?.findFirst()
+        mRealm?.beginTransaction()
+        data?.deleteFromRealm()
+        mRealm?.commitTransaction()
+    }
+
+    fun comicAdd(book: LocalFavoriteBean) {
+        mRealm?.executeTransaction {
+            it.copyToRealm(book)
+        }
     }
 }

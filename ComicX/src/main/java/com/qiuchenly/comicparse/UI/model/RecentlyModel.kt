@@ -8,7 +8,7 @@ import io.realm.Sort
 import java.lang.ref.WeakReference
 
 class RecentlyModel(mView: WeekContract.View?) {
-    var realm: WeakReference<Realm>? = null
+    var realm: WeakReference<Realm?>? = null
 
     init {
         realm = WeakReference(Comic.getRealm())

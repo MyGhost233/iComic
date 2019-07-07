@@ -220,7 +220,6 @@ class ComicDetails :
         mComicInfoViewPager.addOnPageChangeListener(mPageChange!!)
 
 
-        //todo 准备插入数据
         //数据插入
         val mRecentlyReadingBean = RecentlyReadingBean().apply {
             this.mComicName = mComicTitle
@@ -231,9 +230,8 @@ class ComicDetails :
             this.mComicData = baseInfo.mComicString
             this.mComicLastReadTime = System.currentTimeMillis()
         }
-        Comic.getRealm().executeTransaction {
+        Comic.getRealm()?.executeTransaction {
             it.copyToRealmOrUpdate(mRecentlyReadingBean)
-            Log.d("QiuChen", Gson().toJson(mRecentlyReadingBean))
         }
     }
 

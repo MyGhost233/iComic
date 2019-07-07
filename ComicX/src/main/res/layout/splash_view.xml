@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="CopyRight©2019"
+        android:text="Copyright©2019"
         android:textColor="@color/mDefaultListTextColor"
         android:textSize="10sp" />
 

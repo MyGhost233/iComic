@@ -22,21 +22,12 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onViewRecycled(holder: BaseViewHolder) {
         super.onViewRecycled(holder)
-        if (mFixMem) {
-            Glide.with(holder.itemView)
-                    .clear(holder.itemView)
-            System.gc()
-        }
+
     }
 
     override fun onFailedToRecycleView(holder: BaseViewHolder): Boolean {
         return super.onFailedToRecycleView(holder)
 
-    }
-
-    private var mFixMem = false
-    fun setFixMemory() {
-        //mFixMem = true
     }
 
     private var mCallback: LoaderListener? = null
@@ -57,11 +48,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         val mPosition = mRecyclerView?.getChildAdapterPosition(holder.itemView)
         if (mPosition != null && mPosition >= 0)
             onViewShowOrHide(mPosition, holder.itemView, false)
-        if (mFixMem) {
-            Glide.with(holder.itemView)
-                    .clear(holder.itemView)
-            System.gc()
-        }
     }
 
     /**

@@ -21,7 +21,7 @@ class BikaModel(var mViews: BikaInterface?) {
 
     var api: ApiService? = null
 
-    var mRealm: WeakReference<Realm>? = WeakReference(Comic.getRealm())
+    var mRealm: WeakReference<Realm?>? = WeakReference(Comic.getRealm())
 
     fun needLogin(): Boolean {
         mBikaToken = PreferenceHelper.getToken(Comic.getContext())
@@ -46,7 +46,7 @@ class BikaModel(var mViews: BikaInterface?) {
             }
 
             override fun onFailure(call: Call<WakaInitResponse>, t: Throwable) {
-                mViews?.ShowErrorMsg("访问哔咔CDN服务器失败：" + t.message!!)
+                mViews?.ShowErrorMsg("访问哔咔CDN服务器失败：" + t.message)
             }
         })
     }

@@ -283,10 +283,6 @@ class MainActivityViewModel(private var mContentView: MainActivity) : MainActivi
         }
     }
 
-    fun notifyData() {
-        (mFragments[0] as MyDetailsFragment).notifyData()
-    }
-
     fun canExit(keyCode: Int, event: KeyEvent?): Boolean {
         return if (isOpenDrawable && keyCode == KeyEvent.KEYCODE_BACK) {
             closeDrawer()

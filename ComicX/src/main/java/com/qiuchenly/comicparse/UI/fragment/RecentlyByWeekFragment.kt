@@ -6,10 +6,12 @@ import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.ActivityKey
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
+import com.qiuchenly.comicparse.UI.activity.RecentlyRead
 import com.qiuchenly.comicparse.UI.adapter.MyRecentlyAdapter
 import com.qiuchenly.comicparse.UI.model.RecentlyModel
 import com.qiuchenly.comicparse.UI.view.WeekContract
 import kotlinx.android.synthetic.main.recently_week.*
+import java.lang.ref.WeakReference
 
 class RecentlyByWeekFragment : BaseLazyFragment(), WeekContract.View {
 
@@ -26,7 +28,7 @@ class RecentlyByWeekFragment : BaseLazyFragment(), WeekContract.View {
             mSource = intent.extras?.getInt(ActivityKey.KEY_RECENTLY_READ_METHOD) ?: -1
         }
         rv_recently.layoutManager = LinearLayoutManager(this.context)
-        mMyDetailsLocalBookList = MyRecentlyAdapter()
+        mMyDetailsLocalBookList = MyRecentlyAdapter(WeakReference(activity as RecentlyRead))
 
         RecentlyModel(this)
 

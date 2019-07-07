@@ -1,5 +1,6 @@
 package com.qiuchenly.comicparse.UI.model
 
+import com.qiuchenly.comicparse.Bean.LocalFavoriteBean
 import com.qiuchenly.comicparse.Bean.RecentlyReadingBean
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.HttpRequests.BingRequests
@@ -9,6 +10,8 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.UI.view.MyDetailsContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
 import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.Sort
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -16,7 +19,7 @@ import java.lang.ref.WeakReference
 
 class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<ResponseBody>() {
 
-    private var mRealm: WeakReference<Realm>? = null
+    private var mRealm: WeakReference<Realm?>? = null
 
     init {
         mRealm = WeakReference(Comic.getRealm())
@@ -33,6 +36,8 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
             mCall?.cancel()
             mCall = null
         }
+        mRecent?.removeAllChangeListeners()
+        mRecent == null
     }
 
     fun getBingSrc() {
@@ -42,9 +47,16 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
         mCall!!.enqueue(this)
     }
 
+    private var mRecent: RealmResults<RecentlyReadingBean>? = null
     fun getRecentlyReadSize() {
-        mView?.setRecentlySize(mRealm?.get()?.where(RecentlyReadingBean::class.java)
-                ?.findAll()?.size ?: 0)
+        if (mRecent == null) {
+            mRecent = mRealm?.get()?.where(RecentlyReadingBean::class.java)
+                    ?.findAll()
+            mRecent?.addChangeListener { t, Set ->
+                mView?.setRecentlySize(mRecent?.size ?: 0)
+            }
+        }
+        mView?.setRecentlySize(mRecent?.size ?: 0)
     }
 
     override fun loadSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -66,6 +78,13 @@ class DetailsModel(private val mView: MyDetailsContract.View?) : BaseViewModel<R
         super.onFailure(call, t)
         mView?.ShowErrorMsg("无法访问Bing美图服务器,使用默认图片替换.")
         mView?.onSrcReady(CustomUtils.getCachedBingUrl())
+    }
+
+    fun getFavoriteArray() {
+        val a = mRealm?.get()?.where(LocalFavoriteBean::class.java)
+                ?.sort("mComicLastReadTime", Sort.DESCENDING)
+                ?.findAll()
+        mView?.setLocateComic(a)
     }
 
     private var mCall: Call<ResponseBody>? = null

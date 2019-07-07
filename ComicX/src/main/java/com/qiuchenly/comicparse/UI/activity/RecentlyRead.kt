@@ -70,7 +70,7 @@ class RecentlyRead : AppCompatActivity() {
                 }
 
                 val callback = View.OnClickListener {
-                    Comic.getRealm().executeTransaction { mRealm ->
+                    Comic.getRealm()?.executeTransaction { mRealm ->
                         mRealm.where(RecentlyReadingBean::class.java)
                                 .findAll()
                                 .deleteAllFromRealm()

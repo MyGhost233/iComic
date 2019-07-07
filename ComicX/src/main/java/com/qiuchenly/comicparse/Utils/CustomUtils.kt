@@ -261,21 +261,21 @@ object CustomUtils {
 
     fun setCachedBingUrl(url: String) {
         val instance = Comic.getRealm()
-        var single = instance.where(ApplicationSetting::class.java).findFirst()
-        instance.beginTransaction()
+        var single = instance?.where(ApplicationSetting::class.java)?.findFirst()
+        instance?.beginTransaction()
         if (single == null) {
             single = ApplicationSetting().apply {
                 mBingCachedUrl = url
             }
-            instance.copyToRealm(single)
+            instance?.copyToRealm(single)
         } else {
             single.mBingCachedUrl = url
         }
-        instance.commitTransaction()
+        instance?.commitTransaction()
     }
 
     fun getCachedBingUrl(): String {
-        val single = Comic.getRealm().where(ApplicationSetting::class.java).findFirst()
+        val single = Comic.getRealm()?.where(ApplicationSetting::class.java)?.findFirst()
         return if (single?.mBingCachedUrl != null) single.mBingCachedUrl!! else BaseURL.BASE_IMAGE_DEFAULT
     }
 

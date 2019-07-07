@@ -19,6 +19,8 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter.RecyclerLoadStatu
 import com.qiuchenly.comicparse.UI.adapter.ComicReadingAdapter
 import com.qiuchenly.comicparse.UI.view.ReaderContract
 import com.qiuchenly.comicparse.UI.viewModel.ReadViewModel
+import com.qiuchenly.comicparse.Utils.CustomUtils
+import com.qiuchenly.comicparse.Utils.DisplayUtil
 import kotlinx.android.synthetic.main.activity_reader_page.*
 import java.lang.ref.WeakReference
 
@@ -47,7 +49,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             }
         } else {
             currentState = ON_LOAD_NO_MORE
-            mComicImagePageAda?.onNoMore()
+            mComicImagePageAda?.setNoMore()
             //onFailed("没有更多信息了")
         }
     }
@@ -62,7 +64,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         if (currentState != ON_LOAD_FAILED) {
             ShowErrorMsg(reasonStr)
             currentState = ON_LOAD_FAILED
-            mComicImagePageAda?.onLoadNextFailed()
+            mComicImagePageAda?.setLoadFailed()
         }
     }
 
@@ -77,18 +79,18 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         when (mTempComicInfo!!.mComicType) {
             ComicSource.DongManZhiJia -> {
                 mPoint++
-                if (mPoint < mDMZJChapter!!.size) {
-                    nextUrl = mDMZJChapter!!.get(mPoint).chapter_id
-                    currInfos.text = mDMZJChapter!!.get(mPoint - 1).chapter_title
+                nextUrl = if (mPoint < mDMZJChapter!!.size) {
+                    mDMZJChapter!![mPoint].chapter_id
                 } else {
-                    nextUrl = ""
+                    ""
                 }
+                currInfos.text = mDMZJChapter!![mPoint - 1].chapter_title
             }
             ComicSource.BikaComic -> {
                 mPoint++
                 if (mPoint < mBikaChapter!!.size) {
-                    nextUrl = mBikaChapter!!.get(mPoint).order.toString()
-                    currInfos.text = mBikaChapter!!.get(mPoint - 1).title
+                    nextUrl = mBikaChapter!![mPoint].order.toString()
+                    currInfos.text = mBikaChapter!![mPoint - 1].title
                 } else {
                     nextUrl = ""
                 }
@@ -150,20 +152,22 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         mComicImagePageAda = ComicReadingAdapter(this)
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
+        //rv_comicRead_list.screenWidth = DisplayUtil.getScreenWidth(Comic.getContext())
         rv_comicRead_list.isEnableScale = true //感谢这个作者的开源项目。https://github.com/PortgasAce/ZoomRecyclerView/blob/master/demo/src/main/java/com/portgas/view/demo/MainActivity.java
         //=============  初始化界面数据  ===============
         bookID = mTempComicInfo!!.mComicID
+        mPoint = mTempComicInfo!!.mComicString.toInt()
         when (mTempComicInfo!!.mComicType) {
             ComicSource.DongManZhiJia -> {
                 mDMZJChapter = getArr2Str(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicChapterData>()::class.java) as ArrayList<String>)
-                mPoint = mTempComicInfo!!.mComicString.toInt()
+                mDMZJChapter?.reverse()
+                mPoint = (mDMZJChapter?.size ?: 0) - mPoint - 1
                 val mBase = mDMZJChapter?.get(mPoint)
                 currInfos.text = mBase?.chapter_title
                 mViewModel?.getDMZJImage(bookID, mBase!!.chapter_id)
             }
             ComicSource.BikaComic -> {
                 mBikaChapter = getArr2StrA(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicEpisodeObject>()::class.java) as ArrayList<String>)
-                mPoint = mTempComicInfo!!.mComicString.toInt()
                 val mBase = mBikaChapter?.get(mPoint)
                 currInfos.text = mBase?.title
                 mViewModel?.getBikaImage(bookID, mBase!!.order)

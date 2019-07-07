@@ -1,19 +1,29 @@
 package com.qiuchenly.comicparse.UI.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
+import com.qiuchenly.comicparse.Bean.LocalFavoriteBean
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicDetailObject
 import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicInfoViewModel
 import com.qiuchenly.comicparse.R
-import kotlinx.android.synthetic.main.item_comic_infomation.*
+import com.qiuchenly.comicparse.UI.BaseImp.AppManager
+import com.qiuchenly.comicparse.UI.activity.MainActivity
+import com.qiuchenly.comicparse.UI.activity.ReadPage
+import kotlinx.android.synthetic.main.fragment_commic_basic_info.*
 
 class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
+
+    var mViewModel: ComicInfoViewModel? = null
+    var mComicInfo: ComicInfoBean? = null
+    private var defaultUrl = ""
 
     override fun getLayoutID() = R.layout.fragment_commic_basic_info
 
@@ -24,38 +34,38 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
 
         when (mComicInfo?.mComicType) {
             ComicSource.BikaComic -> {
-                mViewModel?.getComicInfo(mComicInfo?.mComicID)
+                val mComicInfo = Gson().fromJson(mComicInfo?.mComicString, ComicDetailObject::class.java)
+                mViewModel?.getComicInfo(mComicInfo?.comicId)
+                this.mComicInfo?.mComicName = mComicInfo.title
             }
             ComicSource.DongManZhiJia -> {
                 val mComicInfo = Gson().fromJson(mComicInfo?.mComicString, DataItem::class.java)
                 tv_comicName.text = "${mComicInfo.title}(${mComicInfo.status})"
+                this.mComicInfo?.mComicName = mComicInfo.title
                 author.text = mComicInfo.sub_title
             }
             else -> {
 
             }
         }
-        /*
-        addFav.setOnClickListener {
-            val book = null
-//                    realm.where(HotComicStrut::class.java)
-//                            .equalTo("BookName",
-//                                    mComicInfo?.BookName)
-//                            .findFirst()
+
+        addFavorite.setOnClickListener {
+            val book = mViewModel?.comicExist(mComicInfo)
             if (book == null) {
-//                realm.beginTransaction()
-//                realm.copyToRealm(mComicInfo!!)
-//                realm.commitTransaction()
+                mViewModel?.comicAdd(LocalFavoriteBean().apply {
+                    this.mComicName = mComicInfo?.mComicName ?: ""
+                    this.mComicImageUrl = mComicInfo?.mComicImg ?: ""
+                    this.mComicData = mComicInfo?.mComicString ?: ""
+                    this.mComicType = mComicInfo?.mComicType ?: ComicSource.BikaComic
+                    this.mComicLastReadTime = System.currentTimeMillis()
+                })
                 ShowErrorMsg("已加入本地图书列表！")
-                addFav.text = "取消收藏"
+                addFavorite.text = "取消收藏"
             } else {
-                *//*realm.executeTransaction {
-                    book.deleteFromRealm()
-                }*//*
+                mViewModel?.comicDel(book.mComicName)
                 ShowErrorMsg("移除成功！")
-                addFav.text = "加入收藏"
+                addFavorite.text = "加入收藏"
             }
-            (AppManager.getActivity(MainActivity::class.java) as MainActivity).updateInfo()
         }
 
         startRead.setOnClickListener {
@@ -63,22 +73,18 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
             var link = lastReadPageUrl
             ContextCompat.startActivity(AppManager.appm.currentActivity(), bin, null)
         }
-        */
+
 
         //TODO 此处需要修复以供开始阅读按钮使用
-        /*val book = null
-        *//* realm.where(HotComicStrut::class.java)
-                 .equalTo("BookName",
-                         mComicInfo?.BookName)
-                 .findFirst()  *//*
-        if (book != null) {
-            addFav.text = "取消收藏"
+        val book = mViewModel?.comicExist(mComicInfo)
+        if (book?.mComicData?.isNotEmpty() == true) {
+            addFavorite.text = "取消收藏"
         }
 
         val point = null//realm.where(ComicBookInfo_Recently::class.java).equalTo("ComicName", mComicInfo?.ComicName).findFirst()
         if (point != null) {
             startRead.text = "继续阅读"
-        }*/
+        }
     }
 
     override fun SetBikaInfo(comic: ComicDetailObject?) {
@@ -86,8 +92,6 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
         author.text = comic?.author
     }
 
-    var mViewModel: ComicInfoViewModel? = null
-    var mComicInfo: ComicInfoBean? = null
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel?.cancel()
@@ -95,7 +99,6 @@ class ComicBasicInfo : BaseLazyFragment(), ComicDetailContract.ComicInfo.View {
         mViewModel = null
     }
 
-    private var defaultUrl = ""
     fun setDefaultIndexUrl(default: String) {
         defaultUrl = default
     }

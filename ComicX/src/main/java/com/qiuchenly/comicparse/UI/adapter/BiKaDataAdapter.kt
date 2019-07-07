@@ -1,6 +1,7 @@
 package com.qiuchenly.comicparse.UI.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -30,9 +31,10 @@ import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.dialog_switchweb.view.*
 import kotlinx.android.synthetic.main.item_bika_userinfo.view.*
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
+import java.lang.ref.WeakReference
 
 
-class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<BaseViewHolder>() {
+class BiKaDataAdapter(private val mViews: BikaInterface, private var mContext: WeakReference<Context>) : RecyclerView.Adapter<BaseViewHolder>() {
     //the first item must be an account information.
 
     val layout_account = R.layout.item_bika_userinfo
@@ -122,7 +124,7 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
         itemView.lt_switchWeb.setOnClickListener { view ->
             var mdialog_view: View? = null
             if (mdialog_view == null) {
-                mdialog_view = LayoutInflater.from(view.context).inflate(com.qiuchenly.comicparse.R.layout.dialog_switchweb, null, false)
+                mdialog_view = LayoutInflater.from(view.context).inflate(R.layout.dialog_switchweb, null, false)
                 mdialog_view!!.rd_web1.setOnClickListener {
                     setWeb(1)
                 }
@@ -188,10 +190,10 @@ class BiKaDataAdapter(private val mViews: BikaInterface) : RecyclerView.Adapter<
             //最近阅读:哔咔
             tv_recently.text = "" + mRecentRead
             ll_recently_read.setOnClickListener {
-                val i = Intent(it.context.applicationContext, RecentlyRead::class.java).apply {
+                val i = Intent(mContext.get(), RecentlyRead::class.java).apply {
                     putExtra(ActivityKey.KEY_RECENTLY_READ_METHOD, ComicSource.BikaComic)
                 }
-                ContextCompat.startActivity(it.context.applicationContext, i, null)
+                mContext.get()?.startActivity(i)
             }
         }
     }

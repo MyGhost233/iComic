@@ -1,28 +1,28 @@
 package com.qiuchenly.comicparse.UI.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import com.qiuchenly.comicparse.Bean.ComicInfoBean
+import com.qiuchenly.comicparse.Bean.LocalFavoriteBean
 import com.qiuchenly.comicparse.Core.ActivityKey
-import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.RecentlyRead
 import com.qiuchenly.comicparse.UI.view.MyDetailsContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.my_main_spec.view.*
 import kotlinx.android.synthetic.main.my_main_topview.view.*
+import java.lang.ref.WeakReference
 
 @Suppress("ClassName", "FunctionName")
-class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapter<String>() {
+class UserDetailsAdapter(val mview: MyDetailsContract.View, private var mContext: WeakReference<Context>) : BaseRecyclerAdapter<String>() {
     override fun canLoadMore(): Boolean {
         return false
     }
@@ -122,13 +122,15 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
      */
     private fun click_recently_read_item(view: View) {
         view.setOnClickListener {
-            val i = Intent(view.context.applicationContext, RecentlyRead::class.java).apply {
+            val i = Intent(mContext.get(), RecentlyRead::class.java).apply {
                 putExtra(ActivityKey.KEY_RECENTLY_READ_METHOD, -1)
             }
-            startActivity(view.context.applicationContext, i, null)
+            mContext.get()?.startActivity(i)
         }
     }
 
+
+    private var mFavoriteComicArr: RealmResults<LocalFavoriteBean>? = null
     @SuppressLint("SetTextI18n")
     private fun init_SpecItem(view: View) {
         with(view) {
@@ -146,21 +148,23 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
                 })
             }
 
-            val arr = ArrayList<ComicInfoBean>()
-            if (arr.size > 0) {
+            if (mFavoriteComicArr != null && mFavoriteComicArr!!.size > 0) {
                 if (my_main_spec_list.visibility == View.GONE) {
                     my_main_spec_list.visibility = View.VISIBLE
                 }
                 rotateViews.startAnimation(RotateAnimation(0f, 90f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f).apply {
-                    duration = 200;fillAfter = true;interpolator = AccelerateInterpolator()
+                    duration = 200
+                    fillAfter = true
+                    interpolator = AccelerateInterpolator()
                 })//设置旋转显示数据
             } else {
                 my_main_spec_list.visibility = View.GONE
             }
             my_main_spec_list.layoutManager = LinearLayoutManager(view.context)
-            //rv_my_main_spec_list.adapter = mMyDetailsLocalBookList
+            if (mFavoriteComicArr != null)
+                my_main_spec_list.adapter = LocalFavoriteAdapter(mFavoriteComicArr!!, mContext)
             my_main_spec_list.isFocusableInTouchMode = false//干掉焦点冲突
-            item_name.text = "我的收藏（本地有${arr.size}本）"
+            item_name.text = "我的收藏（本地有${mFavoriteComicArr?.size}本）"
         }
     }
 
@@ -168,6 +172,17 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View) : BaseRecyclerAdapte
     fun setRecentBooks(size: Int) {
         mRecentlyBook = size
         notifyItemChanged(2)
+    }
+
+    fun setFavoriteBooks(arr: RealmResults<LocalFavoriteBean>?) {
+        mFavoriteComicArr = arr
+        mFavoriteComicArr?.addChangeListener { t, changeSet ->
+            notifyItemRangeChanged(5, 1)
+        }
+    }
+
+    fun destory() {
+        mFavoriteComicArr?.removeAllChangeListeners()
     }
 
     private val TYPE_NORMAL = 0

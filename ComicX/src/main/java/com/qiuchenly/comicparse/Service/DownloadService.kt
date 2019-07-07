@@ -10,6 +10,7 @@ import com.qiuchenly.comicparse.Bean.PageInfo
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.UI.view.ComicDetailContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
+import io.realm.Realm
 import io.realm.RealmResults
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -22,10 +23,11 @@ import java.util.concurrent.Executors
  * @sample \NM$L
  */
 class DownloadService : Service(), ServiceNotification {
+
     override fun onBookPageWasDown(bookName: String, title: String): Boolean {
-        val book = Comic.getRealm().where(DownloadBookInfo::class.java)
-                .equalTo("BookName", bookName)
-                .findFirst()
+        val book = mRealm?.where(DownloadBookInfo::class.java)
+                ?.equalTo("BookName", bookName)
+                ?.findFirst()
         if (book != null) {
             return try {
                 book.PageList.filter { it.titleName == title }[0].DownOver
@@ -37,13 +39,13 @@ class DownloadService : Service(), ServiceNotification {
     }
 
     override fun onDownBookOver(bookName: String) {
-        val mBookInfo = mRealm.where(DownloadBookInfo::class.java)
-                .equalTo("BookName", bookName)
-                .findFirst()
+        val mBookInfo = mRealm?.where(DownloadBookInfo::class.java)
+                ?.equalTo("BookName", bookName)
+                ?.findFirst()
         if (mBookInfo != null) {
-            mRealm.beginTransaction()
+            mRealm?.beginTransaction()
             mBookInfo.DownOver = true
-            mRealm.commitTransaction()
+            mRealm?.commitTransaction()
         }
     }
 
@@ -52,8 +54,8 @@ class DownloadService : Service(), ServiceNotification {
      * @return 从数据库返回所有数据
      */
     override fun onGetAllDownBook(): RealmResults<DownloadBookInfo>? {
-        return mRealm.where(DownloadBookInfo::class.java)
-                .findAll()
+        return mRealm?.where(DownloadBookInfo::class.java)
+                ?.findAll()
     }
 
     /**
@@ -61,9 +63,9 @@ class DownloadService : Service(), ServiceNotification {
      * @param mDownloadBookInfo 新书数据集合
      */
     override fun onBookAdded(mDownloadBookInfo: DownloadBookInfo) {
-        mRealm.beginTransaction()
-        mRealm.copyToRealm(mDownloadBookInfo)
-        mRealm.commitTransaction()
+        mRealm?.beginTransaction()
+        mRealm?.copyToRealm(mDownloadBookInfo)
+        mRealm?.commitTransaction()
     }
 
     /**
@@ -72,9 +74,9 @@ class DownloadService : Service(), ServiceNotification {
      * @return true or false
      */
     override fun onBookHasInDataBase(mBookName: String): Boolean {
-        return mRealm.where(DownloadBookInfo::class.java)
-                .equalTo("BookName", mBookName)
-                .findFirst() == null
+        return mRealm?.where(DownloadBookInfo::class.java)
+                ?.equalTo("BookName", mBookName)
+                ?.findFirst() == null
     }
 
     override fun onSaveBookPage(mBookName: String, mPageInfo: PageInfo) {

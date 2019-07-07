@@ -20,10 +20,6 @@ import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.SearchResult
 import com.qiuchenly.comicparse.UI.view.ComicHomeContract
 import com.qiuchenly.comicparse.Utils.CustomUtils
-import com.youth.banner.Banner
-import com.youth.banner.BannerConfig
-import com.youth.banner.BannerConfig.CIRCLE_INDICATOR_TITLE
-import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
 import kotlinx.android.synthetic.main.item_rankview.view.*
 import kotlinx.android.synthetic.main.item_recommend_normal.view.*
@@ -33,7 +29,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
     override fun addDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>) {
         addData(RecommendItemType().apply {
             this.title = "动漫之家全部分类"
-            type = RecommendItemType.TYPE.TYPE_TITLE
+            type = TYPE_TITLE
         })
         mComicCategory.forEach {
             addData(RecommendItemType().apply {
@@ -70,7 +66,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
         TYPE_DONGMANZHIJIA_CATEGORY,
         TYPE_BIKA -> R.layout.item_foosize_newupdate
         TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
-        RecommendItemType.TYPE.TYPE_TITLE -> R.layout.item_recommend_normal
+        TYPE_TITLE -> R.layout.item_recommend_normal
         else -> R.layout.item_recommend_normal
     }
 
@@ -100,8 +96,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
              * Banner栏数据
              */
             TYPE_TOP -> {
-                return
-                val mViewPager = view.findViewById<Banner>(R.id.pager_container)
+                /*val mViewPager = view.findViewById<Banner>(R.id.pager_container)
                 mViewPager.apply {
                     val banner = this
                     //设置样式,默认为:Banner.NOT_INDICATOR(不显示指示器和标题)
@@ -170,7 +165,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
                             context.startActivity(mFilterIntent)
                         }
                     }
-                }.start()
+                }.start()*/
             }
             /**
              * 暂时没用到
