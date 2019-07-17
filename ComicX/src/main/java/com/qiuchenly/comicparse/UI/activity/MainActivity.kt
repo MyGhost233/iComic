@@ -1,11 +1,13 @@
 package com.qiuchenly.comicparse.UI.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.UI.viewModel.MainActivityViewModel
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.Service.DownloadService
 import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.activity_switch_main.*
 import kotlinx.android.synthetic.main.navigation_main.*

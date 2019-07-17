@@ -17,12 +17,6 @@ import kotlinx.android.synthetic.main.dialog_confirm_clear_all_recently.view.*
 import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 import java.lang.ref.WeakReference
 
-
-/**
- * 这个类 就这么跟你👄吧 最近阅读活动类 你了解⑧？
- * 作者：新津恶霸丶mata川
- * 时间：⚽⚽你萌让我①个月拿驾驶证⑧
- */
 class RecentlyRead : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +36,6 @@ class RecentlyRead : AppCompatActivity() {
 
     private var mDialog: WeakReference<AlertDialog>? = null
     private var mView: View? = null
-
-
-
     private var mPgAdapter: SuperPagerAdapter? = null
     fun InitUI(arr: ArrayList<SuperPagerAdapter.Struct>) {
 
@@ -92,7 +83,7 @@ class RecentlyRead : AppCompatActivity() {
     }
 
     fun call() {
-        (mPgAdapter?.getInstance("最近阅读") as RecentlyByWeekFragment)?.reInitData()
+        (mPgAdapter?.getInstance("最近阅读") as RecentlyByWeekFragment).reInitData()
     }
 
     override fun onDestroy() {

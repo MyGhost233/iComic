@@ -156,8 +156,8 @@ class ComicDetails :
                 mComicSrc = baseInfo.mComicImg
                 mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
                 mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
-                mComicTitle = mComicInfo!!.title
-                mComicAuthor = mComicInfo!!.author
+                mComicTitle = mComicInfo?.title ?: "ERROR-数据错误"
+                mComicAuthor = mComicInfo?.author ?: "ERROR-数据错误"
             }
             ComicSource.DongManZhiJia -> {
                 mComicSourceName = "动漫之家漫画源"

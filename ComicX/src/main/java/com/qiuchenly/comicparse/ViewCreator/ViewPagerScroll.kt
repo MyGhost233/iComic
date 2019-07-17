@@ -13,4 +13,22 @@ class ViewPagerScroll(context: Context, attrs: AttributeSet?) : ViewPager(contex
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return super.onInterceptTouchEvent(ev)
     }
+
+    fun aWaitScroll() {
+
+    }
+
+
+    fun startScroll() {
+
+    }
+
+    fun setData(Lists: ArrayList<String>) {
+        mLists = Lists
+    }
+
+    private var mLists: ArrayList<String>? = null
+
+
+
 }

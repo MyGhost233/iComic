@@ -3,8 +3,10 @@ package com.qiuchenly.comicparse.UI.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.view.ViewPager
 import android.view.View
-import android.widget.ImageView
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.*
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_BIKA
@@ -15,6 +17,7 @@ import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DONGM
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_TITLE
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_TOP
 import com.qiuchenly.comicparse.Core.ActivityKey.KEY_CATEGORY_JUMP
+import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.R
 import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.SearchResult
@@ -23,9 +26,11 @@ import com.qiuchenly.comicparse.Utils.CustomUtils
 import kotlinx.android.synthetic.main.item_foosize_newupdate.view.*
 import kotlinx.android.synthetic.main.item_rankview.view.*
 import kotlinx.android.synthetic.main.item_recommend_normal.view.*
+import kotlinx.android.synthetic.main.vpitem_top_ad.view.*
+import java.lang.ref.WeakReference
 
 
-class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdapter<RecommendItemType>(), ComicHomeContract.DMZJ_Adapter {
+class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mContext: WeakReference<Context?>) : BaseRecyclerAdapter<RecommendItemType>(), ComicHomeContract.DMZJ_Adapter {
     override fun addDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>) {
         addData(RecommendItemType().apply {
             this.title = "动漫之家全部分类"
@@ -45,7 +50,9 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
     override fun onViewShowOrHide(position: Int, item: View, isShow: Boolean) {
         if (getItemViewType(position) == TYPE_TOP) {
             if (isShow) {
+                mCarouselAdapter.startScroll()
             } else {
+                mCarouselAdapter.aWaitScroll()
             }
         }
     }
@@ -89,6 +96,45 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
         }
     }
 
+    private var mCarouselAdapter = object : CarouselAdapter() {
+        override fun onViewInitialization(mView: View, itemData: String?, position: Int) {
+            with(mView) {
+                tv_bookName.text = mTopTitles[position]
+                CustomUtils.loadImageCircle(mView.context, mTopImages[position], vp_item_topad_cv, 15)
+                this.setOnClickListener {
+                    val itemData = mComicList?.get(0)?.data?.get(position)!!
+                    val mFilterIntent = when (itemData["type"]) {
+                        "7" -> {//动漫之家公告
+                            Intent("android.intent.action.GET_DMZJ_URL").apply {
+                                putExtras(Bundle().apply {
+                                    //漫画基本信息 做跳转
+                                    putString(KEY_CATEGORY_JUMP, itemData["url"])
+                                })
+                            }
+                        }
+                        "1" -> {//漫画
+                            //将数据与普通漫画数据格式化一致,修复加载数据问题.
+                            val mComicStringRealInfo = com.google.gson.Gson().toJson(itemData)
+                            Intent("android.intent.action.ComicDetails").apply {
+                                putExtras(Bundle().apply {
+                                    //漫画基本信息 做跳转
+                                    putString(KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(ComicInfoBean().apply {
+                                        this.mComicType = ComicSource.DongManZhiJia
+                                        this.mComicString = mComicStringRealInfo
+                                    }))
+                                })
+                            }
+                        }
+                        else -> null
+                    }
+                    if (mFilterIntent != null) {
+                        Comic.getContext()?.startActivity(mFilterIntent)
+                    }
+                }
+            }
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private fun mInitUI(view: View, data: RecommendItemType?, position: Int) {
         when (data?.type) {
@@ -96,76 +142,10 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View) : BaseRecyclerAdap
              * Banner栏数据
              */
             TYPE_TOP -> {
-                /*val mViewPager = view.findViewById<Banner>(R.id.pager_container)
-                mViewPager.apply {
-                    val banner = this
-                    //设置样式,默认为:Banner.NOT_INDICATOR(不显示指示器和标题)
-                    //可选样式如下:
-                    //1. Banner.CIRCLE_INDICATOR    显示圆形指示器
-                    //2. Banner.NUM_INDICATOR   显示数字指示器
-                    //3. Banner.NUM_INDICATOR_TITLE 显示数字指示器和标题
-                    //4. Banner.CIRCLE_INDICATOR_TITLE  显示圆形指示器和标题
-                    banner.setBannerStyle(CIRCLE_INDICATOR_TITLE)
-
-                    //设置轮播样式（没有标题默认为右边,有标题时默认左边）
-                    //可选样式:
-                    //Banner.LEFT   指示器居左
-                    //Banner.CENTER 指示器居中
-                    //Banner.RIGHT  指示器居右
-                    banner.setIndicatorGravity(BannerConfig.CENTER)
-
-                    //设置轮播要显示的标题和图片对应（如果不传默认不显示标题）
-                    banner.setBannerTitles(mTopTitles)
-
-                    //设置是否自动轮播（不设置则默认自动）
-                    banner.isAutoPlay(true)
-
-                    //设置轮播图片间隔时间（不设置默认为2000）
-                    banner.setDelayTime(5000)
-                    //设置图片资源:可选图片网址/资源文件，默认用Glide加载,也可自定义图片的加载框架
-                    //所有设置参数方法都放在此方法之前执行
-                    //banner.setImages(images);
-
-                    //自定义图片加载框架
-                    banner.setImages(mTopImages)
-                    banner.setImageLoader(object : ImageLoader() {
-                        override fun displayImage(context: Context, path: Any?, imageView: ImageView) {
-                            CustomUtils.loadImageCircle(context.applicationContext, path as String, imageView, 15)
-                        }
-                    })
-                    //设置点击事件，下标是从1开始
-                    banner.setOnBannerListener {
-                        val itemData = mComicList?.get(0)?.data?.get(it)!!
-
-                        val mFilterIntent = when (itemData["type"]) {
-                            "7" -> {//动漫之家公告
-                                Intent("android.intent.action.GET_DMZJ_URL").apply {
-                                    putExtras(android.os.Bundle().apply {
-                                        //漫画基本信息 做跳转
-                                        putString(KEY_CATEGORY_JUMP, itemData["url"])
-                                    })
-                                }
-                            }
-                            "1" -> {//漫画
-                                //将数据与普通漫画数据格式化一致,修复加载数据问题.
-                                val mComicStringRealInfo = com.google.gson.Gson().toJson(itemData)
-                                Intent("android.intent.action.ComicDetails").apply {
-                                    putExtras(android.os.Bundle().apply {
-                                        //漫画基本信息 做跳转
-                                        putString(KEY_CATEGORY_JUMP, com.google.gson.Gson().toJson(ComicInfoBean().apply {
-                                            this.mComicType = ComicSource.DongManZhiJia
-                                            this.mComicString = mComicStringRealInfo
-                                        }))
-                                    })
-                                }
-                            }
-                            else -> null
-                        }
-                        if (mFilterIntent != null) {
-                            context.startActivity(mFilterIntent)
-                        }
-                    }
-                }.start()*/
+                mCarouselAdapter.setData(mTopTitles)
+                val mViewPager = view.findViewById<ViewPager>(R.id.vp_banner)
+                mViewPager.adapter = mCarouselAdapter
+                mCarouselAdapter.setVP(mViewPager)
             }
             /**
              * 暂时没用到

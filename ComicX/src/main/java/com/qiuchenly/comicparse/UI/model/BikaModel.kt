@@ -79,9 +79,9 @@ class BikaModel(var mViews: BikaInterface?) {
                         PreferenceHelper.setImageStorage(Comic.getContext(), imageServer)
                     }
                     mViews?.initImageServerSuccess()
-                } else {
-                    mViews?.ShowErrorMsg("哔咔服务器没有返回数据。")
-                }
+                } else if (response.code() == 401) {
+                    mViews?.ShowErrorMsg("授权认证失败!需要登录哔咔!")
+                } else mViews?.ShowErrorMsg("哔咔服务器返回错误数据:" + response.raw().body()?.string())
             }
 
             override fun onFailure(call: Call<GeneralResponse<InitialResponse>>, t: Throwable) {

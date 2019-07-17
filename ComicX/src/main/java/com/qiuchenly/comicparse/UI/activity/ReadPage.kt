@@ -149,14 +149,21 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         mViewModel = ReadViewModel(this)
         val mStr = intent.getStringExtra(ActivityKey.KEY_CATEGORY_JUMP)
         mTempComicInfo = Gson().fromJson(mStr, ComicInfoBean::class.java)
-        mComicImagePageAda = ComicReadingAdapter(this)
+
+        if (mTempComicInfo?.mComicID == null) {
+            ShowErrorMsg("漫画ID不可以是NULL!请联系作者查找bug")
+            finish()
+            return
+        }
+
+        bookID = mTempComicInfo?.mComicID ?: ""
+        mPoint = mTempComicInfo?.mComicString?.toInt() ?: 0
+        mComicImagePageAda = ComicReadingAdapter(this, WeakReference(this))
         rv_comicRead_list.layoutManager = LinearLayoutManager(this)
         rv_comicRead_list.adapter = mComicImagePageAda
         //rv_comicRead_list.screenWidth = DisplayUtil.getScreenWidth(Comic.getContext())
         rv_comicRead_list.isEnableScale = true //感谢这个作者的开源项目。https://github.com/PortgasAce/ZoomRecyclerView/blob/master/demo/src/main/java/com/portgas/view/demo/MainActivity.java
         //=============  初始化界面数据  ===============
-        bookID = mTempComicInfo!!.mComicID
-        mPoint = mTempComicInfo!!.mComicString.toInt()
         when (mTempComicInfo!!.mComicType) {
             ComicSource.DongManZhiJia -> {
                 mDMZJChapter = getArr2Str(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicChapterData>()::class.java) as ArrayList<String>)

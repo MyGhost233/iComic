@@ -14,6 +14,7 @@ import com.qiuchenly.comicparse.UI.viewModel.ComicHomeViewModel
 import com.qiuchenly.comicparse.UI.activity.PerferenceActivity
 import com.qiuchenly.comicparse.R
 import kotlinx.android.synthetic.main.fragment_my_details.*
+import java.lang.ref.WeakReference
 
 class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     override fun onGetDMZRecommendSuch(mComicList: ArrayList<ComicComm>) {
@@ -44,7 +45,7 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     }
 
     private var mViewModel: ComicHomeViewModel? = null
-    private val mRecommendAdapter = ComicHomeAdapter(this)
+    private val mRecommendAdapter = ComicHomeAdapter(this, WeakReference(this.context))
     override fun onViewFirstSelect(mPagerView: View) {
         mViewModel = ComicHomeViewModel(this)
 

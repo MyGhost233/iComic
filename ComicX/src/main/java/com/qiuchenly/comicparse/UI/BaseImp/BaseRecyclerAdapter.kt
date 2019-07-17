@@ -103,6 +103,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
 
     fun setState(mState: Int) {
+        onReTry = false
         this.mState = mState
         //if (this.mState != RecyclerLoadStatus.ON_LOAD_ING && this.mState != RecyclerLoadStatus.ON_LOAD_SUCCESS)
         if (needNotifyChange(mState))
@@ -146,7 +147,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
     fun getBaseData() = map
 
     /**
-     * 获取基本布局
+     * 获取基本布局,viewType 自带类型请参考 ${RecyclerLoadStatus}
      * @param viewType viewType类型加载多布局
      * @return 返回布局ID
      */
@@ -234,6 +235,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         }
     }
 
+    private var onReTry = false
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         //TODO 此处使用缓存数据 将会导致数据混乱 但是此时应加载的是load More回调,所以不应造成数据错误
         val itemData = if (canLoadMore() && position >= map!!.size) map!![map!!.size - 1] else map!![position]
@@ -256,14 +258,18 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
                             loadingView.visibility = View.INVISIBLE
                             clickRetry.visibility = View.VISIBLE
                             setOnClickListener {
-                                onLoading(true)
+                                if (!onReTry) {
+                                    onLoading(true)
+                                    onReTry = true
+                                }
                             }
                         }
                         else -> {
                             noMore_tip.visibility = View.INVISIBLE
                             loadingView.visibility = View.VISIBLE
                             clickRetry.visibility = View.INVISIBLE
-                            onLoading(false)
+                            if (!onReTry)
+                                onLoading(false)
                             setOnClickListener(null)
                         }
                     }
