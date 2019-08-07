@@ -54,7 +54,7 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
             Glide.with(mContext.get()!!)
                     .asBitmap()
                     .load(data)
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .override(1080, Integer.MAX_VALUE)
                     .transition(BitmapTransitionOptions.withCrossFade(200))
                     .format(DecodeFormat.PREFER_ARGB_8888)
@@ -85,14 +85,16 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
                     })
                     .into(iv_img_page)
             if (position + 1 < getRealSize()) {
+                return@with
                 Log.d(TAG, "onViewShow: Size = " + getRealSize() + ", position = " + (position + 1))
                 Glide.with(mContext.get()!!)
                         .asBitmap()
-                        .load(getIndexData(position + 1))
-                        .diskCacheStrategy(DiskCacheStrategy.DATA)
+                        .load(data)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .override(1080, Integer.MAX_VALUE)
+                        .transition(BitmapTransitionOptions.withCrossFade(200))
                         .format(DecodeFormat.PREFER_ARGB_8888)
-                        .preload()
+                //.preload()
             }
         }
     }
