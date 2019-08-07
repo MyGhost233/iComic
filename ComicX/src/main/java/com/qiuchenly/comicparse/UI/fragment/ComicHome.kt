@@ -18,11 +18,11 @@ import java.lang.ref.WeakReference
 
 class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     override fun onGetDMZRecommendSuch(mComicList: ArrayList<ComicComm>) {
-        mRecommendAdapter.addDMZJData(mComicList)
+        mRecommendAdapter?.addDMZJData(mComicList)
     }
 
     override fun onGetDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>) {
-        mRecommendAdapter.addDMZJCategory(mComicCategory)
+        mRecommendAdapter?.addDMZJCategory(mComicCategory)
         final()
     }
 
@@ -45,17 +45,17 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     }
 
     private var mViewModel: ComicHomeViewModel? = null
-    private val mRecommendAdapter = ComicHomeAdapter(this, WeakReference(this.context))
+    private var mRecommendAdapter: ComicHomeAdapter? = null
     override fun onViewFirstSelect(mPagerView: View) {
         mViewModel = ComicHomeViewModel(this)
-
+        mRecommendAdapter = ComicHomeAdapter(this, WeakReference(this.activity))//fix activity jump error
         MyDetails_Refresh.setOnRefreshListener {
             mViewModel?.getDMZJRecommend()
         }
         mRecView.layoutManager = GridLayoutManager(activity, 6).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return mRecommendAdapter.getSizeByItem(position)
+                    return mRecommendAdapter?.getSizeByItem(position) ?: 6
                 }
             }
         }
@@ -63,7 +63,7 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
         mRecView.adapter = mRecommendAdapter
         mRecView.addItemDecoration(object : GridSpacingItemDecoration() {
             override fun needFixed(position: Int): Boolean {
-                return when (mRecommendAdapter.getItemViewType(position)) {
+                return when (mRecommendAdapter?.getItemViewType(position)) {
                     RecommendItemType.TYPE.TYPE_TITLE,
                     RecommendItemType.TYPE.TYPE_TOP,
                     RecommendItemType.TYPE.TYPE_RANK
@@ -78,5 +78,6 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel?.cancel()
+        mRecommendAdapter = null
     }
 }

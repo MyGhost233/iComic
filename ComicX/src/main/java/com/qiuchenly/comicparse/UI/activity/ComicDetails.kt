@@ -150,11 +150,12 @@ class ComicDetails :
 
         mBookCategory = baseInfo.mComicTAG
 
+        mComicTag = "" + baseInfo.mComicType + "|"
         when (baseInfo.mComicType) {
             ComicSource.BikaComic -> {
                 mComicSourceName = "哔咔漫画源"
                 mComicSrc = baseInfo.mComicImg
-                mComicTag = baseInfo.mComicName + "|" + baseInfo.mComicID
+                mComicTag += baseInfo.mComicName + "|" + baseInfo.mComicID
                 mComicInfo = Gson().fromJson(baseInfo.mComicString, ComicListObject::class.java)
                 mComicTitle = mComicInfo?.title ?: "ERROR-数据错误"
                 mComicAuthor = mComicInfo?.author ?: "ERROR-数据错误"
@@ -162,6 +163,7 @@ class ComicDetails :
             ComicSource.DongManZhiJia -> {
                 mComicSourceName = "动漫之家漫画源"
                 val mComic = Gson().fromJson(baseInfo.mComicString, DataItem::class.java)
+                mComicTag += mComic.title + "|" + mComic.obj_id
                 mComicSrc = mComic.cover
                 mComicAuthor = mComic.sub_title
                 mComicTitle = mComic.title

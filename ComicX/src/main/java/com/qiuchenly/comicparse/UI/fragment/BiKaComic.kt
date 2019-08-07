@@ -100,13 +100,15 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
                 swipe_bika_refresh.isRefreshing = false
             return
         }
-        if (!isInitImageServer) {
-            messageDialog = ProgressDialog(this.context)
-            messageDialog?.setTitle("请稍后")
-            messageDialog?.apply {
-                setMessage("正在初始化哔咔图片服务器...")
-                isIndeterminate = true
-                setCancelable(false)
+        if (!isInitImageServer && messageDialog?.isShowing == false) {
+            if (messageDialog == null) {
+                messageDialog = ProgressDialog(this.context)
+                messageDialog?.setTitle("请稍后")
+                messageDialog?.apply {
+                    setMessage("正在初始化哔咔图片服务器...")
+                    isIndeterminate = true
+                    setCancelable(false)
+                }
             }
             messageDialog?.show()
             model?.initImage()
@@ -148,5 +150,9 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         mRecyclerAdapter = null
         model?.cancel()
         model = null
+        if (messageDialog != null || messageDialog?.isShowing == true) {
+            messageDialog?.dismiss()
+            messageDialog = null
+        }
     }
 }

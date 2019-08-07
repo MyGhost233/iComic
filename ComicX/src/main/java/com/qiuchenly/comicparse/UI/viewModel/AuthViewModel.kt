@@ -25,7 +25,7 @@ class AuthViewModel(private var mView: AuthBikaViewContract.View?) : BaseViewMod
             mView?.ShowErrorMsg("登录Bika成功!请手动下拉刷新数据")
             mView?.LoginSucc()
         } else {
-            mView?.ShowErrorMsg("登录Bika失败!检查账号密码!")
+            mView?.ShowErrorMsg(response.errorBody()?.string() ?: "登录Bika失败!请检查账号密码!")
             mView?.LoginFailed()
         }
     }

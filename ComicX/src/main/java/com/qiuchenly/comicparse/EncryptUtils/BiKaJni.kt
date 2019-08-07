@@ -166,6 +166,6 @@ object BiKaJni {
         return retMessage
     }
 
-    fun StringSigFromNativeLocal() = "~n}\$S9\$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr"
+    fun StringSigFromNativeLocal() = "~d}\$Q7\$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"//"~n}\$S9\$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr"
 
 }

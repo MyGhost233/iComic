@@ -48,13 +48,12 @@ object DongManZhiJia : BaseRetrofitManager<ComicApi>() {
         return api
     }
 
+    private var mV3API: ComicApi? = null
     fun getV3API(): ComicApi {
+        mV3API = getAPI()
+        if (mV3API != null) return mV3API!!
         val httpClient = OkHttpClient.Builder()
-                .hostnameVerifier(object : HostnameVerifier {
-                    override fun verify(hostname: String?, session: SSLSession?): Boolean {
-                        return true
-                    }
-                })
+                .hostnameVerifier { hostname, session -> true }
         HttpLoggingInterceptor().level = HttpLoggingInterceptor.Level.BODY
         val api = Retrofit
                 .Builder()
@@ -66,9 +65,9 @@ object DongManZhiJia : BaseRetrofitManager<ComicApi>() {
                         httpClient.build()
                 )
                 .build()
-                .create<ComicApi>(ComicApi::class.java)
+                .create(ComicApi::class.java)
                 as ComicApi
         setAPI(api)
-        return api
+        return getAPI()!!
     }
 }

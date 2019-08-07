@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import com.qiuchenly.comicparse.UI.BaseImp.BaseApp
 import com.qiuchenly.comicparse.Bean.WelcomeLang
 import com.qiuchenly.comicparse.Core.Comic
 import com.qiuchenly.comicparse.ProductModules.Common.NMSL.WelcomeLangClient
-import com.qiuchenly.comicparse.R
 import com.tencent.bugly.Bugly
 import kotlinx.android.synthetic.main.splash_view.*
 import retrofit2.Call
@@ -16,11 +16,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
+
 class SplashActivity : BaseApp() {
 
     private var TAG = "SplashActivity"
     override fun getLayoutID() =
-            R.layout.splash_view
+            com.qiuchenly.comicparse.R.layout.splash_view
 
     override fun getUISet(mSet: UISet): UISet {
         return mSet.apply {

@@ -128,7 +128,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
                         else -> null
                     }
                     if (mFilterIntent != null) {
-                        Comic.getContext()?.startActivity(mFilterIntent)
+                        mContext.get()?.startActivity(mFilterIntent)
                     }
                 }
             }

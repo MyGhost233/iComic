@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.widget.Toast
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
 import com.qiuchenly.comicparse.Bean.ComicSource
 import com.qiuchenly.comicparse.Bean.DataItem
 import com.qiuchenly.comicparse.Bean.LocalFavoriteBean
 import com.qiuchenly.comicparse.Core.ActivityKey
+import com.qiuchenly.comicparse.Core.Comic
+import com.qiuchenly.comicparse.ProductModules.Bika.BikaApi
 import com.qiuchenly.comicparse.ProductModules.Bika.ComicListObject
 import com.qiuchenly.comicparse.ProductModules.Bika.Tools
 import com.qiuchenly.comicparse.R
@@ -62,6 +65,10 @@ class LocalFavoriteAdapter
             curr_read.text = ComicSource.getTypeName(data.mComicType)
             CustomUtils.loadImageCircle(item.context, mBookImage, item.bookNameImg, 8)
             setOnClickListener {
+                if (BikaApi.getAPI() == null) {
+                    Toast.makeText(Comic.getContext(), "请先打开哔咔页面以初始化哔咔服务器!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 val i = Intent(mContext.get(), ComicDetails::class.java)
                 i.putExtras(android.os.Bundle().apply {
                     putString(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
