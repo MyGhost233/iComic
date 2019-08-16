@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.view_magic_indicator_base.*
 class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderListener {
     @SuppressLint("SetTextI18n")
     override fun getComicList_DMZJ(list: List<ComicHome_CategoryComic>?) {
+        hideProgress()
         if (list != null) {
             if (list.isEmpty()) {
                 mAdapter?.setNoMore()
@@ -44,6 +45,7 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
     }
 
     override fun getRandomComicList_Bika(data: ArrayList<ComicListObject>?) {
+        hideProgress()
         if (data != null) {
             //修复数据显示问题
             activityName_secondTitle.visibility = View.VISIBLE
@@ -65,6 +67,7 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
 
     @SuppressLint("SetTextI18n")
     override fun getComicList_Bika(data: ComicListData?) {
+        hideProgress()
         if (data != null) {
             //修复数据显示问题
             val page = if (data.page > data.pages) data.pages else data.page
@@ -148,6 +151,8 @@ class SearchResult : BaseApp(), SearchResultView, BaseRecyclerAdapter.LoaderList
         if (mCategory.mCategoryName != "搜索关键词")
             mCategoryObj = Gson().fromJson(mCategory.mData, CategoryObject::class.java)
         magic_indicator.visibility = View.GONE
+
+        showProgress("加载漫画结果中...")
         when (mCategory.mComicType) {
             ComicSource.BikaComic -> {
                 handle_bika(mCategory)

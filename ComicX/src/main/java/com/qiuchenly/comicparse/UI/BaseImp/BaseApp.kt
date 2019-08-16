@@ -1,6 +1,7 @@
 package com.qiuchenly.comicparse.UI.BaseImp
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.ComponentCallbacks2
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -52,7 +53,39 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
         }
     }
 
+    private var mProcessBar: ProgressDialog? = null
 
+    fun showProgress(hide: Boolean) {
+        showProgress(hide, "正在请求网络...")
+    }
+
+    fun showProgress(message: String) {
+        showProgress(false, message)
+    }
+
+    fun showProgress() {
+        showProgress(false, "正在请求网络...")
+    }
+
+    fun hideProgress() {
+        showProgress(true)
+    }
+
+    fun showProgress(hide: Boolean, message: String) {
+        if (mProcessBar == null) {
+            mProcessBar = ProgressDialog(this, ProgressDialog.THEME_DEVICE_DEFAULT_DARK).apply {
+                setTitle("加载中...")
+                setCancelable(false)
+                isIndeterminate = true
+            }
+        }
+        mProcessBar?.setMessage(message)
+        if (mProcessBar?.isShowing == false && !hide)
+            mProcessBar?.show()
+        if (hide && mProcessBar?.isShowing == true) {
+            mProcessBar?.dismiss()
+        }
+    }
 
     abstract fun getLayoutID(): Int?
     open fun getUISet(mSet: UISet = UISet().apply {
@@ -69,6 +102,8 @@ abstract class BaseApp : AppCompatActivity(), BaseView {
 
     override fun onDestroy() {
         super.onDestroy()
+        mProcessBar?.dismiss()
+        mProcessBar = null
         AppManager.appm.removeActivity(this)
     }
 

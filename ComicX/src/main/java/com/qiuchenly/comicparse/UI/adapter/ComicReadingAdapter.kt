@@ -55,7 +55,7 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
                     .asBitmap()
                     .load(data)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .override(1080, Integer.MAX_VALUE)
+                    //.override(1080, 1080)
                     .transition(BitmapTransitionOptions.withCrossFade(200))
                     .format(DecodeFormat.PREFER_ARGB_8888)
                     .addListener(object : RequestListener<Bitmap> {
@@ -85,7 +85,7 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
                     })
                     .into(iv_img_page)
             if (position + 1 < getRealSize()) {
-                return@with
+                return@with//这里preload有闪退问题,先屏蔽了再说
                 Log.d(TAG, "onViewShow: Size = " + getRealSize() + ", position = " + (position + 1))
                 Glide.with(mContext.get()!!)
                         .asBitmap()

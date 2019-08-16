@@ -1,6 +1,5 @@
 package com.qiuchenly.comicparse.UI.fragment
 
-import android.app.ProgressDialog
 import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -26,7 +25,10 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         var model: BikaModel? = null
     }
 
+    private var mActivity: MainActivity? = null
+
     override fun onViewFirstSelect(mPagerView: View) {
+        mActivity = this.activity as MainActivity
         mRecycler = view?.findViewById(R.id.rv_bika_content)
         mRecyclerAdapter = BiKaDataAdapter(this, WeakReference(activity as MainActivity))
         mRecycler?.layoutManager = GridLayoutManager(this.activity, 6).apply {
@@ -55,6 +57,7 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
     }
 
     override fun reInitAPI() {
+        mActivity?.showProgress("初始化哔咔CDN服务器地址...")
         model?.initBikaApi()
     }
 
@@ -64,9 +67,9 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     override fun ShowErrorMsg(msg: String) {
         super.ShowErrorMsg(msg)
-        if (!isInitImageServer || messageDialog?.isShowing == true) {
-            messageDialog?.dismiss()
-            messageDialog = null
+        mActivity?.hideProgress()
+        if (!isInitImageServer) {
+            mActivity?.showProgress(true)
             //此处并不需要取消初始化，因为获取图片服务器失败也要重新获取一遍
         }
         if (swipe_bika_refresh.isRefreshing)
@@ -79,44 +82,39 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
 
     override fun initImageServerSuccess() {
         if (!isInitImageServer) {
-            messageDialog?.dismiss()
-            messageDialog = null
+            mActivity?.showProgress(true)
             isInitImageServer = true
+            mActivity?.showProgress(false, "加载哔咔类别数据...")
             update()//reinitialization application
         }
     }
 
     private var mInitBikaAPISucc = false
     override fun initSuccess() {
+        mActivity?.hideProgress()
         update()
         mInitBikaAPISucc = true
     }
 
     private var isInitImageServer = false
-    private var messageDialog: ProgressDialog? = null
     fun update() {
         if (model?.needLogin()!!) {
             if (swipe_bika_refresh.isRefreshing)
                 swipe_bika_refresh.isRefreshing = false
+            mActivity?.hideProgress()
             return
         }
-        if (!isInitImageServer && messageDialog?.isShowing == false) {
-            if (messageDialog == null) {
-                messageDialog = ProgressDialog(this.context)
-                messageDialog?.setTitle("请稍后")
-                messageDialog?.apply {
-                    setMessage("正在初始化哔咔图片服务器...")
-                    isIndeterminate = true
-                    setCancelable(false)
-                }
-            }
-            messageDialog?.show()
+        if (!isInitImageServer) {
+            mActivity?.hideProgress()
+            mActivity?.showProgress(false, "正在初始化哔咔图片服务器")
             model?.initImage()
             return
         }
         if (swipe_bika_refresh.isRefreshing)
             swipe_bika_refresh.isRefreshing = false
+        mActivity?.showProgress(false, "正在加载用户信息...")
         model?.updateUserInfo()
+        mActivity?.showProgress(false, "正在加载漫画类别...")
         model?.getCategory()
     }
 
@@ -125,10 +123,12 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
     }
 
     override fun loadCategory(mBikaCategoryArr: ArrayList<CategoryObject>?) {
+        mActivity?.hideProgress()
         mRecyclerAdapter?.setCategory(mBikaCategoryArr ?: ArrayList())
     }
 
     override fun signResult(ret: Boolean) {
+        mActivity?.hideProgress()
         if (ret) {
             ShowErrorMsg("签到成功")
             model?.updateUserInfo()
@@ -137,10 +137,12 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
     }
 
     override fun punchSign() {
+        mActivity?.showProgress(false, "正在签到哔咔...")
         model?.punchSign()
     }
 
     override fun updateUser(ret: UserProfileObject) {
+        mActivity?.hideProgress()
         mRecyclerAdapter?.setUserProfile(ret)
     }
 
@@ -150,9 +152,6 @@ class BiKaComic : BaseLazyFragment(), BikaInterface {
         mRecyclerAdapter = null
         model?.cancel()
         model = null
-        if (messageDialog != null || messageDialog?.isShowing == true) {
-            messageDialog?.dismiss()
-            messageDialog = null
-        }
+        mActivity?.showProgress(true)
     }
 }

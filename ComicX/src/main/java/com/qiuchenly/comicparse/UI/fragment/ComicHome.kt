@@ -13,11 +13,13 @@ import com.qiuchenly.comicparse.UI.view.ComicHomeContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicHomeViewModel
 import com.qiuchenly.comicparse.UI.activity.PerferenceActivity
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_my_details.*
 import java.lang.ref.WeakReference
 
 class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     override fun onGetDMZRecommendSuch(mComicList: ArrayList<ComicComm>) {
+        mActivity?.hideProgress()
         mRecommendAdapter?.addDMZJData(mComicList)
     }
 
@@ -38,6 +40,7 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
     override fun OnNetFailed(message: String?) {
         final()
         ShowErrorMsg(message!!)
+        mActivity?.hideProgress()
     }
 
     override fun getLayoutID(): Int {
@@ -46,10 +49,13 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
 
     private var mViewModel: ComicHomeViewModel? = null
     private var mRecommendAdapter: ComicHomeAdapter? = null
+    private var mActivity: MainActivity? = null
     override fun onViewFirstSelect(mPagerView: View) {
+        mActivity = this.activity as MainActivity
         mViewModel = ComicHomeViewModel(this)
         mRecommendAdapter = ComicHomeAdapter(this, WeakReference(this.activity))//fix activity jump error
         MyDetails_Refresh.setOnRefreshListener {
+            mActivity?.showProgress("加载推荐数据...")
             mViewModel?.getDMZJRecommend()
         }
         mRecView.layoutManager = GridLayoutManager(activity, 6).apply {
@@ -72,6 +78,7 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
                 }
             }
         })
+        mActivity?.showProgress("加载推荐数据...")
         mViewModel?.getDMZJRecommend()
     }
 
