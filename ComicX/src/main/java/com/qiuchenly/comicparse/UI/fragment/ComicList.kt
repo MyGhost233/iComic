@@ -47,10 +47,15 @@ class ComicList : BaseLazyFragment(), ComicDetailContract.Comiclist.View, BaseRe
     }
 
     override fun SetBikaPages(docs: ComicEpisodeResponse?, id: String) {
-        if (docs?.eps?.page == docs?.eps?.pages) comicPageAdas?.setNoMore()
         comicPageAdas?.setBaseID(id)
         comicPageAdas?.addData(getArr2Str(docs?.eps?.docs ?: ArrayList()))
-        pageSize++
+        if (docs?.eps?.page == docs?.eps?.pages) {
+            comicPageAdas?.setNoMore()
+        } else {
+            //自动加载所有的漫画章节
+            pageSize++
+            onLoadMore(false)
+        }
     }
 
     private fun <T> getArr2Str(clazz: ArrayList<T>): ArrayList<String> {

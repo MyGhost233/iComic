@@ -108,6 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
+                    android:id="@+id/openVIP"
                     android:layout_toEndOf="@id/parent_A"
                     android:text="@string/ad_openVIP"
                     android:textColor="#ffffff"

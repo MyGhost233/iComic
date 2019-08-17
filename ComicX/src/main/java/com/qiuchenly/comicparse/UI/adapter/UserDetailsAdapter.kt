@@ -32,6 +32,8 @@ class UserDetailsAdapter(val mview: MyDetailsContract.View, private var mContext
         with(item) {
             when (getItemViewType(position)) {
                 TYPE_TOPVIEW -> {
+                    top_userName.text = "临时用户"
+                    openVIP.text = "你知道吗?有时候登录账号体验更好"
                     if (bingSrc == "") bingSrc = CustomUtils.getCachedBingUrl()
                     CustomUtils.loadImageCircle(this.context, bingSrc, top_userImg)
                     CustomUtils.loadImage(this.context, bingSrc, topview_back, 20, 50)

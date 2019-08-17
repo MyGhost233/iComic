@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.UI.adapter
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.widget.Toast
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
@@ -37,6 +38,11 @@ class ComicPageAdapter(private var mContext: Context?, mCallback: LoaderListener
                 item.tv_comicPageName.text = mComicEpisodeObject.title
                 item.last_read.visibility = View.GONE
                 item.setOnClickListener {
+                    if (getState() != RecyclerLoadStatus.ON_LOAD_NO_MORE) {
+                        Toast.makeText(mContext, "请等待所有章节加载完毕后再试!", Toast.LENGTH_SHORT)
+                                .show()
+                        return@setOnClickListener
+                    }
                     mContext?.startActivity(Intent(mContext, ReadPage::class.java).apply {
                         putExtra(ActivityKey.KEY_CATEGORY_JUMP, Gson().toJson(ComicInfoBean().apply {
                             mComicType = ComicSource.BikaComic

@@ -2,6 +2,8 @@ package com.qiuchenly.comicparse.UI.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicChapterData
 import com.qiuchenly.comicparse.Bean.ComicInfoBean
@@ -75,10 +77,9 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             onLoadMore(true)
             return
         }
-
+        mPoint++
         when (mTempComicInfo!!.mComicType) {
             ComicSource.DongManZhiJia -> {
-                mPoint++
                 nextUrl = if (mPoint < mDMZJChapter!!.size) {
                     mDMZJChapter!![mPoint].chapter_id
                 } else {
@@ -87,13 +88,13 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
                 currInfos.text = mDMZJChapter!![mPoint - 1].chapter_title
             }
             ComicSource.BikaComic -> {
-                mPoint++
-                if (mPoint < mBikaChapter!!.size) {
-                    nextUrl = mBikaChapter!![mPoint].order.toString()
-                    currInfos.text = mBikaChapter!![mPoint - 1].title
+                if (mPoint - 1 <= mBikaChapter!!.size)
+                    nextUrl = if (mPoint < mBikaChapter!!.size) {
+                        mBikaChapter!![mPoint].order.toString()
                 } else {
-                    nextUrl = ""
+                        ""
                 }
+                currInfos.text = mBikaChapter!![mPoint - 1].title
             }
             else -> {
             }
@@ -159,10 +160,26 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
         bookID = mTempComicInfo?.mComicID ?: ""
         mPoint = mTempComicInfo?.mComicString?.toInt() ?: 0
         mComicImagePageAda = ComicReadingAdapter(this, WeakReference(this))
-        rv_comicRead_list.layoutManager = LinearLayoutManager(this)
+        rv_comicRead_list.layoutManager = LinearLayoutManager(this).apply {
+            //isAutoMeasureEnabled = true
+            //isSmoothScrollbarEnabled = true
+        }
+        rv_comicRead_list.setHasFixedSize(true)
         rv_comicRead_list.adapter = mComicImagePageAda
         //rv_comicRead_list.screenWidth = DisplayUtil.getScreenWidth(Comic.getContext())
         rv_comicRead_list.isEnableScale = true //感谢这个作者的开源项目。https://github.com/PortgasAce/ZoomRecyclerView/blob/master/demo/src/main/java/com/portgas/view/demo/MainActivity.java
+        rv_comicRead_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                //优化RV滑动时加载图片导致的卡顿
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(this@ReadPage).resumeRequests()
+                } else {
+                    Glide.with(this@ReadPage).pauseRequests()
+                }
+            }
+        })
+
         //=============  初始化界面数据  ===============
         when (mTempComicInfo!!.mComicType) {
             ComicSource.DongManZhiJia -> {
@@ -175,6 +192,8 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
             }
             ComicSource.BikaComic -> {
                 mBikaChapter = getArr2StrA(Gson().fromJson(mTempComicInfo!!.mComicTAG, ArrayList<ComicEpisodeObject>()::class.java) as ArrayList<String>)
+                mBikaChapter?.reverse()
+                mPoint = (mBikaChapter?.size ?: 0) - mPoint - 1
                 val mBase = mBikaChapter?.get(mPoint)
                 currInfos.text = mBase?.title
                 mViewModel?.getBikaImage(bookID, mBase!!.order)

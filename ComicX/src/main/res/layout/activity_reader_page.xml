@@ -10,7 +10,7 @@
         android:id="@+id/mAppBarComicReader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#dedede"
+        android:background="#313131"
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
@@ -33,7 +33,7 @@
                     android:layout_gravity="bottom"
                     android:gravity="center"
                     android:text="Loading..."
-                    android:textColor="#121212"
+                    android:textColor="#ffffff"
                     android:textSize="13sp" />
             </FrameLayout>
         </android.support.v7.widget.Toolbar>
@@ -43,5 +43,6 @@
         android:id="@+id/rv_comicRead_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/cardview_dark_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

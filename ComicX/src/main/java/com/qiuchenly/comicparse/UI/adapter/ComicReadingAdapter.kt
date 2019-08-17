@@ -38,9 +38,10 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
             return
         with(item) {
             mRetryLoad.setOnClickListener {
-                onViewShow(item, data, position, ViewType)
                 mRetryLoad.text = "加载中..."
                 mRetryLoad.isClickable = false
+                mRetryLoad.visibility = View.INVISIBLE
+                onViewShow(item, data, position, ViewType)
             }
             tv_imageIndex.visibility = View.VISIBLE
             tv_imageIndex.text = "图${position + 1}...加载中"
@@ -55,7 +56,7 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
                     .asBitmap()
                     .load(data)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //.override(1080, 1080)
+                    .override(1080, Int.MAX_VALUE)
                     .transition(BitmapTransitionOptions.withCrossFade(200))
                     .format(DecodeFormat.PREFER_ARGB_8888)
                     .addListener(object : RequestListener<Bitmap> {
@@ -91,10 +92,8 @@ class ComicReadingAdapter(loadListener: LoaderListener, private val mContext: We
                         .asBitmap()
                         .load(data)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .override(1080, Integer.MAX_VALUE)
-                        .transition(BitmapTransitionOptions.withCrossFade(200))
                         .format(DecodeFormat.PREFER_ARGB_8888)
-                //.preload()
+                        .preload()
             }
         }
     }
