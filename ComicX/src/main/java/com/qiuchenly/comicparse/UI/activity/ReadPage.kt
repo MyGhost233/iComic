@@ -29,17 +29,11 @@ import java.lang.ref.WeakReference
 
 class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListener {
     private var lastPoint = 0
-    private var currentState = ON_LOAD_SUCCESS
 
     override fun showMsg(str: String) = ShowErrorMsg(str)
 
     override fun onLoadMore(isRetry: Boolean) {
-        if (
-                currentState != ON_LOAD_SUCCESS &&
-                currentState != ON_LOAD_FAILED
-        ) return
         if (nextUrl.isNotEmpty()) {
-            currentState = ON_LOAD_ING
             //TODO 此处加载下一页
             when (mTempComicInfo!!.mComicType) {
                 ComicSource.DongManZhiJia -> {
@@ -50,9 +44,7 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
                 }
             }
         } else {
-            currentState = ON_LOAD_NO_MORE
             mComicImagePageAda?.setNoMore()
-            //onFailed("没有更多信息了")
         }
     }
 
@@ -63,15 +55,12 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
     }
 
     override fun onFailed(reasonStr: String) {
-        if (currentState != ON_LOAD_FAILED) {
-            ShowErrorMsg(reasonStr)
-            currentState = ON_LOAD_FAILED
-            mComicImagePageAda?.setLoadFailed()
-        }
+        ShowErrorMsg(reasonStr)
+        mComicImagePageAda?.setLoadFailed()
     }
 
     override fun onLoadSucc(lst: ArrayList<String>, next: String, currInfo: String, isOver: Boolean) {
-        currentState = ON_LOAD_SUCCESS
+        mComicImagePageAda?.setLoadSuccess()
         nextUrl = next
         if (isOver) {
             onLoadMore(true)
@@ -91,9 +80,9 @@ class ReadPage : BaseApp(), ReaderContract.View, BaseRecyclerAdapter.LoaderListe
                 if (mPoint - 1 <= mBikaChapter!!.size)
                     nextUrl = if (mPoint < mBikaChapter!!.size) {
                         mBikaChapter!![mPoint].order.toString()
-                } else {
+                    } else {
                         ""
-                }
+                    }
                 currInfos.text = mBikaChapter!![mPoint - 1].title
             }
             else -> {

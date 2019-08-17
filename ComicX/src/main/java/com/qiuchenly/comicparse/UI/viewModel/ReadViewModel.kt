@@ -42,7 +42,7 @@ class ReadViewModel(private var mView: ReaderContract.View?) : BaseViewModel<Res
         BikaApi.getAPI()?.getPagesWithOrder(PreferenceHelper.getToken(Comic.getContext()), bookID, order, 1)
                 ?.enqueue(object : Callback<GeneralResponse<ComicPagesResponse>> {
                     override fun onFailure(call: Call<GeneralResponse<ComicPagesResponse>>, t: Throwable) {
-                        loadFailure(Throwable("加载漫画章节失败!"))
+                        mView?.onFailed("加载哔咔漫画章节失败!")
                     }
 
                     override fun onResponse(call: Call<GeneralResponse<ComicPagesResponse>>, response: Response<GeneralResponse<ComicPagesResponse>>) {
@@ -59,7 +59,7 @@ class ReadViewModel(private var mView: ReaderContract.View?) : BaseViewModel<Res
         DongManZhiJia.getV3API().getComic(bookID, chapter_id)
                 .enqueue(object : Callback<ChapterList> {
                     override fun onFailure(call: Call<ChapterList>, t: Throwable) {
-                        loadFailure(Throwable("加载动漫之家的漫画章节失败!"))
+                        mView?.onFailed("加载动漫之家的漫画章节失败!")
                     }
 
                     override fun onResponse(call: Call<ChapterList>, response: Response<ChapterList>) {
