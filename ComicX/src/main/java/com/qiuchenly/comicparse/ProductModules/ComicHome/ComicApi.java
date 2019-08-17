@@ -6,6 +6,7 @@ import com.qiuchenly.comicparse.Bean.ChapterList;
 import com.qiuchenly.comicparse.Bean.ComicComm;
 import com.qiuchenly.comicparse.Bean.ComicHomeComicChapterList;
 import com.qiuchenly.comicparse.Bean.ComicHome_CategoryComic;
+import com.qiuchenly.comicparse.Bean.HotComic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,11 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ComicApi {
 
-    String BaseLine = "?channel=Android&version=2.7.017";
+    String BaseLine = "?channel=Android&version=2.7.018&_debug=0";
 
     @GET("/v3/recommend.json" + BaseLine)
     Call<ArrayList<ComicComm>> getRecommend();
@@ -30,6 +32,16 @@ public interface ComicApi {
 
     @GET("/chapter/{bookId}/{chapterId}.json" + BaseLine)
     Call<ChapterList> getComic(@Path("bookId") String bookId, @Path("chapterId") String chapterId);
+
+    /**
+     * 热门连载刷新获取
+     *
+     * @param time 时间戳
+     * @return
+     */
+    @GET("/recommend/batchUpdate" + BaseLine + "&category_id=54")
+    Call<HotComic> getComicByHot(@Query("timestamp") int time);
+
 
     /**
      * 获取类别漫画点进去后的详细分类

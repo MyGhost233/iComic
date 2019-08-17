@@ -10,6 +10,7 @@ import android.view.View
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.*
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_BIKA
+import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_HOT
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_LASTUPDATE
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_NORMAL
 import com.qiuchenly.comicparse.Bean.RecommendItemType.TYPE.Companion.TYPE_DMZJ_SPEC_2
@@ -44,6 +45,25 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
         }
     }
 
+    private var isInitForLoadMore = false
+
+    //加载热门漫画数据
+    fun addDMZJHot(mComicCategory: ArrayList<DataItem>) {
+        if (!isInitForLoadMore) {
+            addData(RecommendItemType().apply {
+                this.title = "热门推荐漫画"
+                type = TYPE_TITLE
+            })
+            isInitForLoadMore = true
+        }
+        mComicCategory.forEach {
+            addData(RecommendItemType().apply {
+                type = TYPE_DMZJ_HOT
+                this.mItemData = Gson().toJson(it)
+            })
+        }
+    }
+
     /**
      * 在mInitUI(param1,param2,param3)方法后被调用.先初始化Item数据再显示该Item
      */
@@ -58,27 +78,34 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
     }
 
     override fun canLoadMore(): Boolean {
-        return false
+        return true
     }
 
     override fun getViewType(position: Int): Int {
-        return position
+        return if (position < getRealSize()) position
+        else super.getViewType(position)
     }
 
-    override fun getItemLayout(viewType: Int) = when (viewType) {
-        TYPE_TOP -> R.layout.item_recommend_topview
-        RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
-        TYPE_DMZJ_NORMAL,
-        TYPE_DMZJ_LASTUPDATE,
-        TYPE_DONGMANZHIJIA_CATEGORY,
-        TYPE_BIKA -> R.layout.item_foosize_newupdate
-        TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
-        TYPE_TITLE -> R.layout.item_recommend_normal
-        else -> R.layout.item_recommend_normal
+    override fun getItemLayout(viewType: Int): Int {
+        return when (viewType) {
+            TYPE_TOP -> R.layout.item_recommend_topview
+            RecommendItemType.TYPE.TYPE_RANK -> R.layout.item_rankview
+            TYPE_DMZJ_NORMAL,
+            TYPE_DMZJ_LASTUPDATE,
+            TYPE_DONGMANZHIJIA_CATEGORY,
+            TYPE_DMZJ_HOT,//加载热门漫画
+            TYPE_BIKA -> R.layout.item_foosize_newupdate
+            TYPE_DMZJ_SPEC_2 -> R.layout.item_foosize_newupdate_2
+            TYPE_TITLE -> R.layout.item_recommend_normal
+            else -> R.layout.item_recommend_normal
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return getItemData(position).type
+        return if (position < getRealSize())
+            getItemData(position).type
+        else
+            super.getItemViewType(position)
     }
 
     override fun onViewShow(item: View, data: RecommendItemType, position: Int, ViewType: Int) {
@@ -89,6 +116,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
         return when (getItemViewType(position)) {
             TYPE_BIKA,
             TYPE_DMZJ_NORMAL,
+            TYPE_DMZJ_HOT,
             TYPE_DONGMANZHIJIA_CATEGORY,
             TYPE_DMZJ_LASTUPDATE -> 2
             TYPE_DMZJ_SPEC_2 -> 3
@@ -187,6 +215,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
              */
             TYPE_DMZJ_NORMAL,
             TYPE_DMZJ_LASTUPDATE,
+            TYPE_DMZJ_HOT,
             TYPE_DMZJ_SPEC_2 -> {
                 var mImage = ""
                 var mComicBookName = ""
@@ -295,6 +324,7 @@ class ComicHomeAdapter(var mBaseView: ComicHomeContract.View, private var mConte
 
     override fun addDMZJData(mComicList: ArrayList<ComicComm>) {
         setData(ArrayList())
+        isInitForLoadMore = false
         mTopImages = arrayListOf()
         mTopTitles = arrayListOf()
         this.mComicList = mComicList

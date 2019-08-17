@@ -7,17 +7,27 @@ import com.qiuchenly.comicparse.Bean.ComicComm
 import com.qiuchenly.comicparse.UI.BaseImp.BaseLazyFragment
 import com.qiuchenly.comicparse.UI.BaseImp.GridSpacingItemDecoration
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
+import com.qiuchenly.comicparse.Bean.HotComic
 import com.qiuchenly.comicparse.Bean.RecommendItemType
 import com.qiuchenly.comicparse.UI.adapter.ComicHomeAdapter
 import com.qiuchenly.comicparse.UI.view.ComicHomeContract
 import com.qiuchenly.comicparse.UI.viewModel.ComicHomeViewModel
 import com.qiuchenly.comicparse.UI.activity.PerferenceActivity
 import com.qiuchenly.comicparse.R
+import com.qiuchenly.comicparse.UI.BaseImp.BaseRecyclerAdapter
 import com.qiuchenly.comicparse.UI.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_my_details.*
 import java.lang.ref.WeakReference
 
-class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
+class ComicHome : BaseLazyFragment(), ComicHomeContract.View, BaseRecyclerAdapter.LoaderListener {
+    override fun onGetDMZJHOT(mComicCategory: HotComic?) {
+        mRecommendAdapter?.addDMZJHot(mComicCategory?.data?.data ?: ArrayList())
+    }
+
+    override fun onLoadMore(isRetry: Boolean) {
+        mViewModel?.getDMZJHot()
+    }
+
     override fun onGetDMZRecommendSuch(mComicList: ArrayList<ComicComm>) {
         mActivity?.hideProgress()
         mRecommendAdapter?.addDMZJData(mComicList)
@@ -58,6 +68,7 @@ class ComicHome : BaseLazyFragment(), ComicHomeContract.View {
             mActivity?.showProgress("加载推荐数据...")
             mViewModel?.getDMZJRecommend()
         }
+        mRecommendAdapter?.setLoadMoreCallBack(this)
         mRecView.layoutManager = GridLayoutManager(activity, 6).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {

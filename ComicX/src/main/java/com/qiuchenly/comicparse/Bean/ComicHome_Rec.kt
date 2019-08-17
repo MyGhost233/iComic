@@ -12,6 +12,19 @@ class DataItem {
     var status: String = ""
 }
 
+class HotComic {
+    var code = 500
+    var msg = ""
+    var data: ComicCommV2? = null
+}
+
+class ComicCommV2 {
+    var category_id: String = ""
+    var data: ArrayList<DataItem>? = null
+    var sort: String = ""
+    var title: String = ""
+}
+
 class ComicComm {
     var category_id: String = ""
     var data: ArrayList<Map<String, String>>? = null

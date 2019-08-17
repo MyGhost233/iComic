@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.UI.view
 import com.qiuchenly.comicparse.Bean.ComicComm
 import com.qiuchenly.comicparse.UI.BaseImp.BaseView
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
+import com.qiuchenly.comicparse.Bean.HotComic
 
 interface ComicHomeContract {
     interface View : BaseView, DongManZhiJia {
@@ -18,6 +19,7 @@ interface ComicHomeContract {
         fun onGetDMZRecommendSuch(mComicList: ArrayList<ComicComm>)
 
         fun onGetDMZJCategory(mComicCategory: ArrayList<ComicHome_Category>)
+        fun onGetDMZJHOT(mComicCategory: HotComic?)
     }
 
     interface DMZJ_Adapter {

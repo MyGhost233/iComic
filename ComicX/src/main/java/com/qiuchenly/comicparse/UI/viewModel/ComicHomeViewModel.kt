@@ -3,6 +3,7 @@ package com.qiuchenly.comicparse.UI.viewModel
 import com.google.gson.Gson
 import com.qiuchenly.comicparse.Bean.ComicComm
 import com.qiuchenly.comicparse.Bean.ComicHome_Category
+import com.qiuchenly.comicparse.Bean.HotComic
 import com.qiuchenly.comicparse.ProductModules.ComicHome.DongManZhiJia
 import com.qiuchenly.comicparse.UI.BaseImp.BaseViewModel
 import com.qiuchenly.comicparse.UI.view.ComicHomeContract
@@ -57,6 +58,21 @@ class ComicHomeViewModel(Views: ComicHomeContract.View?) : BaseViewModel<Respons
                 val ret = response.body() ?: return
                 mView?.onGetDMZRecommendSuch(ret)
                 getDMZJCategory()
+            }
+        })
+    }
+
+    fun getDMZJHot() {
+        val time: Int = (System.currentTimeMillis() / 1000).toInt()
+        val mCall = DongManZhiJia.getV3API().getComicByHot(time)
+        mCall.enqueue(object : Callback<HotComic> {
+            override fun onFailure(call: Call<HotComic>, t: Throwable) {
+                loadFailure(Throwable("加载动漫之家的热门漫画数据失败!"))
+            }
+
+            override fun onResponse(call: Call<HotComic>, response: Response<HotComic>) {
+                println(Gson().toJson(response.body()))
+                mView?.onGetDMZJHOT(response.body())
             }
         })
     }
