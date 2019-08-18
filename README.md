@@ -8,6 +8,9 @@
 
 许可证使用MIT授权.
 
+项目已针对Android Q 重构,请访问[此处](https://git.lug.ustc.edu.cn/QiuChenly/comicx)浏览新重构的repo库.
+
+
 ### 下载最新编译版
 [最新每日编译版 - 2019.8.17](ComicX-release.apk)
 
